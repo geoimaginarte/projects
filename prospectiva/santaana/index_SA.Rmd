@@ -1,0 +1,149 @@
+---
+title: "Residenciales en 10 km desde el proyecto"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: cerulean
+    orientation: columns
+    vertical_layout: fill
+    navbar:
+      - {icon: "fa-cc", href: "https://geoimaginarte.github.io/mysite", align: right }
+      - {icon: "fa-home", href: "https://prospectivacr.com", align: right }
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE, results="hide"}
+
+#Librerias----
+
+library(dplyr)
+library(crosstalk)
+library(leaflet)
+library(flexdashboard)
+library(DT)
+library(RSQLite)
+library(sf)
+library(rgdal)
+library(leaflet.extras)
+library(leafem)
+library(htmltools)
+library(summarywidget)
+library(readxl)
+
+#Data----
+
+dir <- "E:/Trabajos Fran/Prospectiva investigación de mercado/Residenciales_SantaAna_near/Resi_SA.gpkg"
+con <- dbConnect(RSQLite::SQLite(), dbname = dir)
+
+layers <- ogrListLayers(dir)
+resi <- st_read(dir, layer="Resi_Urb_near", query = "Select id, Nombre, round(Area, 2) as Area, st_centroid(geom) as geom from Resi_Urb_near")
+resi_p <- st_read(dir, layer="Resi_Urb_near")
+buffer <- st_read(dir, layer="Buffer10km")
+proy <- st_read(dir, layer="Proyecto")
+
+invent <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/Residenciales_SantaAna_near/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Dataset")
+
+resi_inv <- left_join(resi, invent, by = c("id"="ID"))
+
+dist <- st_read("G:/Sig Datos/Distritos/DistritosIGN.gpkg", layer="DistritosGAM")
+
+shared_resi <- SharedData$new(resi_inv)
+
+#Mapa----
+
+resicon <- makeIcon(
+  iconUrl = "https://image.flaticon.com/icons/svg/2694/2694442.svg",
+  iconWidth = 20, iconHeight = 50
+)
+
+proyicon <- makeIcon(
+  iconUrl = "https://image.flaticon.com/icons/svg/684/684908.svg",
+  iconWidth = 20, iconHeight = 50
+)
+
+map_top <- leaflet(width = "100%")%>%
+                  addTiles(group = "OSM") %>%
+                  addProviderTiles(providers$CartoDB.DarkMatter, group = "Calles en oscuro") %>%
+                  addProviderTiles(providers$Esri.WorldImagery, group = "Satelite") %>%
+                  setView(-84.18763889, 9.92698333, zoom = 12) %>% 
+                  addPolygons(data= buffer, group = "Buffer 10 km",color = "red", weight = 3, stroke=1, fillOpacity = .05)%>%
+                  addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
+                  addPolygons(data= resi_p, group = "Limites Residenciales",color = "green", label = ~Nombre, weight = 3)%>%
+                  addMarkers(data=proy, group = "Proyecto", icon = proyicon)%>%
+                  addMarkers(data= shared_resi, group = "Residenciales", icon = resicon, label = ~Nombre)%>%
+                  addLayersControl(
+                      baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
+                      overlayGroups = c("Proyecto", "Buffer 10 km", "Residenciales", "Limites Residenciales","Distritos GAM"),
+                      options = layersControlOptions(collapsed = TRUE))%>%
+                  addMeasure(
+                      position = "bottomleft",
+                      primaryLengthUnit = "meters",
+                      primaryAreaUnit = "sqmeters",
+                      activeColor = "#3D535D",
+                      completedColor = "#7D4479")%>%
+                  addMiniMap(
+                    tiles = providers$Esri.WorldStreetMap,
+                    toggleDisplay = TRUE,
+                    minimized = TRUE,
+                    position = "bottomleft")%>%
+                  addResetMapButton() %>%
+                  addSearchOSM()%>%
+                  addFullscreenControl(position = "bottomleft")%>%
+                  addLegend(position = "bottomright",
+                    colors = c("blue","red","green", "#698eff"),
+                    labels = c("Proyecto","Buffer","Limites Residenciales", "Distritos GAM"), opacity = .5,
+                    title = "Leyenda")%>%
+                  addControl(html = c("<img src='https://image.flaticon.com/icons/svg/2694/2694442.svg' height=50 width=20>Residencial<br/>", "<img src='https://image.flaticon.com/icons/svg/684/684908.svg' height=50 width=20>Proyecto<br/>"), position="bottomright") %>% 
+                  addLogo("http://prospectivacr.com/wp-content/uploads/2018/03/perpectiva-logo.png", url = "http://prospectivacr.com/", 
+                          position = "bottomleft", offset.x = 70, offset.y = 10, width = 204, height = 39)
+
+#Tabla-----
+
+dt_resi <- datatable(shared_resi, extensions="Scroller", style="bootstrap", class="compact", width="100%",
+    options=list(deferRender=TRUE, scrollY=300, scroller=TRUE, 
+                 columnDefs = list(list(visible=FALSE, targets=c(7,25))))) %>% formatPercentage("% VENTA") %>% formatCurrency(c("PRECIOS(m²) DESDE", "PRECIOS(m²) HASTA" ,"PRECIOS(m²) PROMEDIO","PROMEDIO POR UNIDAD", "VALOR DE DISPONIBLES $")) %>% formatDate("INGRESO AL MERCADO", method = "toUTCString", params = list("no", list(timeZone = "UTC"))) %>% formatRound(c("ABSORCIÓN MENSUAL", "MESES EN INVENTARIO"), c(1,0))
+
+```
+
+Residenciales {data-icon="fa-map"}
+=============================================================
+
+Sidebar1 {.sidebar}
+-----------------------------------------------------------------------
+
+Cantidad de condominios, residencias o urbanizaciones: <b><big>`r summarywidget(shared_resi, statistic='count', column='Nombre')`</big></b>
+
+```{r}
+filter_checkbox("inv", "Esta en inventario", shared_resi, group = ~EN_INVENTARIO)
+filter_checkbox("tipo", "Tipo de condominio o residencial", shared_resi, group = ~TIPO)
+filter_select("residencial", "Busque el nombre del condominio, residencial o urbanizacion", shared_resi, group = ~Nombre, multiple = T)
+filter_slider("area", "Filtre por area del condominio, residencial o urbanizacion", shared_resi, column = ~Area, post = " m2")
+```
+
+
+
+<p><p><p><p>
+<b>Creado por:</b> Jose Francisco Nuñez O. [Web page](https://geoimaginarte.github.io/mysite)
+<br><b>Fecha:</b> "`r format(Sys.time(), '%d %B %Y')`"
+<br><b>Fuente:</b> API Open Street Map
+<br><b>Para:</b> Prospectiva & TopBox Research
+<p>
+<p>
+
+Column
+-----------------
+
+###
+
+```{r}
+
+map_top
+
+```
+
+### 
+
+```{r}
+
+dt_resi
+
+```
+```
