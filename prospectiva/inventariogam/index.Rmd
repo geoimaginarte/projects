@@ -1,0 +1,326 @@
+---
+title: "Inventario Subsectores GAM"
+output: 
+  flexdashboard::flex_dashboard:
+    navbar:
+      - {icon: "fa-cc", href: "https://geoimaginarte.github.io/mysite", align: right }
+      - {icon: "fa-book", href: "https://prospectivacr.com", align: right }
+---
+
+```{r setup, include=FALSE}
+
+#Librerias----
+library(flexdashboard)
+library(dplyr)
+library(crosstalk)
+library(leaflet)
+library(RSQLite)
+library(sf)
+library(rgdal)
+library(leaflet.extras)
+library(leafpop)
+library(htmltools)
+library(summarywidget)
+library(readxl)
+library(ggplot2)
+library(plotly)
+library(DT)
+
+#Data----
+
+conn <- "E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/usos.gpkg"
+con <- dbConnect(RSQLite::SQLite(), dbname = conn)
+
+lay <- ogrListLayers(conn)
+
+#Layer----
+
+resid <- st_read(conn, layer="residencial_polygon")
+resid_p <- st_read(conn, layer="residencial_polygon", query="select fid, Nombre, Categoria, st_centroid(geom) as geom from residencial_polygon")
+
+indust <- st_read(conn, layer="industrial_polygon")
+indust_p <- st_read(conn, layer="industrial_polygon", query="select fid, Nombre, Categoria, st_centroid(geom) as geom from industrial_polygon")
+
+ofic <- st_read(conn, layer="oficentros_polygon")
+ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, Nombre, Categoria, st_centroid(geom) as geom from oficentros_polygon")
+
+comer <- st_read(conn, layer="comercials_point")
+
+rest <- st_read(conn, layer="restaurantes_point")
+
+dist <- st_read("G:/Sig Datos/Distritos/DistritosIGN.gpkg", layer="DistritosGAM")
+
+#Uniones----
+
+inv <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Dataset")
+
+resid_inv <- left_join(resid_p, inv, by = c("fid"="ID"))
+
+#Layers_Filtros----
+
+shared_resid <- SharedData$new(resid_inv, group = "inventario")
+shared_indust <- SharedData$new(indust_p, group = "inventario")
+shared_ofic <- SharedData$new(ofic_p, group = "inventario")
+shared_comer <- SharedData$new(comer, group = "inventario")
+shared_rest <- SharedData$new(rest, group = "inventario")
+
+
+#Mapa de Residenciales----
+
+map_resid <- leaflet(width = "100%")%>%
+                  addTiles(group = "OSM") %>%
+                  addProviderTiles(providers$CartoDB.DarkMatter, group = "Calles en oscuro") %>%
+                  addProviderTiles(providers$Esri.WorldImagery, group = "Satelite") %>%
+                  setView(-84.18763889, 9.92698333, zoom = 11) %>%
+                  addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
+                  addWebGLHeatmap(data = shared_resid, group = "Densidad de residenciales", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
+                  addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre)%>% 
+                  addLayersControl(
+                      baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
+                      overlayGroups = c( "Z. Residenciales", "Densidad de residenciales","Distritos GAM"),
+                      options = layersControlOptions(collapsed = FALSE))%>%
+                  addMeasure(
+                      position = "bottomleft",
+                      primaryLengthUnit = "meters",
+                      primaryAreaUnit = "sqmeters",
+                      activeColor = "#3D535D",
+                      completedColor = "#7D4479")%>%
+                  addMiniMap(
+                    tiles = providers$Esri.WorldStreetMap,
+                    toggleDisplay = TRUE,
+                    minimized = TRUE,
+                    position = "bottomleft")
+
+#Mapa de Industriales----
+
+map_indust <- leaflet(width = "100%")%>%
+                  addTiles(group = "OSM") %>%
+                  addProviderTiles(providers$CartoDB.DarkMatter, group = "Calles en oscuro") %>%
+                  addProviderTiles(providers$Esri.WorldImagery, group = "Satelite") %>%
+                  setView(-84.18763889, 9.92698333, zoom = 11) %>%
+                  addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
+                  addWebGLHeatmap(data = shared_indust, group = "Densidad de zonas industriales", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
+                  addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre)%>% 
+                  addLayersControl(
+                      baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
+                      overlayGroups = c( "Z. Industriales", "Densidad de zonas industriales","Distritos GAM"),
+                      options = layersControlOptions(collapsed = FALSE))%>%
+                  addMeasure(
+                      position = "bottomleft",
+                      primaryLengthUnit = "meters",
+                      primaryAreaUnit = "sqmeters",
+                      activeColor = "#3D535D",
+                      completedColor = "#7D4479")%>%
+                  addMiniMap(
+                    tiles = providers$Esri.WorldStreetMap,
+                    toggleDisplay = TRUE,
+                    minimized = TRUE,
+                    position = "bottomleft")
+
+#Mapa de Oficentros----
+
+map_ofic <- leaflet(width = "100%")%>%
+                  addTiles(group = "OSM") %>%
+                  addProviderTiles(providers$CartoDB.DarkMatter, group = "Calles en oscuro") %>%
+                  addProviderTiles(providers$Esri.WorldImagery, group = "Satelite") %>%
+                  setView(-84.18763889, 9.92698333, zoom = 11) %>%
+                  addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
+                  addWebGLHeatmap(data = shared_ofic, group = "Densidad de Oficentros", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
+                  addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre)%>% 
+                  addLayersControl(
+                      baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
+                      overlayGroups = c( "Oficentros", "Densidad de Oficentros","Distritos GAM"),
+                      options = layersControlOptions(collapsed = FALSE))%>%
+                  addMeasure(
+                      position = "bottomleft",
+                      primaryLengthUnit = "meters",
+                      primaryAreaUnit = "sqmeters",
+                      activeColor = "#3D535D",
+                      completedColor = "#7D4479")%>%
+                  addMiniMap(
+                    tiles = providers$Esri.WorldStreetMap,
+                    toggleDisplay = TRUE,
+                    minimized = TRUE,
+                    position = "bottomleft")
+
+#Mapa de Comerciales----
+
+map_comer <- leaflet(width = "100%")%>%
+                  addTiles(group = "OSM") %>%
+                  addProviderTiles(providers$CartoDB.DarkMatter, group = "Calles en oscuro") %>%
+                  addProviderTiles(providers$Esri.WorldImagery, group = "Satelite") %>%
+                  setView(-84.18763889, 9.92698333, zoom = 11) %>%
+                  addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
+                  addWebGLHeatmap(data = shared_comer, group = "Densidad de Comerciales", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
+                  addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre)%>% 
+                  addLayersControl(
+                      baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
+                      overlayGroups = c( "Comerciales", "Densidad de Comerciales","Distritos GAM"),
+                      options = layersControlOptions(collapsed = FALSE))%>%
+                  addMeasure(
+                      position = "bottomleft",
+                      primaryLengthUnit = "meters",
+                      primaryAreaUnit = "sqmeters",
+                      activeColor = "#3D535D",
+                      completedColor = "#7D4479")%>%
+                  addMiniMap(
+                    tiles = providers$Esri.WorldStreetMap,
+                    toggleDisplay = TRUE,
+                    minimized = TRUE,
+                    position = "bottomleft")
+
+#Mapa de Restaurantes----
+
+map_rest <- leaflet(width = "100%")%>%
+                  addTiles(group = "OSM") %>%
+                  addProviderTiles(providers$CartoDB.DarkMatter, group = "Calles en oscuro") %>%
+                  addProviderTiles(providers$Esri.WorldImagery, group = "Satelite") %>%
+                  setView(-84.18763889, 9.92698333, zoom = 11) %>%
+                  addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
+                  addWebGLHeatmap(data = shared_rest, group = "Densidad de Restaurantes", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
+                  addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre)%>% 
+                  addLayersControl(
+                      baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
+                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Distritos GAM"),
+                      options = layersControlOptions(collapsed = FALSE))%>%
+                  addMeasure(
+                      position = "bottomleft",
+                      primaryLengthUnit = "meters",
+                      primaryAreaUnit = "sqmeters",
+                      activeColor = "#3D535D",
+                      completedColor = "#7D4479")%>%
+                  addMiniMap(
+                    tiles = providers$Esri.WorldStreetMap,
+                    toggleDisplay = TRUE,
+                    minimized = TRUE,
+                    position = "bottomleft")
+
+```
+
+
+
+Residenciales {data-icon="fa-home"}
+=====================================
+
+
+Input1 {.sidebar}
+-------------------------------------
+
+Cantidad de condominios, residencias o urbanizaciones: <b><big>`r summarywidget(shared_resid, statistic='count', column='Categoria')`</big></b>
+
+```{r}
+filter_checkbox("inv", "Esta en inventario", shared_resid, group = ~EN_INVENTARIO)
+filter_checkbox("tipo", "Tipo de condominio o residencial", shared_resid, group = ~TIPO)
+filter_select("residencial", "Busque el nombre del condominio, residencial o urbanizacion", shared_resid, group = ~Nombre, multiple = T)
+```
+
+
+<p><p><p><p>
+<b>Creado por:</b> Jose Francisco Nuñez O. [Web page](https://geoimaginarte.github.io/mysite)
+<br><b>Fecha:</b> "`r format(Sys.time(), '%d %B %Y')`"
+<br><b>Fuente:</b> API Open Street Map
+<br><b>Para:</b> Prospectiva & TopBox Research
+<p>
+<p>
+
+
+Column
+-----------------------------------------------------------------------
+
+### Mapa Zonas Residenciales
+
+```{r}
+map_resid
+```
+
+
+Industriales {data-icon="fa-industry"}
+=====================================
+
+Input2 {.sidebar}
+-------------------------------------
+
+Cantidad de zonas industriales: <b><big>`r summarywidget(shared_indust, statistic='count', column='Categoria')`</big></b>
+
+```{r}
+filter_select("industrial", "Busque el nombre de la zona industrial", shared_indust, group = ~Nombre, multiple = T)
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Mapa de Zonas Industriales
+
+```{r}
+map_indust
+```
+
+Oficentros {data-icon="fa-suitcase"}
+=====================================
+
+Input3 {.sidebar}
+-------------------------------------
+
+Cantidad de Oficentros: <b><big>`r summarywidget(shared_ofic, statistic='count', column='Categoria')`</big></b>
+
+```{r}
+filter_select("oficent", "Busque el nombre del oficentro", shared_ofic, group = ~Nombre, multiple = T)
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Mapa de Oficentros
+
+```{r}
+map_ofic
+```
+
+Comercial {data-icon="fa-shopping-bag"}
+=====================================
+
+Input4 {.sidebar}
+-------------------------------------
+
+Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count', column='Categoria')`</big></b>
+
+```{r}
+filter_select("comerc", "Busque el nombre del comercio", shared_comer, group = ~Nombre, multiple = T)
+filter_select("comerc_shop", "Seleccione tipo de negocio", shared_comer, group = ~shop, multiple = T)
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Mapa de Comercios
+
+```{r}
+map_comer
+```
+
+Restaurantes {data-icon="fa-cutlery"}
+=====================================
+
+Input5 {.sidebar}
+-------------------------------------
+
+Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count', column='Categoria')`</big></b>
+
+```{r}
+filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
+filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Mapa de Restaurantes
+
+```{r}
+map_rest
+```
+
+
+
+
+
