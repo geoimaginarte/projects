@@ -64,6 +64,13 @@ shared_ofic <- SharedData$new(ofic_p, group = "inventario")
 shared_comer <- SharedData$new(comer, group = "inventario")
 shared_rest <- SharedData$new(rest, group = "inventario")
 
+#Icons
+
+resicon <- makeIcon(iconUrl = "house.png")
+indicon <- makeIcon(iconUrl = "industry.png")
+oficon <- makeIcon(iconUrl = "office.png")
+comercon <- makeIcon(iconUrl = "market.png")
+restcon <- makeIcon(iconUrl = "restaurant.png")
 
 #Mapa de Residenciales----
 
@@ -74,7 +81,7 @@ map_resid <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
                   addWebGLHeatmap(data = shared_resid, group = "Densidad de residenciales", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
-                  addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre)%>% 
+                  addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre, icon = resicon)%>% 
                   addLayersControl(
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Z. Residenciales", "Densidad de residenciales","Distritos GAM"),
@@ -100,7 +107,7 @@ map_indust <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
                   addWebGLHeatmap(data = shared_indust, group = "Densidad de zonas industriales", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
-                  addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre)%>% 
+                  addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, icon = indicon)%>% 
                   addLayersControl(
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Z. Industriales", "Densidad de zonas industriales","Distritos GAM"),
@@ -126,7 +133,7 @@ map_ofic <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
                   addWebGLHeatmap(data = shared_ofic, group = "Densidad de Oficentros", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
-                  addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre)%>% 
+                  addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, icon = oficon)%>% 
                   addLayersControl(
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Oficentros", "Densidad de Oficentros","Distritos GAM"),
@@ -152,7 +159,7 @@ map_comer <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
                   addWebGLHeatmap(data = shared_comer, group = "Densidad de Comerciales", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
-                  addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre)%>% 
+                  addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre, icon = comercon)%>% 
                   addLayersControl(
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Comerciales", "Densidad de Comerciales","Distritos GAM"),
@@ -178,7 +185,7 @@ map_rest <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= paste0("Distrito: ", dist$distrito), fillOpacity = 0.05)%>%
                   addWebGLHeatmap(data = shared_rest, group = "Densidad de Restaurantes", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
-                  addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre)%>% 
+                  addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, icon = restcon)%>% 
                   addLayersControl(
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Distritos GAM"),
