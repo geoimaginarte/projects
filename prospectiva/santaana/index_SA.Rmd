@@ -57,7 +57,7 @@ shared_resi <- SharedData$new(resi_inv)
 resicon <- iconList(
   Horizontal = makeIcon("horizontal.png", 18),
   Vertical = makeIcon("vertical.png", 18),
-  Lote = makeIcon("lote.png", 18)
+  Lotes = makeIcon("lote.png", 18)
 )
 
 proyicon <- makeIcon(
@@ -97,9 +97,9 @@ map_top <- leaflet(width = "100%")%>%
                       completedColor = "#7D4479")%>%
                   addResetMapButton() %>%
                   addFullscreenControl(position = "bottomleft")%>%
-                  addControl(html = c("<img src='https://image.flaticon.com/icons/svg/236/236980.svg' height=18 width=18>Verticales<br/>", 
-                                      "<img src='https://image.flaticon.com/icons/svg/505/505059.svg' height=18 width=18>Horizontal<br/>", 
-                                      "<img src='https://image.flaticon.com/icons/svg/505/505047.svg' height=18 width=18>Lotes<br/>", 
+                  addControl(html = c("<img src='https://image.flaticon.com/icons/svg/440/440672.svg' height=18 width=18>Verticales<br/>", 
+                                      "<img src='https://image.flaticon.com/icons/svg/440/440678.svg' height=18 width=18>Horizontal<br/>", 
+                                      "<img src='https://image.flaticon.com/icons/svg/197/197718.svg' height=18 width=18>Lotes<br/>", 
                                       "<img src='https://image.flaticon.com/icons/svg/992/992225.svg' height=18 width=18>Densidad de residenciales<br/>", 
                                       "<img src='https://image.flaticon.com/icons/svg/684/684908.svg' height=18 width=18>Proyecto<br/>"), position="bottomright") %>% 
                   addLegend(position = "bottomright",
