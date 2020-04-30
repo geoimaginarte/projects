@@ -39,7 +39,7 @@ resi_p <- st_read(dir, layer="Resi_Urb_near")
 buffer <- st_read(dir, layer="Buffer10km")
 proy <- st_read(dir, layer="Proyecto")
 
-invent <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/Residenciales_SantaAna_near/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Dataset")
+invent <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Dataset")
 
 #Uniones
 resi_inv <- left_join(resi, invent, by = c("id"="ID"))
