@@ -36,17 +36,17 @@ lay <- ogrListLayers(conn)
 #Layer----
 
 resid <- st_read(conn, layer="residencial_polygon")
-resid_p <- st_read(conn, layer="residencial_polygon", query="select fid, Nombre, Categoria, st_centroid(geom) as geom from residencial_polygon")
+resid_p <- st_read(conn, layer="residencial_polygon", query="select fid, fid as id, Nombre, Categoria, Area, st_centroid(geom) as geom from residencial_polygon")
 
 indust <- st_read(conn, layer="industrial_polygon")
-indust_p <- st_read(conn, layer="industrial_polygon", query="select fid, Nombre, Categoria, st_centroid(geom) as geom from industrial_polygon")
+indust_p <- st_read(conn, layer="industrial_polygon", query="select fid, fid as id, Nombre, Categoria, Area, st_centroid(geom) as geom from industrial_polygon")
 
 ofic <- st_read(conn, layer="oficentros_polygon")
-ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, Nombre, Categoria, st_centroid(geom) as geom from oficentros_polygon")
+ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, fid as id, Nombre, Categoria, Area, st_centroid(geom) as geom from oficentros_polygon")
 
-comer <- st_read(conn, layer="comercials_point")
+comer <- st_read(conn, layer="comercials_point", query="select fid, fid as id, Nombre, Categoria, shop, geom from comercials_point")
 
-rest <- st_read(conn, layer="restaurantes_point")
+rest <- st_read(conn, layer="restaurantes_point", query="select fid, fid as id, Nombre, Categoria, Cadena, Servicios, Cocina, geom from restaurantes_point")
 
 dist <- st_read("G:/Sig Datos/Distritos/DistritosIGN.gpkg", layer="DistritosGAM")
 
@@ -251,6 +251,7 @@ Cantidad de zonas industriales: <b><big>`r summarywidget(shared_indust, statisti
 
 ```{r}
 filter_select("industrial", "Busque el nombre de la zona industrial", shared_indust, group = ~Nombre, multiple = T)
+filter_select("f", "Busque por id",  shared_indust, group = ~id, multiple = T)
 ```
 
 Column
@@ -272,6 +273,7 @@ Cantidad de Oficentros: <b><big>`r summarywidget(shared_ofic, statistic='count',
 
 ```{r}
 filter_select("oficent", "Busque el nombre del oficentro", shared_ofic, group = ~Nombre, multiple = T)
+filter_select("fo", "Busque por id",  shared_ofic, group = ~id, multiple = T)
 ```
 
 Column
@@ -294,6 +296,7 @@ Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count',
 ```{r}
 filter_select("comerc", "Busque el nombre del comercio", shared_comer, group = ~Nombre, multiple = T)
 filter_select("comerc_shop", "Seleccione tipo de negocio", shared_comer, group = ~shop, multiple = T)
+filter_select("fc", "Busque por id",  shared_comer, group = ~id, multiple = T)
 ```
 
 Column
@@ -316,6 +319,7 @@ Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count
 ```{r}
 filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
 filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
+filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
 ```
 
 Column
