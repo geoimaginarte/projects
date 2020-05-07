@@ -91,12 +91,11 @@ map_recope <- leaflet(width = "100%")%>%
                   addResetMapButton() %>%
                   addFullscreenControl(position = "bottomleft")%>%
                   addControl(html = c("<img src='https://image.flaticon.com/icons/svg/316/316377.svg' height=18 width=18>Gasolineras<br/>", 
-                                      "<img src='https://image.flaticon.com/icons/svg/316/316372.svg' height=18 width=18>Planteles<br/>"), position="bottomright")
+                                      "<img src='https://image.flaticon.com/icons/svg/316/316372.svg' height=18 width=18>Planteles<br/>"), position="bottomright") %>% addControlGPS(gpsOptions(autoCenter = T, setView = T, maxZoom = 22)) %>% addScaleBar()
 
 #Tabla-----
 
-dt_recope <- datatable(shared_gas, extensions="Scroller", style="bootstrap", class="compact", width="100%",
-    options=list(deferRender=TRUE, scrollY=300, scroller=TRUE, 
+dt_recope <- datatable(shared_gas,  options=list(deferRender=TRUE, pageLength = 25,
                  columnDefs = list(list(visible=FALSE, targets=11))))
 
 ```
