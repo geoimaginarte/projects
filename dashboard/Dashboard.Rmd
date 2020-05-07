@@ -1,0 +1,145 @@
+---
+title: "Planteles y Gasolineras de CR, 2014"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: cerulean
+    orientation: columns
+    vertical_layout: fill
+    navbar:
+      - {icon: "fa-cc", href: "https://geoimaginarte.github.io/mysite", align: right }
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE, results="hide"}
+
+#Librerias----
+
+library(dplyr)
+library(crosstalk)
+library(leaflet)
+library(flexdashboard)
+library(DT)
+library(sf)
+library(sp)
+library(leaflet.extras)
+library(leafem)
+library(htmltools)
+library(summarywidget)
+
+#Data----
+
+rec_conn <- "E:/Analista de datos/Flexdashboard/recope.gpkg"
+
+gas <- st_read(rec_conn, layer="gasolineras", query = "Select ID,NOMBRE,GASOLINERA,GAS__REG__ as REGULAR,GAS__SUP__ as SUPER,DIESEL__L_ as DIESEL,KEROSENO__ as KEROSENO,TOTA__L_ as TOTAL,DISTANCIA,PLANTEL, geom from gasolineras")
+
+plantel <- st_read(rec_conn, layer="plantel", query =  "Select fid, NOMBRE, geom from plantel")
+
+pol <- st_read(rec_conn, layer="poliducto", query =  "Select fid, Length as DISTANCIA, geom from poliducto")
+polid <- st_cast(pol, "LINESTRING")
+
+conc <- st_read(rec_conn, layer="conexiones", query =  "Select fid, Length as DISTANCIA, geom from conexiones")
+conex <- st_cast(conc, "LINESTRING")
+
+gas_p <- st_read(rec_conn, layer="gasolineras_plantel", query =  "Select fid, grid_code as id, geom from gasolineras_plantel")
+gas_plan <- st_cast(gas_p, "POLYGON")
+
+#Preparacion
+
+shared_gas <- SharedData$new(gas)
+shared_plantel <- SharedData$new(plantel)
+shared_polid <- SharedData$new(polid)
+shared_conex <- SharedData$new(conex)
+shared_gp <- SharedData$new(gas_plan)
+
+#Iconos----
+
+gasicon <- makeIcon(
+  iconUrl = "fuel.png", 18)
+platicon <- makeIcon(
+  iconUrl = "plantel.png", 18)
+
+pal_gp <- colorFactor(c("#76FEC5", "#41B619", "#FED876", "#9A76B3" ), domain = c("1", "2", "6", "7"))
+
+#Mapa----
+
+map_recope <- leaflet(width = "100%")%>%
+                  addTiles("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", group="OSM") %>%
+                  addProviderTiles("Stamen.Terrain", group = "Terreno") %>% 
+                  addProviderTiles("Esri.WorldImagery", group = "Foto Area") %>% 
+                  setView(-84.15637975, 9.87487738, zoom = 8) %>%
+                  addMarkers(data=shared_plantel, group="Planteles", icon = platicon, label= ~NOMBRE, labelOptions = labelOptions(style = list(
+        "color" = "black", "background" = "#FFF851"))) %>% 
+                  addMarkers(data=shared_gas, group = "Gasolineras", icon = gasicon, label= ~NOMBRE, labelOptions = labelOptions(style = list(
+        "color" = "white", "background" = "#FE634E"))) %>% 
+                  addPolylines(data = shared_polid, group = "Poliducto", color = "red") %>% 
+                  addPolylines(data=shared_conex, group = "Conexiones", color="green", label= ~DISTANCIA) %>% 
+                  addPolygons(data=shared_gp, group = "Cobertura por plantel",  color = ~pal_gp(id), label= ~id) %>% 
+                  addLayersControl(position = "topleft",
+                      baseGroups = c("OSM", "Terreno", "Foto Area"),
+                      overlayGroups = c("Planteles", "Gasolineras", "Poliducto", "Conexiones","Cobertura por plantel"),
+                      options = layersControlOptions(collapsed = T))%>%
+                  addMiniMap(
+                    tiles = providers$Esri.WorldStreetMap,
+                    toggleDisplay = TRUE,
+                    minimized = TRUE,
+                    position = "topright")%>%
+                  addMeasure(
+                      position = "topright",
+                      primaryLengthUnit = "meters",
+                      primaryAreaUnit = "sqmeters",
+                      activeColor = "#3D535D",
+                      completedColor = "#7D4479")%>%
+                  addResetMapButton() %>%
+                  addFullscreenControl(position = "bottomleft")%>%
+                  addControl(html = c("<img src='https://image.flaticon.com/icons/svg/316/316377.svg' height=18 width=18>Gasolineras<br/>", 
+                                      "<img src='https://image.flaticon.com/icons/svg/316/316372.svg' height=18 width=18>Planteles<br/>"), position="bottomright")
+
+#Tabla-----
+
+dt_recope <- datatable(shared_gas, extensions="Scroller", style="bootstrap", class="compact", width="100%",
+    options=list(deferRender=TRUE, scrollY=300, scroller=TRUE, 
+                 columnDefs = list(list(visible=FALSE, targets=11))))
+
+```
+
+Sidebar1 {.sidebar}
+-----------------------------------------------------------------------
+
+Cantidad de gasolineras: <b><big>`r summarywidget(shared_gas, statistic='count', column='NOMBRE')`</big></b>
+
+```{r}
+filter_select("ccm", "Filtre por el nombre de la gasolinera", shared_gas, group = ~NOMBRE, multiple = T)
+filter_checkbox("nplantel", "Gasolineras segun plantel", shared_gas, group = ~PLANTEL)
+filter_slider("regular", "Filtre por cant de Gas Regular", shared_gas, column = ~REGULAR, post = " ltrs")
+filter_slider("super", "Filtre por cant de Gas Super", shared_gas, column = ~SUPER, post = " ltrs")
+filter_slider("diesel", "Filtre por cant de Gas Diesel", shared_gas, column = ~DIESEL, post = " ltrs")
+filter_select("plantel", "Filtre por el nombre del plantel", shared_plantel, group = ~NOMBRE, multiple = T)
+
+```
+
+
+
+<p><p><p><p>
+<b>Creado por:</b> Jose Francisco Nuñez O. [Web page](https://geoimaginarte.github.io/mysite)
+<br><b>Fecha:</b> "`r format(Sys.time(), '%d %B %Y')`"
+<br><b>Fuente:</b> RECOPE
+<p>
+<p>
+
+Column
+-----------------
+
+###
+
+```{r}
+
+map_recope
+
+```
+
+### 
+
+```{r}
+
+dt_recope
+
+```
