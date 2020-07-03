@@ -21,6 +21,10 @@ library(leaflet.extras)
 library(htmltools)
 library(summarywidget)
 library(readxl)
+library(ggplot2)
+library(plotly)
+library(viridis)
+library(viridisLite)
 
 #Data----
 
@@ -40,7 +44,7 @@ indust_p <- st_read(conn, layer="industriales", query="select fid, fid as id, No
 ofic <- st_read(conn, layer="oficentros")
 ofic_p <- st_read(conn, layer="oficentros", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_centroid(geom) as geom from oficentros")
 
-comer <- st_read(conn, layer="comercials_point", query="select fid, fid as id, Nombre, Categoria, shop, geom from comercials_point where shop = 'mall'")
+comer <- st_read(conn, layer="comercials_point", query="select fid, fid as id, Nombre, Categorias, shop, geom from comercials_point where shop = 'mall'")
 
 rest <- st_read(conn, layer="restaurantes_point", query="select fid, fid as id, Nombre, Categoria, Cadena, Servicios, Cocina, geom from restaurantes_point where Cadena IS NOT NULL AND Cadena NOT LIKE 'Campe%' AND Cadena NOT LIKE 'App%' AND  Cadena NOT LIKE'Popeyes' AND Cadena NOT LIKE 'Nikk%'")
 
@@ -102,11 +106,11 @@ map_resid <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Cornubanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
-                  addWebGLHeatmap(data = shared_resid, group = "Densidad de residenciales", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
+                  addPolygons(data=resid, group = "Limites de residenciales", color = "green", fillOpacity = 0.05)%>%
                   addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre, icon = resicon, popup = resipop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Residenciales", "Densidad de residenciales","Distritos GAM", "Cornubanos GAM"),
+                      overlayGroups = c( "Z. Residenciales", "Limites de residenciales","Distritos GAM", "Cornubanos GAM"),
                       options = layersControlOptions(collapsed = FALSE))%>%
                   addMeasure(
                       position = "bottomleft",
@@ -131,11 +135,11 @@ map_indust <- leaflet(width = "100%")%>%
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
                   addPolygons(data=zon_pgam, group="Z.I. PlanGAM 2013", stroke = F, fillColor = "#BC0022")%>%
                   addPolygons(data=zoni_ind, group="Z.I. Planes Reguladores", color = "#FF6B00", fillColor = "#D2AA1B", weight = 2, popup = zoni_ind$Sitio)%>%
-                  addWebGLHeatmap(data = shared_indust, group = "Densidad de zonas industriales", intensity = shared_indust$data()$Cantidad_personas, size = 2000, units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
+                  addPolygons(data=indust, group = "Limites de Z.Industriales", color = "green", fillOpacity = 0.05)%>%
                   addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, icon = indicon, popup = indupop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Industriales", "Densidad de zonas industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM"),
+                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM"),
                       options = layersControlOptions(collapsed = FALSE))%>%
                   addMeasure(
                       position = "bottomleft",
@@ -158,11 +162,10 @@ map_ofic <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%   
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
-                  addWebGLHeatmap(data = shared_ofic, group = "Densidad de Oficentros", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
                   addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, icon = oficon, popup = ofipop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Oficentros", "Densidad de Oficentros","Distritos GAM", "Conurbanos GAM"),
+                      overlayGroups = c( "Oficentros", "Distritos GAM", "Conurbanos GAM"),
                       options = layersControlOptions(collapsed = FALSE))%>%
                   addMeasure(
                       position = "bottomleft",
@@ -230,6 +233,64 @@ map_rest <- leaflet(width = "100%")%>%
                     minimized = TRUE,
                     position = "bottomleft")
 
+#Graficos de densidad----
+
+densi_resid <- plot_ly(
+    type = 'densitymapbox',
+    lat = st_coordinates(shared_resid$data())[,2],
+    lon = st_coordinates(shared_resid$data())[,1],
+    z = shared_resid$data()$Area,
+    coloraxis = 'coloraxis',
+    radius = 10)
+densi_resid <- densi_resid %>%
+  layout(
+    mapbox = list(
+      style="carto-darkmatter",
+      zoom =9,
+      center= list(lon=-84, lat=10)),
+      coloraxis = list(colorscale = "Viridis"))
+
+
+densi_indust <- plot_ly(
+    type = 'densitymapbox',
+    lat = st_coordinates(shared_indust$data())[,2],
+    lon = st_coordinates(shared_indust$data())[,1],
+    z = shared_indust$data()$Cantidad_personas,
+    coloraxis = 'coloraxis',
+    radius = 10)
+densi_indust <- densi_indust %>%
+  layout(
+    mapbox = list(
+      style="carto-darkmatter",
+      zoom =9,
+      center= list(lon=-84, lat=10)),
+      coloraxis = list(colorscale = "Viridis"))
+
+
+densi_ofic <- plot_ly(
+    type = 'densitymapbox',
+    lat = st_coordinates(shared_ofic$data())[,2],
+    lon = st_coordinates(shared_ofic$data())[,1],
+    z = shared_ofic$data()$Cantidad_personas,
+    coloraxis = 'coloraxis',
+    radius = 10,
+    frame = shared_ofic$data()$Fecha_inicio,
+    alpha = 0.3)
+densi_ofic <- densi_ofic %>% animation_slider(
+  currentvalue = list(
+    prefix = "Fecha de inicio "
+  )
+)
+densi_ofic <- densi_ofic %>%
+  layout(
+    mapbox = list(
+      style="carto-darkmatter",
+      zoom =9,
+      center= list(lon=-84, lat=10)),
+      coloraxis = list(colorscale = "Viridis"))
+
+
+
 ```
 
 
@@ -245,6 +306,7 @@ Cantidad de condominios, residencias o urbanizaciones: <b><big>`r summarywidget(
 
 ```{r}
 filter_select("residencial", "Busque el nombre del condominio, residencial o urbanizacion", shared_resid, group = ~Nombre, multiple = T)
+filter_checkbox("cate_resi", "Filtre por categoria", shared_resid, group = ~Categoria)
 filter_select("conurbano_r", "Filtre por conurbano", shared_resid, group = ~Conurbano, multiple = T)
 filter_checkbox("inv", "Esta en inventario", shared_resid, group = ~EN_INVENTARIO)
 filter_checkbox("tipo", "Tipo de condominio o residencial", shared_resid, group = ~TIPO)
@@ -267,6 +329,12 @@ Column
 
 ```{r}
 map_resid
+```
+
+### Mapa de Densidad por Area
+
+```{r}
+densi_resid
 ```
 
 
@@ -295,6 +363,13 @@ Column
 map_indust
 ```
 
+### Mapa de Densidad por Cantidad de Personas
+
+```{r}
+densi_indust
+```
+
+
 Oficentros {data-icon="fa-suitcase"}
 =====================================
 
@@ -321,18 +396,25 @@ Column
 map_ofic
 ```
 
+### Mapa de Densidad de Oficentros segun Area Arrendable y Fecha de inicio
+
+```{r}
+densi_ofic
+```
+
+
 Comercial {data-icon="fa-shopping-bag"}
 =====================================
 
 Input4 {.sidebar}
 -------------------------------------
 
-Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count', column='Categoria')`</big></b>
+Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count', column='Categorias')`</big></b>
 
 ```{r}
 filter_select("comerc", "Busque el nombre del comercio", shared_comer, group = ~Nombre, multiple = T)
-filter_select("comerc_shop", "Seleccione tipo de negocio", shared_comer, group = ~shop, multiple = T)
-filter_select("fc", "Busque por id",  shared_comer, group = ~id, multiple = T)
+filter_checkbox("comerc_cat", "Seleccione la Categoria", shared_comer, group = ~Categorias)
+#filter_select("fc", "Busque por id",  shared_comer, group = ~id, multiple = T)
 ```
 
 Column
@@ -353,9 +435,9 @@ Input5 {.sidebar}
 Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
-filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
+#filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
 filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
-filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
+#filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
 ```
 
 Column
