@@ -10,6 +10,7 @@ output:
 ```{r setup, include=FALSE}
 
 #Librerias----
+
 library(flexdashboard)
 library(dplyr)
 library(crosstalk)
@@ -25,6 +26,8 @@ library(ggplot2)
 library(plotly)
 library(viridis)
 library(viridisLite)
+library(MASS)
+library(raster)
 
 #Data----
 
@@ -36,15 +39,15 @@ lay <- ogrListLayers(conn)
 #Layer----
 
 resid <- st_read(conn, layer="residenciales")
-resid_p <- st_read(conn, layer="residenciales", query="select fid, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_centroid(geom) as geom from residenciales")
+resid_p <- st_read(conn, layer="residenciales", query="select fid, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from residenciales")
 
 indust <- st_read(conn, layer="industriales")
-indust_p <- st_read(conn, layer="industriales", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_centroid(geom) as geom from industriales")
+indust_p <- st_read(conn, layer="industriales", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from industriales")
 
-ofic <- st_read(conn, layer="oficentros")
-ofic_p <- st_read(conn, layer="oficentros", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_centroid(geom) as geom from oficentros")
+ofic <- st_read(conn, layer="oficentros_polygon")
+ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from oficentros_polygon")
 
-comer <- st_read(conn, layer="comercials_point", query="select fid, fid as id, Nombre, Categorias, shop, geom from comercials_point where shop = 'mall'")
+comer <- st_read(conn, layer="comercials_point", query="select fid, fid as id, Nombre, Categorias, shop, st_x(geom) as x, st_y(geom) as y, geom from comercials_point where shop = 'mall'")
 
 rest <- st_read(conn, layer="restaurantes_point", query="select fid, fid as id, Nombre, Categoria, Cadena, Servicios, Cocina, geom from restaurantes_point where Cadena IS NOT NULL AND Cadena NOT LIKE 'Campe%' AND Cadena NOT LIKE 'App%' AND  Cadena NOT LIKE'Popeyes' AND Cadena NOT LIKE 'Nikk%'")
 
@@ -67,6 +70,15 @@ inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
 resid_inv <- left_join(resid_p, inv_r, by = c("fid"="ID"))
 ofic_inv <- left_join(ofic_p, inv_o, by = c("id"="fid"))
 indu_inv <- left_join(indust_p, inv_i, by = c("id"="fid"))
+
+#Mapa de restaurantes con densidades de los otros subsectores----
+
+lat_rd = st_coordinates(resid_inv)[,2]
+lon_rd = st_coordinates(resid_inv)[,1]
+
+rd = kde2d(lon_rd,lat_rd,h=.2,n=1000)
+rd_den <- raster(rd)
+
 
 #Layers_Filtros----
 
@@ -233,13 +245,16 @@ map_rest <- leaflet(width = "100%")%>%
                     minimized = TRUE,
                     position = "bottomleft")
 
+
 #Graficos de densidad----
 
-densi_resid <- plot_ly(
+densi_resid <- shared_resid
+densi_resid <- densi_resid %>% 
+  plot_ly(
     type = 'densitymapbox',
-    lat = st_coordinates(shared_resid$data())[,2],
-    lon = st_coordinates(shared_resid$data())[,1],
-    z = shared_resid$data()$Area,
+    lat = ~y,
+    lon = ~x,
+    z = ~Area,
     coloraxis = 'coloraxis',
     radius = 10)
 densi_resid <- densi_resid %>%
@@ -248,14 +263,15 @@ densi_resid <- densi_resid %>%
       style="carto-darkmatter",
       zoom =9,
       center= list(lon=-84, lat=10)),
-      coloraxis = list(colorscale = "Viridis"))
+    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
 
-
-densi_indust <- plot_ly(
+densi_indust <- shared_indust
+densi_indust <- densi_indust %>% 
+  plot_ly(
     type = 'densitymapbox',
-    lat = st_coordinates(shared_indust$data())[,2],
-    lon = st_coordinates(shared_indust$data())[,1],
-    z = shared_indust$data()$Cantidad_personas,
+    lat = ~y,
+    lon = ~x,
+    z = ~Cantidad_personas,
     coloraxis = 'coloraxis',
     radius = 10)
 densi_indust <- densi_indust %>%
@@ -264,17 +280,18 @@ densi_indust <- densi_indust %>%
       style="carto-darkmatter",
       zoom =9,
       center= list(lon=-84, lat=10)),
-      coloraxis = list(colorscale = "Viridis"))
+    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
 
-
-densi_ofic <- plot_ly(
+densi_ofic <- shared_ofic
+densi_ofic <- densi_ofic %>% 
+  plot_ly(
     type = 'densitymapbox',
-    lat = st_coordinates(shared_ofic$data())[,2],
-    lon = st_coordinates(shared_ofic$data())[,1],
-    z = shared_ofic$data()$Cantidad_personas,
+    lat = ~y,
+    lon = ~x,
+    z = ~Area_arrendable,
     coloraxis = 'coloraxis',
     radius = 10,
-    frame = shared_ofic$data()$Fecha_inicio,
+    frame = ~Fecha_inicio,
     alpha = 0.3)
 densi_ofic <- densi_ofic %>% animation_slider(
   currentvalue = list(
@@ -287,8 +304,7 @@ densi_ofic <- densi_ofic %>%
       style="carto-darkmatter",
       zoom =9,
       center= list(lon=-84, lat=10)),
-      coloraxis = list(colorscale = "Viridis"))
-
+    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
 
 
 ```
@@ -331,7 +347,7 @@ Column
 map_resid
 ```
 
-### Mapa de Densidad por Area
+### Mapa de Densidad de Residenciales por Area
 
 ```{r}
 densi_resid
