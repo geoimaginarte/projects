@@ -17,6 +17,7 @@ library(crosstalk)
 library(leaflet)
 library(RSQLite)
 library(sf)
+library(sp)
 library(rgdal)
 library(leaflet.extras)
 library(htmltools)
@@ -26,7 +27,6 @@ library(ggplot2)
 library(plotly)
 library(viridis)
 library(viridisLite)
-library(MASS)
 library(raster)
 
 #Data----
@@ -39,17 +39,29 @@ lay <- ogrListLayers(conn)
 #Layer----
 
 resid <- st_read(conn, layer="residenciales")
-resid_p <- st_read(conn, layer="residenciales", query="select fid, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from residenciales")
+resid_p <- st_centroid(resid)
+#resid_p <- st_read(conn, layer="residenciales", query="select fid, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from residenciales")
 
 indust <- st_read(conn, layer="industriales")
-indust_p <- st_read(conn, layer="industriales", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from industriales")
+indust_p <- st_centroid(indust) %>% 
+  dplyr::mutate(id =  fid)
+#indust_p <- st_read(conn, layer="industriales", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from industriales")
 
-ofic <- st_read(conn, layer="oficentros_polygon")
-ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from oficentros_polygon")
+ofic <- st_read(conn, layer="oficentros")
+ofic_p <- st_centroid(ofic) %>% 
+  dplyr::mutate(id = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
+#ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from oficentros_polygon")
 
-comer <- st_read(conn, layer="comercials_point", query="select fid, fid as id, Nombre, Categorias, shop, st_x(geom) as x, st_y(geom) as y, geom from comercials_point where shop = 'mall'")
+comer <- st_read(conn, layer="comercials_point") %>% 
+  dplyr::mutate(id = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2]) %>% 
+  dplyr::filter(shop == "mall")
+#query="select fid, fid as id, Nombre, Categorias, shop, st_x(geom) as x, st_y(geom) as y, geom from comercials_point where shop = 'mall'")
 
-rest <- st_read(conn, layer="restaurantes_point", query="select fid, fid as id, Nombre, Categoria, Cadena, Servicios, Cocina, geom from restaurantes_point where Cadena IS NOT NULL AND Cadena NOT LIKE 'Campe%' AND Cadena NOT LIKE 'App%' AND  Cadena NOT LIKE'Popeyes' AND Cadena NOT LIKE 'Nikk%'")
+rest <- st_read(conn, layer="restaurantes_point") %>%
+  dplyr::mutate(Long = st_coordinates(geom)[,1], lat = st_coordinates(geom)[,2]) %>% 
+  dplyr::filter(!Cadena %in% c("Campe", "App", "Popeyes", "Nikk")) %>% 
+  dplyr::filter(!is.na(Cadena))
+#query="select fid, fid as id, Nombre, Categoria, Cadena, Servicios, Cocina, geom from restaurantes_point where Cadena IS NOT NULL AND Cadena NOT LIKE 'Campe%' AND Cadena NOT LIKE 'App%' AND  Cadena NOT LIKE'Popeyes' AND Cadena NOT LIKE 'Nikk%'")
 
 dist <- st_read("E:/Trabajos Fran/Prospectiva investigación de mercado/Datos_Base/conurbanos.gpkg", layer="c_distritos")
 conur <- st_read("E:/Trabajos Fran/Prospectiva investigación de mercado/Datos_Base/conurbanos.gpkg", layer="conurbanos")
@@ -67,17 +79,23 @@ inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/Inve
 inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = cell_cols("D:F"))
 inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
 
-resid_inv <- left_join(resid_p, inv_r, by = c("fid"="ID"))
-ofic_inv <- left_join(ofic_p, inv_o, by = c("id"="fid"))
-indu_inv <- left_join(indust_p, inv_i, by = c("id"="fid"))
+resid_inv <- dplyr::left_join(resid_p, inv_r, by = c("fid"="ID"))
+ofic_inv <- dplyr::left_join(ofic_p, inv_o, by = c("id"="fid"))
+indu_inv <- dplyr::left_join(indust_p, inv_i, by = c("id"="fid"))
 
-#Mapa de restaurantes con densidades de los otros subsectores----
+#Densidades de los otros subsectores----
 
-lat_rd = st_coordinates(resid_inv)[,2]
-lon_rd = st_coordinates(resid_inv)[,1]
+resid_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_residenciales/resid_den/resid_den.img")
+pal_r <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(resid_den),
+  na.color = "transparent")
 
-rd = kde2d(lon_rd,lat_rd,h=.2,n=1000)
-rd_den <- raster(rd)
+indust_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_industrial/indust_den/indust_den.img")
+pal_i <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(indust_den),
+  na.color = "transparent")
+
+ofic_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_oficentros/ofic_den/ofic_den.img")
+pal_o <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(ofic_den),
+  na.color = "transparent")
 
 
 #Layers_Filtros----
@@ -124,6 +142,7 @@ map_resid <- leaflet(width = "100%")%>%
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Z. Residenciales", "Limites de residenciales","Distritos GAM", "Cornubanos GAM"),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  hideGroup("Limites de residenciales") %>% 
                   addMeasure(
                       position = "bottomleft",
                       primaryLengthUnit = "meters",
@@ -153,6 +172,7 @@ map_indust <- leaflet(width = "100%")%>%
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM"),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  hideGroup(c("Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
                   addMeasure(
                       position = "bottomleft",
                       primaryLengthUnit = "meters",
@@ -227,12 +247,16 @@ map_rest <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
+                  addRasterImage(resid_den, group = "Densidad residencial por area", colors = pal_r, opacity = 0.8) %>%  
+                  addRasterImage(indust_den, group = "Densidad industrial por cant.personas", colors = pal_i, opacity = 0.8) %>%
+                  addRasterImage(ofic_den, group = "Densidad residencial por area arrendable", colors = pal_o, opacity = 0.8) %>%
                   addWebGLHeatmap(data = shared_rest, group = "Densidad de Restaurantes", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
                   addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, icon = restcon)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Distritos GAM", "Conurbanos GAM"),
+                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Densidad residencial por area","Densidad industrial por cant.personas","Densidad residencial por area arrendable","Distritos GAM", "Conurbanos GAM"),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  hideGroup(c("Densidad residencial por area","Densidad industrial por cant.personas","Densidad residencial por area arrendable")) %>% 
                   addMeasure(
                       position = "bottomleft",
                       primaryLengthUnit = "meters",
@@ -252,8 +276,8 @@ densi_resid <- shared_resid
 densi_resid <- densi_resid %>% 
   plot_ly(
     type = 'densitymapbox',
-    lat = ~y,
-    lon = ~x,
+    lat = ~Lat,
+    lon = ~Long,
     z = ~Area,
     coloraxis = 'coloraxis',
     radius = 10)
@@ -269,8 +293,8 @@ densi_indust <- shared_indust
 densi_indust <- densi_indust %>% 
   plot_ly(
     type = 'densitymapbox',
-    lat = ~y,
-    lon = ~x,
+    lat = ~Lat,
+    lon = ~Long,
     z = ~Cantidad_personas,
     coloraxis = 'coloraxis',
     radius = 10)
@@ -286,8 +310,8 @@ densi_ofic <- shared_ofic
 densi_ofic <- densi_ofic %>% 
   plot_ly(
     type = 'densitymapbox',
-    lat = ~y,
-    lon = ~x,
+    lat = ~Lat,
+    lon = ~Long,
     z = ~Area_arrendable,
     coloraxis = 'coloraxis',
     radius = 10,
@@ -347,7 +371,7 @@ Column
 map_resid
 ```
 
-### Mapa de Densidad de Residenciales por Area
+### Mapa de Densidad de Residenciales por magnitud de Area
 
 ```{r}
 densi_resid
@@ -379,7 +403,7 @@ Column
 map_indust
 ```
 
-### Mapa de Densidad por Cantidad de Personas
+### Mapa de Densidad de Z.Industriales por magnitud de Cantidad de Personas
 
 ```{r}
 densi_indust
@@ -412,7 +436,7 @@ Column
 map_ofic
 ```
 
-### Mapa de Densidad de Oficentros segun Area Arrendable y Fecha de inicio
+### Mapa de Densidad de Oficentros por magnitud de Area Arrendable segun Fecha de inicio
 
 ```{r}
 densi_ofic
@@ -452,9 +476,19 @@ Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count
 
 ```{r}
 #filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
+filter_checkbox("auto", "Automatic", shared_rest, ~ifelse(Cadena == "KFC", "KFC", "Otras Cadenas"))
 filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
 #filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
 ```
+
+<p><p><p><p>
+<b>Creado por:</b> Jose Francisco Nuñez O. [Web page](https://geoimaginarte.github.io/mysite)
+<br><b>Fecha:</b> "`r format(Sys.time(), '%d %B %Y')`"
+<br><b>Fuente:</b> API Open Street Map
+<br><b>Analisis de densidades:</b> Interpolacion mediante el metodo de Natural Neighbor
+<br><b>Para:</b> Prospectiva & TopBox Research
+<p>
+<p>
 
 Column
 -----------------------------------------------------------------------
