@@ -235,11 +235,16 @@ map_resid <- leaflet(width = "100%")%>%
                   addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre, icon = resicon, popup = resipop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Residenciales", "Limites de residenciales","Distritos GAM", "Cornubanos GAM"),
+                      overlayGroups = c( "Z. Residenciales", "Limites de residenciales","Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
                   hideGroup("Limites de residenciales") %>% 
+                  addEasyprint(options = easyprintOptions(
+                    title = 'Print map',
+                    position = 'bottomleft',
+                    sizeModes = list("A4Landscape", "Current"),
+                    exportOnly = TRUE)) %>% 
                   addMeasure(
-                      position = "bottomleft",
+                      position = "bottomright",
                       primaryLengthUnit = "meters",
                       primaryAreaUnit = "sqmeters",
                       activeColor = "#3D535D",
@@ -248,7 +253,15 @@ map_resid <- leaflet(width = "100%")%>%
                     tiles = providers$Esri.WorldStreetMap,
                     toggleDisplay = TRUE,
                     minimized = TRUE,
-                    position = "bottomleft")
+                    position = "bottomright", zoomLevelOffset = -4)%>%
+                  addDrawToolbar(
+                    targetGroup='Nuevo Dibujo',
+                    position = 'topright',
+                    polylineOptions = FALSE,
+                    polygonOptions = FALSE,
+                    rectangleOptions = FALSE,
+                    circleMarkerOptions = FALSE,
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
 
 #Mapa de Industriales----
 
@@ -265,11 +278,16 @@ map_indust <- leaflet(width = "100%")%>%
                   addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, icon = indicon, popup = indupop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM"),
+                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
                   hideGroup(c("Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
+                  addEasyprint(options = easyprintOptions(
+                    title = 'Print map',
+                    position = 'bottomleft',
+                    sizeModes = list("A4Landscape", "Current"),
+                    exportOnly = TRUE)) %>% 
                   addMeasure(
-                      position = "bottomleft",
+                      position = "bottomright",
                       primaryLengthUnit = "meters",
                       primaryAreaUnit = "sqmeters",
                       activeColor = "#3D535D",
@@ -278,7 +296,15 @@ map_indust <- leaflet(width = "100%")%>%
                     tiles = providers$Esri.WorldStreetMap,
                     toggleDisplay = TRUE,
                     minimized = TRUE,
-                    position = "bottomleft")
+                    position = "bottomright", zoomLevelOffset = -4)%>%
+                  addDrawToolbar(
+                    targetGroup='Nuevo Dibujo',
+                    position = 'topright',
+                    polylineOptions = FALSE,
+                    polygonOptions = FALSE,
+                    rectangleOptions = FALSE,
+                    circleMarkerOptions = FALSE,
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
 
 #Mapa de Oficentros----
 
@@ -292,10 +318,15 @@ map_ofic <- leaflet(width = "100%")%>%
                   addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, icon = oficon, popup = ofipop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Oficentros", "Distritos GAM", "Conurbanos GAM"),
+                      overlayGroups = c( "Oficentros", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  addEasyprint(options = easyprintOptions(
+                    title = 'Print map',
+                    position = 'bottomleft',
+                    sizeModes = list("A4Landscape", "Current"),
+                    exportOnly = TRUE)) %>% 
                   addMeasure(
-                      position = "bottomleft",
+                      position = "bottomright",
                       primaryLengthUnit = "meters",
                       primaryAreaUnit = "sqmeters",
                       activeColor = "#3D535D",
@@ -304,7 +335,15 @@ map_ofic <- leaflet(width = "100%")%>%
                     tiles = providers$Esri.WorldStreetMap,
                     toggleDisplay = TRUE,
                     minimized = TRUE,
-                    position = "bottomleft")
+                    position = "bottomright", zoomLevelOffset = -4)%>%
+                  addDrawToolbar(
+                    targetGroup='Nuevo Dibujo',
+                    position = 'topright',
+                    polylineOptions = FALSE,
+                    polygonOptions = FALSE,
+                    rectangleOptions = FALSE,
+                    circleMarkerOptions = FALSE,
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
 
 #Mapa de Comerciales----
 
@@ -318,10 +357,15 @@ map_comer <- leaflet(width = "100%")%>%
                   addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre, icon = comercon, popup = comerpop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Comerciales", "Distritos GAM", "Conurbanos GAM"),
+                      overlayGroups = c( "Comerciales", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  addEasyprint(options = easyprintOptions(
+                    title = 'Print map',
+                    position = 'bottomleft',
+                    sizeModes = list("A4Landscape", "Current"),
+                    exportOnly = TRUE)) %>% 
                   addMeasure(
-                      position = "bottomleft",
+                      position = "bottomright",
                       primaryLengthUnit = "meters",
                       primaryAreaUnit = "sqmeters",
                       activeColor = "#3D535D",
@@ -330,7 +374,15 @@ map_comer <- leaflet(width = "100%")%>%
                     tiles = providers$Esri.WorldStreetMap,
                     toggleDisplay = TRUE,
                     minimized = TRUE,
-                    position = "bottomleft")
+                    position = "bottomright", zoomLevelOffset = -4)%>%
+                  addDrawToolbar(
+                    targetGroup='Nuevo Dibujo',
+                    position = 'topright',
+                    polylineOptions = FALSE,
+                    polygonOptions = FALSE,
+                    rectangleOptions = FALSE,
+                    circleMarkerOptions = FALSE,
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
 
 #Mapa de Restaurantes----
 
