@@ -28,6 +28,7 @@ library(plotly)
 library(viridis)
 library(viridisLite)
 library(raster)
+library(leaflet.extras2)
 
 #Data----
 
@@ -120,6 +121,20 @@ oficon <- makeIcon(iconUrl = "office.png")
 comercon <- makeIcon(iconUrl = "market.png")
 restcon <- makeIcon(iconUrl = "restaurant.png")
 
+#resticons <- iconList(
+  #KFC = makeIcon("brands/kfc.png"),
+  #McDonalds = makeIcon("brands/mcdonalds.png"),
+  #rest = makeIcon(iconUrl = "restaurant.png"))
+
+
+#Icons Diferenciados
+
+resticons <- icons(
+  iconUrl = ifelse(shared_rest$data()$Cadena == "KFC",
+    "brands/kfc.png", ifelse(shared_rest$data()$Cadena == "McDonalds",
+    "brands/mcdonalds.png", "restaurant.png"
+  )))
+
 #popups----
 
 distpop <- paste0("<b>Distrito:</b> ", dist$distrito, "<br><b>Conurbano: </b>", dist$Conurbanos)
@@ -133,6 +148,79 @@ indupop <- paste0("<b>Nombre:</b> ", shared_indust$data()$Nombre, "<br><b>Tipo:<
 ofipop <- paste0("<b>Nombre:</b> ", shared_ofic$data()$Nombre, "<br><b>Area Arrendable:</b> ", shared_ofic$data()$Area_arrendable, " mts", "<br><b>Poblacion:</b> ", shared_ofic$data()$Poblacion, "<br><b>Fecha de inicio:</b> ", shared_ofic$data()$Fecha_inicio, "<br><b>Distrito:</b> ", shared_ofic$data()$Distrito,  "<br><b>Conurbano:</b> ", shared_ofic$data()$Conurbano)
 
 comerpop <- paste0("<b>Nombre:</b> ", shared_comer$data()$Nombre, "<br><b>Area:</b> ", shared_comer$data()$Area, " mts", "<br><b>Categoria:</b> ", shared_comer$data()$Categorias, "<br><b>Fecha:</b> ", shared_comer$data()$Fecha, "<br><b>Distrito:</b> ", shared_comer$data()$distrito,  "<br><b>Conurbano:</b> ", shared_comer$data()$Conurbanos)
+
+#Graficos de densidad----
+
+densi_resid <- shared_resid
+densi_resid <- densi_resid %>% 
+  plot_ly(
+    type = 'densitymapbox',
+    lat = ~Lat,
+    lon = ~Long,
+    z = ~Personas,
+    coloraxis = 'coloraxis',
+    radius = 10)
+densi_resid <- densi_resid %>%
+  layout(
+    mapbox = list(
+      style="carto-darkmatter",
+      zoom =9,
+      center= list(lon=-84, lat=10)),
+    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
+
+densi_indust <- shared_indust
+densi_indust <- densi_indust %>% 
+  plot_ly(
+    type = 'densitymapbox',
+    lat = ~Lat,
+    lon = ~Long,
+    z = ~Cantidad_personas,
+    coloraxis = 'coloraxis',
+    radius = 10)
+densi_indust <- densi_indust %>%
+  layout(
+    mapbox = list(
+      style="carto-darkmatter",
+      zoom =9,
+      center= list(lon=-84, lat=10)),
+    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
+
+densi_ofic <- shared_ofic
+densi_ofic <- densi_ofic %>% 
+  plot_ly(
+    type = 'densitymapbox',
+    lat = ~Lat,
+    lon = ~Long,
+    z = ~Area_arrendable,
+    coloraxis = 'coloraxis',
+    radius = 10,
+    #frame = ~Fecha_inicio,
+    alpha = 0.3)
+#densi_ofic <- densi_ofic %>% animation_slider(currentvalue = list(prefix = "Fecha de inicio "))
+densi_ofic <- densi_ofic %>%
+  layout(
+    mapbox = list(
+      style="carto-darkmatter",
+      zoom =9,
+      center= list(lon=-84, lat=10)),
+    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
+
+densi_comer <- shared_comer
+densi_comer <- densi_comer %>% 
+  plot_ly(
+    type = 'densitymapbox',
+    lat = ~Lat,
+    lon = ~Long,
+    z = ~Area,
+    coloraxis = 'coloraxis',
+    radius = 10)
+densi_comer <- densi_comer %>%
+  layout(
+    mapbox = list(
+      style="carto-darkmatter",
+      zoom =9,
+      center= list(lon=-84, lat=10)),
+    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
 
 #Mapa de Residenciales----
 
@@ -258,14 +346,19 @@ map_rest <- leaflet(width = "100%")%>%
                   addRasterImage(ofic_den, group = "Densidad oficentros por area arrendable", colors = pal_o, opacity = 0.8) %>%
                   addRasterImage(comer_den, group = "Densidad comerciales por area", colors = pal_c, opacity = 0.8) %>%  
                   addWebGLHeatmap(data = shared_rest, group = "Densidad de Restaurantes", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
-                  addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, icon = restcon)%>% 
+                  addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, icon = ~resticons[Cadena])%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area","Distritos GAM", "Conurbanos GAM"),
+                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area")) %>% 
+                  hideGroup(c("Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area"))%>% 
+                  addEasyprint(options = easyprintOptions(
+                    title = 'Print map',
+                    position = 'bottomleft',
+                    sizeModes = list("A4Landscape", "Current"),
+                    exportOnly = TRUE)) %>% 
                   addMeasure(
-                      position = "bottomleft",
+                      position = "bottomright",
                       primaryLengthUnit = "meters",
                       primaryAreaUnit = "sqmeters",
                       activeColor = "#3D535D",
@@ -274,81 +367,16 @@ map_rest <- leaflet(width = "100%")%>%
                     tiles = providers$Esri.WorldStreetMap,
                     toggleDisplay = TRUE,
                     minimized = TRUE,
-                    position = "bottomleft")
+                    position = "bottomright", zoomLevelOffset = -4)%>%
+                  addDrawToolbar(
+                    targetGroup='Nuevo Dibujo',
+                    position = 'topright',
+                    polylineOptions = FALSE,
+                    polygonOptions = FALSE,
+                    rectangleOptions = FALSE,
+                    circleMarkerOptions = FALSE,
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
 
-
-#Graficos de densidad----
-
-densi_resid <- shared_resid
-densi_resid <- densi_resid %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Personas,
-    coloraxis = 'coloraxis',
-    radius = 10)
-densi_resid <- densi_resid %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
-
-densi_indust <- shared_indust
-densi_indust <- densi_indust %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Cantidad_personas,
-    coloraxis = 'coloraxis',
-    radius = 10)
-densi_indust <- densi_indust %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
-
-densi_ofic <- shared_ofic
-densi_ofic <- densi_ofic %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Area_arrendable,
-    coloraxis = 'coloraxis',
-    radius = 10,
-    #frame = ~Fecha_inicio,
-    alpha = 0.3)
-#densi_ofic <- densi_ofic %>% animation_slider(currentvalue = list(prefix = "Fecha de inicio "))
-densi_ofic <- densi_ofic %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
-
-densi_comer <- shared_comer
-densi_comer <- densi_comer %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Area,
-    coloraxis = 'coloraxis',
-    radius = 10)
-densi_comer <- densi_comer %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
 
 
 ```
@@ -508,7 +536,7 @@ Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count
 
 ```{r}
 #filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
-filter_checkbox("auto", "Automatic", shared_rest, ~ifelse(Cadena == "KFC", "KFC", "Otras Cadenas"))
+filter_checkbox("auto", "Selectivo de cadenas", shared_rest, ~ifelse(Cadena == "KFC", "KFC", ifelse(Cadena == "McDonalds", "McDonalds", "Otras Cadenas")))
 filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
 #filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
 ```
