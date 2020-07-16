@@ -29,6 +29,7 @@ library(viridis)
 library(viridisLite)
 library(raster)
 library(leaflet.extras2)
+library(spatstat)
 
 #Data----
 
@@ -77,31 +78,57 @@ zoni_ind <- st_read(conn2, layer="zoni_indust")
 #Uniones----
 
 inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Residencial", range = cell_cols("J:AG"))
-inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Oficentros", range = "C1:G264")
 inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = cell_cols("D:G"))
 inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
+inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Oficentros", range = "C1:G264")
 inv_c <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Comerciales", range = cell_cols("E:H"))
 
 resid_inv <- dplyr::left_join(resid_p, inv_r, by = c("fid"="fid"))
-ofic_inv <- dplyr::left_join(ofic_p, inv_o, by = c("id"="fid"))
 indu_inv <- dplyr::left_join(indust_p, inv_i, by = c("id"="fid"))
+ofic_inv <- dplyr::left_join(ofic_p, inv_o, by = c("id"="fid"))
 comer_inv <- dplyr::left_join(comer, inv_c, by = c("id"="fid"))
 
 #Densidades de los otros subsectores----
 
-resid_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_residenciales/resid_den/resid_den.img")
+#resid_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_residenciales/resid_den/resid_den.img")
+
+#indust_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_industrial/indust_den/indust_den.img")
+
+#ofic_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_oficentros/ofic_den/ofic_den.img")
+
+#comer_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_comerciales/comer_den/comer_den.img")
+
+#Projections----
+
+crtm <- "+proj=tmerc +lat_0=0 +lon_0=-84 +k=0.9999 +x_0=500000 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+wgs <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+
+#Density Analysis Nearest Neighbour
+
+r_p <- st_transform(resid_inv, 5367) %>% as.ppp()
+dresid <- nndensity(x=r_p, k = r_p$Personas) %>% raster(crs= crtm)
+resid_den <- projectRaster(dresid, crs = wgs)
+
+i_p <- st_transform(indu_inv, 5367) %>% as.ppp()
+dindu <- nndensity(x=i_p, k = i_p$Cantidad_personas) %>% raster(crs= crtm)
+indust_den <- projectRaster(dindu, crs = wgs)
+
+o_p <- st_transform(ofic_inv, 5367) %>% as.ppp()
+dofic <- nndensity(x=o_p, k = o_p$Area_arrendable) %>% raster(crs= crtm)
+ofic_den <- projectRaster(dofic, crs = wgs)
+
+c_p <- st_transform(comer_inv, 5367) %>% as.ppp()
+dofic <- nndensity(x=c_p, k = c_p$Area) %>% raster(crs= crtm)
+comer_den <- projectRaster(dofic, crs = wgs)
+
+#Paletas de color de rasters
+
 pal_r <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(resid_den),
   na.color = "transparent")
-
-indust_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_industrial/indust_den/indust_den.img")
 pal_i <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(indust_den),
   na.color = "transparent")
-
-ofic_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_oficentros/ofic_den/ofic_den.img")
 pal_o <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(ofic_den),
   na.color = "transparent")
-
-comer_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_comerciales/comer_den/comer_den.img")
 pal_c <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(comer_den),
   na.color = "transparent")
 
@@ -113,7 +140,7 @@ shared_ofic <- SharedData$new(ofic_inv, group = "inventario")
 shared_comer <- SharedData$new(comer_inv, group = "inventario")
 shared_rest <- SharedData$new(rest, group = "inventario")
 
-#Icons
+#Icons----
 
 resicon <- makeIcon(iconUrl = "house.png")
 indicon <- makeIcon(iconUrl = "industry.png")
@@ -127,7 +154,7 @@ restcon <- makeIcon(iconUrl = "restaurant.png")
   #rest = makeIcon(iconUrl = "restaurant.png"))
 
 
-#Icons Diferenciados
+#Icons Diferenciados----
 
 resticons <- icons(
   iconUrl = ifelse(shared_rest$data()$Cadena == "KFC",
@@ -428,7 +455,6 @@ map_rest <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
-
 
 
 ```
