@@ -105,25 +105,27 @@ wgs <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
 #Density Analysis Nearest Neighbour
 
+GAM <- st_transform(conur, 5367) %>% as.owin() %>% as.mask()
+
 r_p <- st_transform(resid_inv, 5367) %>% as.ppp()
-dresid <- nndensity(x=r_p, k = r_p$Personas) %>% raster(crs= crtm)
+dresid <- nndensity(x=r_p, k = r_p$Personas, W=GAM) %>% raster(crs= crtm)
 resid_den <- projectRaster(dresid, crs = wgs)
 
 i_p <- st_transform(indu_inv, 5367) %>% as.ppp()
-dindu <- nndensity(x=i_p, k = i_p$Cantidad_personas) %>% raster(crs= crtm)
+dindu <- nndensity(x=i_p, k = i_p$Cantidad_personas, W=GAM) %>% raster(crs= crtm)
 indust_den <- projectRaster(dindu, crs = wgs)
 
 o_p <- st_transform(ofic_inv, 5367) %>% as.ppp()
-dofic <- nndensity(x=o_p, k = o_p$Area_arrendable) %>% raster(crs= crtm)
+dofic <- nndensity(x=o_p, k = o_p$Area_arrendable, W=GAM) %>% raster(crs= crtm)
 ofic_den <- projectRaster(dofic, crs = wgs)
 
 c_p <- st_transform(comer_inv, 5367) %>% as.ppp()
-dofic <- nndensity(x=c_p, k = c_p$Area) %>% raster(crs= crtm)
+dofic <- nndensity(x=c_p, k = c_p$Area, W=GAM) %>% raster(crs= crtm)
 comer_den <- projectRaster(dofic, crs = wgs)
 
 #Paletas de color de rasters
 
-pal_r <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(resid_den),
+pal_r <- colorNumeric(palette = c("transparent", "#41B6C4", "#0C2C84"),  domain = values(resid_den),
   na.color = "transparent")
 pal_i <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(indust_den),
   na.color = "transparent")
