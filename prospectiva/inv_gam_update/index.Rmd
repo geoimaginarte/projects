@@ -88,15 +88,7 @@ indu_inv <- dplyr::left_join(indust_p, inv_i, by = c("id"="fid"))
 ofic_inv <- dplyr::left_join(ofic_p, inv_o, by = c("id"="fid"))
 comer_inv <- dplyr::left_join(comer, inv_c, by = c("id"="fid"))
 
-#Densidades de los otros subsectores----
-
-#resid_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_residenciales/resid_den/resid_den.img")
-
-#indust_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_industrial/indust_den/indust_den.img")
-
-#ofic_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_oficentros/ofic_den/ofic_den.img")
-
-#comer_den <- raster("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_comerciales/comer_den/comer_den.img")
+rest <- st_intersection(rest, dist)
 
 #Projections----
 
@@ -618,6 +610,7 @@ Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count
 #filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
 filter_checkbox("auto", "Selectivo de cadenas", shared_rest, ~ifelse(Cadena == "KFC", "KFC", ifelse(Cadena == "McDonalds", "McDonalds", "Otras Cadenas")))
 filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
+filter_select("conurbano_rest", "Filtre por conurbano", shared_rest, group = ~Conurbanos, multiple = T)
 #filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
 ```
 
