@@ -617,7 +617,7 @@ filter_select("conurbano_rest", "Filtre por conurbano", shared_rest, group = ~Co
 <p><p><p><p>
 <b>Creado por:</b> Jose Francisco Nuñez O. [Web page](https://geoimaginarte.github.io/mysite)
 <br><b>Fecha:</b> "`r format(Sys.time(), '%d %B %Y')`"
-<br><b>Fuente:</b> API Open Street Map
+<br><b>Fuente:</b> Sitios web de los restaurantes, API Open Street Map, Google Maps, Foursquare
 <br><b>Analisis de densidades:</b> Interpolacion mediante el metodo de Natural Neighbor
 <br><b>Para:</b> Prospectiva & TopBox Research
 <p>
