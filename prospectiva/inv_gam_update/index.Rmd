@@ -170,6 +170,8 @@ ofipop <- paste0("<b>Nombre:</b> ", shared_ofic$data()$Nombre, "<br><b>Area Arre
 
 comerpop <- paste0("<b>Nombre:</b> ", shared_comer$data()$Nombre, "<br><b>Area:</b> ", shared_comer$data()$Area, " mts", "<br><b>Categoria:</b> ", shared_comer$data()$Categorias, "<br><b>Fecha:</b> ", shared_comer$data()$Fecha, "<br><b>Distrito:</b> ", shared_comer$data()$distrito,  "<br><b>Conurbano:</b> ", shared_comer$data()$Conurbanos)
 
+restpop <- paste0("<b>Nombre:</b> ", shared_rest$data()$Nombre, "<br><b>Direccion:</b> ", shared_rest$data()$Direccion,  "<br><b>Distrito:</b> ", shared_comer$data()$distrito,  "<br><b>Conurbano:</b> ", shared_comer$data()$Conurbanos)
+
 #Graficos de densidad----
 
 densi_resid <- shared_resid
@@ -419,7 +421,7 @@ map_rest <- leaflet(width = "100%")%>%
                   addRasterImage(ofic_den, group = "Densidad oficentros por area arrendable", colors = pal_o, opacity = 0.8) %>%
                   addRasterImage(comer_den, group = "Densidad comerciales por area", colors = pal_c, opacity = 0.8) %>%  
                   addWebGLHeatmap(data = shared_rest, group = "Densidad de Restaurantes", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
-                  addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, icon = ~resticons[Cadena])%>% 
+                  addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, popup = restpop,icon = ~resticons[Cadena])%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
@@ -611,6 +613,7 @@ Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count
 filter_checkbox("auto", "Selectivo de cadenas", shared_rest, ~ifelse(Cadena == "KFC", "KFC", ifelse(Cadena == "McDonalds", "McDonalds", "Otras Cadenas")))
 filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
 filter_select("conurbano_rest", "Filtre por conurbano", shared_rest, group = ~Conurbanos, multiple = T)
+filter_select("dir_rest", "Filtre por Direccion", shared_rest, group = ~Direccion, multiple = T)
 #filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
 ```
 
