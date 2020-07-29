@@ -97,27 +97,40 @@ write.csv(rest, file = "E:/Trabajos Fran/Prospectiva investigación de mercado/I
 crtm <- "+proj=tmerc +lat_0=0 +lon_0=-84 +k=0.9999 +x_0=500000 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 wgs <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
-#Density Analysis Nearest Neighbour
+#Density Analysis Nearest Neighbour----
+
+reclass_df <- c(0, 1.5, NA,
+              1.5, 3, 1,
+              3, Inf, 2)
+reclass_m <- matrix(reclass_df,
+                ncol = 3,
+                byrow = TRUE)
 
 GAM <- st_transform(conur, 5367) %>% as.owin() %>% as.mask()
 
 r_p <- st_transform(resid_inv, 5367) %>% as.ppp()
 dresid <- nndensity(x=r_p, k = r_p$Personas, W=GAM) %>% raster(crs= crtm)
 resid_den <- projectRaster(dresid, crs = wgs)
+resid_den_r <- cut(resid_den, breaks = 3) %>% reclassify(reclass_m)
 
 i_p <- st_transform(indu_inv, 5367) %>% as.ppp()
 dindu <- nndensity(x=i_p, k = i_p$Cantidad_personas, W=GAM) %>% raster(crs= crtm)
 indust_den <- projectRaster(dindu, crs = wgs)
+indust_den_r <- cut(indust_den, breaks = 3)%>% reclassify(reclass_m)
 
 o_p <- st_transform(ofic_inv, 5367) %>% as.ppp()
 dofic <- nndensity(x=o_p, k = o_p$Area_arrendable, W=GAM) %>% raster(crs= crtm)
 ofic_den <- projectRaster(dofic, crs = wgs)
+ofic_den_r <- cut(ofic_den, breaks = 3)%>% reclassify(reclass_m)
 
 c_p <- st_transform(comer_inv, 5367) %>% as.ppp()
 dofic <- nndensity(x=c_p, k = c_p$Area, W=GAM) %>% raster(crs= crtm)
 comer_den <- projectRaster(dofic, crs = wgs)
+comer_den_r <- cut(comer_den, breaks = 3)%>% reclassify(reclass_m)
 
-#Paletas de color de rasters
+union_den <- raster::merge(resid_den_r, indust_den_r, ofic_den_r, comer_den_r)
+
+#Paletas de color de rasters----
 
 pal_r <- colorNumeric(palette = c("transparent", "#41B6C4", "#0C2C84"),  domain = values(resid_den),
   na.color = "transparent")
@@ -421,14 +434,15 @@ map_rest <- leaflet(width = "100%")%>%
                   addRasterImage(resid_den, group = "Densidad residencial por personas", colors = pal_r, opacity = 0.8) %>%  
                   addRasterImage(indust_den, group = "Densidad industrial por cant.personas", colors = pal_i, opacity = 0.8) %>%
                   addRasterImage(ofic_den, group = "Densidad oficentros por area arrendable", colors = pal_o, opacity = 0.8) %>%
-                  addRasterImage(comer_den, group = "Densidad comerciales por area", colors = pal_c, opacity = 0.8) %>%  
+                  addRasterImage(comer_den, group = "Densidad comerciales por area", colors = pal_c, opacity = 0.8) %>% 
+                  addRasterImage(union_den, group = "Zona determinada por mayores densidades", colors = "green", opacity = 0.8) %>%  
                   addWebGLHeatmap(data = shared_rest, group = "Densidad de Restaurantes", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
                   addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, popup = restpop,icon = ~resticons[Cadena])%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes","Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes", "Zona determinada por mayores densidades", "Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area"))%>% 
+                  hideGroup(c("Zona determinada por mayores densidades", "Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area"))%>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
