@@ -85,11 +85,11 @@ inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/Inve
 inv_c <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Comerciales", range = cell_cols("E:H"))
 inv_rt <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Restaurantes", range = cell_cols("A:C"))
 
-resid_inv <- dplyr::left_join(resid_p, inv_r, by = c("fid"="fid"))
-indu_inv <- dplyr::left_join(indust_p, inv_i, by = c("id"="fid"))
-ofic_inv <- dplyr::left_join(ofic_p, inv_o, by = c("id"="fid"))
-comer_inv <- dplyr::left_join(comer, inv_c, by = c("id"="fid"))
-rest_inv <- dplyr::left_join(rest, inv_rt, by = c("fid"="fid"))
+resid_inv <- dplyr::inner_join(resid_p, inv_r, by = c("fid"="fid"))
+indu_inv <- dplyr::inner_join(indust_p, inv_i, by = c("id"="fid"))
+ofic_inv <- dplyr::inner_join(ofic_p, inv_o, by = c("id"="fid"))
+comer_inv <- dplyr::inner_join(comer, inv_c, by = c("id"="fid"))
+rest_inv <- dplyr::inner_join(rest, inv_rt, by = c("fid"="fid"))
 
 rest <- st_intersection(rest_inv, dist)
 
