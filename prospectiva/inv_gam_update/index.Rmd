@@ -51,6 +51,7 @@ indust_p <- st_centroid(indust) %>%
 
 ofic <- st_read(conn, layer="oficentros")
 ofic_p <- st_centroid(ofic) %>% 
+    dplyr::select(fid, Nombre, Categoria, Area) %>% 
   dplyr::mutate(id = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
 #ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from oficentros_polygon")
 
@@ -81,7 +82,7 @@ zoni_ind <- st_read(conn2, layer="zoni_indust")
 inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Residencial", range = cell_cols("J:AG"))
 inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = cell_cols("D:G"))
 inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
-inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Oficentros", range = "C1:G264")
+inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Oficentros", range = "C1:G280")
 inv_c <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Comerciales", range = cell_cols("E:H"))
 inv_rt <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Restaurantes", range = cell_cols("A:C"))
 
@@ -92,8 +93,10 @@ comer_inv <- dplyr::inner_join(comer, inv_c, by = c("id"="fid"))
 rest_inv <- dplyr::inner_join(rest, inv_rt, by = c("fid"="fid"))
 
 rest <- st_intersection(rest_inv, dist)
+ofic_inv <- st_intersection(ofic_inv, dist)
 
-#write.csv(rest, file = "E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/otros_restaurantes/rest.csv")
+#library(writexl)
+#write_xlsx(indu_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_industrial\\indust.xlsx")
 
 #Projections----
 
@@ -564,7 +567,7 @@ Cantidad de Oficentros: <b><big>`r summarywidget(shared_ofic, statistic='count',
 
 ```{r}
 filter_select("oficent", "Busque el nombre del oficentro", shared_ofic, group = ~Nombre, multiple = T)
-filter_select("conurbano_o", "Filtre por conurbano", shared_ofic, group = ~Conurbano, multiple = T)
+filter_select("conurbano_o", "Filtre por conurbano", shared_ofic, group = ~Conurbanos, multiple = T)
 filter_checkbox("clasi", "Busque por clasificacion",  shared_ofic, group = ~Clasificacion, columns = 2)
 filter_slider("arrendable", "Filtre por area arrendable", shared_ofic, column = ~Area_arrendable, post = " mts")
 filter_slider("arrendable", "Filtre por poblacion", shared_ofic, column = ~Poblacion)
