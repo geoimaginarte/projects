@@ -80,7 +80,7 @@ zoni_ind <- st_read(conn2, layer="zoni_indust")
 #Uniones----
 
 inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Residencial", range = cell_cols("J:AG"))
-inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = cell_cols("D:G"))
+inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = "D1:G383")
 inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
 inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Oficentros", range = "C1:G280")
 inv_c <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Comerciales", range = cell_cols("E:H"))
