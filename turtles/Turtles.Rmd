@@ -1,5 +1,5 @@
 ---
-title: "Eggs laying and Nests Harvested of turtles in Ostional, Costa Rica, Period 2006-2010"
+title: "Eggs Laid and Nests Harvested of Kemp's Ridley Sea Turtles in Ostional, Costa Rica, Period 2006-2010"
 author: "Jose Francisco Nuñez Obando (<https://geoimaginarte.github.io/mysite>)"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: 
@@ -13,7 +13,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## About this document
+## About this Document
 
 This is an R Markdown presentation and it is created using Rstudio.
 
@@ -23,39 +23,39 @@ R is a language and environment for statistical computing and graphics. R provid
 
 ## Steps
 
-> - Determinate the Libraries to use
-> - Read the file and transformation the data
-> - Selection of the more appropiated kind of chart to represent the information
-> - Creation of dynamic timeline chart
+> - Determine the libraries to use
+> - Read the file and transform the data
+> - Select the more appropriate kind of chart to represent the information
+> - Create a dynamic timeline chart
 
-## Libraries used {.smaller}
+## Libraries Used {.smaller}
 
-R packages are a collection of R functions, complied code and sample data. They are stored under a directory called "library" in the R environment. By default, R installs a set of packages during installation. More packages are added later, when they are needed for some specific purpose.
+R packages are a collection of R functions, compiled code and sample data. They are stored under a directory called "library" in the R environment. By default, R installs a set of packages during installation. More packages are added later when they are needed for some specific purpose.
 
 ```{r warning=FALSE, message=FALSE, echo = TRUE}
 
-library(readxl) #Reading the data from excel sheet
-library(DT) #Show the dynamic table
-library(highcharter) #Representing the data in timelines chart
+library(readxl) #Read the data from excel sheet
+library(DT) #Show a dynamic table
+library(highcharter) #Represent the data in timeseries chart
 
 ```
 
-## Load of the table and any other changes in the data 
+## Load the Table and any other Changes in Data 
 
 ```{r echo = TRUE}
 
-#Load the table, stablishing the sheet, range and column types of the data
+#Load the table, establishing the sheet, range and column types of the data
 
 Turtle <- read_excel("E:/Trabajos Fran/Ostional/Nesting_and_Harvesting_DATA_Students.xlsx", 
                      sheet = "Chart", range = cell_cols("A1:C43"), 
                      col_types = c("numeric", "numeric", "date")) 
 
-#Change of column names
+#Change column names
 
 names(Turtle)[1] <- "egglaying"
 names(Turtle)[2] <- "nharv"
 
-#Convert of Date column to Timestamp column
+#Convert Date column to Timeseries column
 
 turtle.date <- ts(data=Turtle, 
                   start = c(2006,06), 
@@ -64,7 +64,7 @@ turtle.date <- ts(data=Turtle,
 
 ```
 
-## Creating a table
+## Create a visualization of the Table
 
 ```{r echo = TRUE}
 table <- datatable(turtle.date, extensions = c('Buttons','FixedColumns', 'RowReorder'),
@@ -76,31 +76,31 @@ table <- datatable(turtle.date, extensions = c('Buttons','FixedColumns', 'RowReo
     rowReorder = TRUE, order = list(c(0 , 'asc'))))
 ```
 
-## Consulting the table
+## Consulte the table
 
 ```{r}
 table
 ```
 
 
-## Creating the Timelines Dynamic Chart
+## Create the TimeSeries Dynamic Chart
 
 ```{r echo = TRUE}
 
-#Creating the Timelines chart
+#Create the Timeseries chart
 
 Chart <- highchart(type = "stock") %>% 
-  hc_title(text = "Total Eggs Laying Female and Percent of nests harvested") %>% 
+  hc_title(text = "Total Eggs Laid and Percentage of Nests Harvested") %>% 
   hc_subtitle(text = "Ostional - Costa Rica, Period 2006-2010") %>%
-  hc_yAxis_multiples(list(title = list(text = "Eggs laying"), opposite = FALSE),
+  hc_yAxis_multiples(list(title = list(text = "Total Eggs Laid"), opposite = FALSE),
                     list(showLastLabel = FALSE, opposite = TRUE, 
-                            title = list(text = "Nests harvested"))) %>% 
+                            title = list(text = "% of Nests Harvested"))) %>% 
   hc_add_series(turtle.date[,1],  yAxis = 0, type = "line", 
                 pointInterval= 30*24*3600*1000, 
-                name="Total Eggs Laying Female", color = "#ffa500")%>%
+                name="COunt of Eggs Laid", color = "#ffa500")%>%
   hc_add_series(turtle.date[,2],  yAxis = 1, type = "line", 
                 pointInterval= 30*24*3600*1000, 
-                name="Percent of nests harvested", color = "#13ED3F")%>%
+                name="Percentage of Nests Harvested", color = "#13ED3F")%>%
   hc_xAxis(title= list(text='Date'), type='datetime')
 ```
 
