@@ -67,6 +67,7 @@ turtle.date <- ts(data=Turtle,
 ## Create a visualization of the Table
 
 ```{r echo = TRUE}
+
 table <- datatable(turtle.date, extensions = c('Buttons','FixedColumns', 'RowReorder'),
   filter = list(position = 'top', clear = FALSE),
   options = list(dom = 'Bfrtip',
@@ -74,9 +75,10 @@ table <- datatable(turtle.date, extensions = c('Buttons','FixedColumns', 'RowReo
     scrollX = TRUE,
     fixedColumns = TRUE,
     rowReorder = TRUE, order = list(c(0 , 'asc'))))
+
 ```
 
-## Consulte the table
+## Consult the Table
 
 ```{r}
 table
