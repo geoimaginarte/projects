@@ -1,0 +1,33 @@
+/*!
+ * ActivePresenter HTML5 Output File
+ * Copyright (c) Atomi Systems, Inc. All rights reserved.
+ * https://atomisystems.com/activepresenter/
+ * Version: 7.5.15
+ * Date: 2020.10.20
+ */
+#MhL1XVnv .ap-focused {
+	outline: 1px dashed black;
+	outline-offset: 1px;
+}
+#MhL1XVnv p {
+	margin: 0;
+}
+#MhL1XVnv ol,ul {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+@font-face{
+    font-family: 'Georgia';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Georgia'),
+         url('resources/font_0.woff');
+}
+@font-face{
+    font-family: 'Tahoma';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Tahoma'),
+         url('resources/font_1.woff');
+}
+
