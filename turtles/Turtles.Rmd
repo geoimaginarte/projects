@@ -46,7 +46,7 @@ library(highcharter) #Represent the data in timeseries chart
 
 #Load the table, establishing the sheet, range and column types of the data
 
-Turtle <- read_excel("E:/Trabajos Fran/Ostional/Nesting_and_Harvesting_DATA_Students.xlsx", 
+Turtle <- read_excel("E:/Trabajos Fran/Ostional/Final.xlsx", 
                      sheet = "Chart", range = cell_cols("A1:C43"), 
                      col_types = c("numeric", "numeric", "date")) 
 
@@ -92,14 +92,14 @@ table
 #Create the Timeseries chart
 
 Chart <- highchart(type = "stock") %>% 
-  hc_title(text = "Total Eggs Laid and Percentage of Nests Harvested") %>% 
+  hc_title(text = "Total number of Egg Laying Females and Percent of Nests Harvested") %>% 
   hc_subtitle(text = "Ostional - Costa Rica, Period 2006-2010") %>%
-  hc_yAxis_multiples(list(title = list(text = "Total Eggs Laid"), opposite = FALSE),
+  hc_yAxis_multiples(list(title = list(text = "Egg Laying Females (total number)"), opposite = FALSE),
                     list(showLastLabel = FALSE, opposite = TRUE, 
-                            title = list(text = "% of Nests Harvested"))) %>% 
+                            title = list(text = "Nests Harvested (percent)"))) %>% 
   hc_add_series(turtle.date[,1],  yAxis = 0, type = "line", 
                 pointInterval= 30*24*3600*1000, 
-                name="COunt of Eggs Laid", color = "#ffa500")%>%
+                name="Egg Laying Females", color = "#ffa500")%>%
   hc_add_series(turtle.date[,2],  yAxis = 1, type = "line", 
                 pointInterval= 30*24*3600*1000, 
                 name="Percentage of Nests Harvested", color = "#13ED3F")%>%
