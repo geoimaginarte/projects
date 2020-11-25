@@ -92,8 +92,8 @@ table
 #Create the Timeseries chart
 
 Chart <- highchart(type = "stock") %>% 
-  hc_title(text = "Total number of Egg Laying Females and Percent of Nests Harvested") %>% 
-  hc_subtitle(text = "Ostional - Costa Rica, Period 2006-2010") %>%
+  hc_title(text = "Total number of Egg Laying Females and Percent of Nests Harvested<br>Ostional - Costa Rica, Period 2006-2010</br>") %>% 
+  hc_subtitle(text = "Figure Adapted from: Valverde et al. 2012") %>% 
   hc_yAxis_multiples(list(title = list(text = "Egg Laying Females (total number)"), opposite = FALSE),
                     list(showLastLabel = FALSE, opposite = TRUE, 
                             title = list(text = "Nests Harvested (percent)"))) %>% 
