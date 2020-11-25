@@ -97,12 +97,13 @@ Chart <- highchart(type = "stock") %>%
   hc_yAxis_multiples(list(title = list(text = "Egg Laying Females (total number)"), opposite = FALSE),
                     list(showLastLabel = FALSE, opposite = TRUE, 
                             title = list(text = "Nests Harvested (percent)"))) %>% 
-  hc_add_series(turtle.date[,1],  yAxis = 0, type = "line", 
+  hc_add_series(turtle.date[,2],  yAxis = 1, type = "column", 
                 pointInterval= 30*24*3600*1000, 
-                name="Egg Laying Females", color = "#ffa500")%>%
-  hc_add_series(turtle.date[,2],  yAxis = 1, type = "line", 
+                name="Percentage of Nests Harvested", color = "#2F528F")%>%
+  hc_add_series(turtle.date[,1],  yAxis = 0, type = "spline", 
                 pointInterval= 30*24*3600*1000, 
-                name="Percentage of Nests Harvested", color = "#13ED3F")%>%
+                name="Egg Laying Females", color = "#ED7D31")%>%
+  hc_plotOptions(spline = list(marker = list(enabled = TRUE, radius = 4))) %>% 
   hc_xAxis(title= list(text='Date'), type='datetime')
 ```
 
