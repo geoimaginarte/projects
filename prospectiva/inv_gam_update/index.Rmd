@@ -41,34 +41,46 @@ lay <- ogrListLayers(conn)
 #Layer----
 
 resid <- st_read(conn, layer="residenciales")
-resid_p <- st_centroid(resid)
+resid_p <- st_centroid(resid) %>% 
+  dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
+
+resid_p$ID <- as.numeric(as.character(resid_p$ID))
 #resid_p <- st_read(conn, layer="residenciales", query="select fid, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from residenciales")
 
-indust <- st_read(conn, layer="industriales")
+indust <- st_read(conn, layer="industriales", fid_column_name = 'fid', stringsAsFactors = FALSE)
 indust_p <- st_centroid(indust) %>% 
-  dplyr::mutate(id =  fid)
+  dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
+
+indust_p$ID <- as.numeric(as.character(indust_p$ID))
 #indust_p <- st_read(conn, layer="industriales", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from industriales")
 
-ofic <- st_read(conn, layer="oficentros")
+ofic <- st_read(conn, layer="oficentros", fid_column_name = 'fid')
 ofic_p <- st_centroid(ofic) %>% 
-    dplyr::select(fid, Nombre, Categoria, Area) %>% 
-  dplyr::mutate(id = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
+  dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
+
+ofic_p$ID <- as.numeric(as.character(ofic_p$ID))
 #ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from oficentros_polygon")
 
-comer <- st_read(conn, layer="comerciales") %>% 
-  dplyr::mutate(id = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2]) %>% 
-  dplyr::filter(shop == "mall")
-comer <- st_cast(comer, "POINT")
+comer <- st_read(conn, layer="comerciales", fid_column_name = 'fid') %>% dplyr::filter(shop == "mall")
+comer_p <- st_centroid(comer) %>% 
+  dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
+
+comer_p$ID <- as.numeric(as.character(comer_p$ID))
+#comer%>%dplyr::mutate(Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2]) %>% 
+  #dplyr::filter(shop == c("mall", "mall2"))
+#comer <- st_cast(comer, "POINT")
 #query="select fid, fid as id, Nombre, Categorias, shop, st_x(geom) as x, st_y(geom) as y, geom from comercials_point where shop = 'mall'")
 
-rest <- st_read(conn, layer="restaurantes_point") %>%
-  dplyr::mutate(Long = st_coordinates(geom)[,1], lat = st_coordinates(geom)[,2]) %>% 
+rest_p <- st_read(conn, layer="restaurantes", fid_column_name = 'fid') %>% 
   dplyr::filter(!Cadena %in% c("Campe", "App", "Popeyes", "Nikk")) %>% 
   dplyr::filter(!is.na(Cadena)) %>% 
-  dplyr::select(fid, Nombre, Servicios, Cadena, Direccion)
+  dplyr::select(fid, Nombre, Servicios, Cadena, Direccion) %>% 
+  dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], lat = st_coordinates(geom)[,2])
+
+rest_p$ID <- as.numeric(as.character(rest_p$ID))
 #query="select fid, fid as id, Nombre, Categoria, Cadena, Servicios, Cocina, geom from restaurantes_point where Cadena IS NOT NULL AND Cadena NOT LIKE 'Campe%' AND Cadena NOT LIKE 'App%' AND  Cadena NOT LIKE'Popeyes' AND Cadena NOT LIKE 'Nikk%'")
 
-dist <- st_read("E:/Trabajos Fran/Prospectiva investigación de mercado/Datos_Base/conurbanos.gpkg", layer="c_distritos")
+dist <- st_read("E:/Trabajos Fran/Prospectiva investigación de mercado/Datos_Base/conurbanos.gpkg", layer="Distritos_GAM")
 conur <- st_read("E:/Trabajos Fran/Prospectiva investigación de mercado/Datos_Base/conurbanos.gpkg", layer="conurbanos")
 
 conn2 <- "E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/complementarios.gpkg"
@@ -79,24 +91,48 @@ zoni_ind <- st_read(conn2, layer="zoni_indust")
 
 #Uniones----
 
-inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Residencial", range = cell_cols("J:AG"))
+inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Residenciales", range = cell_cols("A:AH"))
+inv_r[2:4] <- list(NULL)
+inv_r[3:8] <- list(NULL)
+inv_r[5:6] <- list(NULL)
+inv_r[23] <- NULL
+
 inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = "D1:G383")
 inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
+
 inv_o <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Oficentros", range = "C1:G280")
+
 inv_c <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Comerciales", range = cell_cols("E:H"))
+
 inv_rt <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Restaurantes", range = cell_cols("A:C"))
 
-resid_inv <- dplyr::inner_join(resid_p, inv_r, by = c("fid"="fid"))
-indu_inv <- dplyr::inner_join(indust_p, inv_i, by = c("id"="fid"))
-ofic_inv <- dplyr::inner_join(ofic_p, inv_o, by = c("id"="fid"))
-comer_inv <- dplyr::inner_join(comer, inv_c, by = c("id"="fid"))
-rest_inv <- dplyr::inner_join(rest, inv_rt, by = c("fid"="fid"))
+resid_inv <- dplyr::inner_join(resid_p, inv_r, by = c("ID"="fid_t"))
+indu_inv <- dplyr::inner_join(indust_p, inv_i, by = c("ID"="fid_t"))
+ofic_inv <- dplyr::inner_join(ofic_p, inv_o, by = c("ID"="fid_t"))
+comer_inv <- dplyr::left_join(comer_p, inv_c, by = c("ID"="fid_t"))
+rest_inv <- dplyr::inner_join(rest_p, inv_rt, by = c("ID"="fid_t"))
 
-rest <- st_intersection(rest_inv, dist)
+resid_inv <- st_intersection(resid_inv, dist)
+indu_inv <- st_intersection(indu_inv, dist)
 ofic_inv <- st_intersection(ofic_inv, dist)
+comer_inv <- st_intersection(comer_inv, dist)
+rest_inv <- st_intersection(rest_inv, dist)
+
+#Add new values
+
+#com <- comer_inv %>% 
+#  mutate(Categ = ifelse(test = grepl("Plaza", comer_inv$Nombre),  "Plaza", 
+#                        ifelse(test = grepl("Centro", comer_inv$Nombre),  "Centro Comercial", "")))
 
 #library(writexl)
-#write_xlsx(indu_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_industrial\\indust.xlsx")
+
+#write_xlsx(indu_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_industrial\\tabla_industriales.xlsx")
+
+#write_xlsx(ofic_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_oficentros\\tabla_oficentros.xlsx")
+
+#write_xlsx(comer_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_comerciales\\tabla_comerciales.xlsx")
+
+#write_xlsx(rest_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_restaurantes\\tabla_restaurantes.xlsx")
 
 #Projections----
 
@@ -153,7 +189,7 @@ shared_resid <- SharedData$new(resid_inv, group = "inventario")
 shared_indust <- SharedData$new(indu_inv, group = "inventario")
 shared_ofic <- SharedData$new(ofic_inv, group = "inventario")
 shared_comer <- SharedData$new(comer_inv, group = "inventario")
-shared_rest <- SharedData$new(rest, group = "inventario")
+shared_rest <- SharedData$new(rest_inv, group = "inventario")
 
 #Icons----
 
@@ -168,6 +204,19 @@ restcon <- makeIcon(iconUrl = "restaurant.png")
   #McDonalds = makeIcon("brands/mcdonalds.png"),
   #rest = makeIcon(iconUrl = "restaurant.png"))
 
+## Clasificacion por anos
+
+bins_resid <- c(10, 15, Inf)
+pal_resid <- colorBin(c("navy", "red"), domain = shared_resid$data()$FECHA, bins = bins_resid)
+
+bins_indust <- c(10, 15, Inf)
+pal_indust <- colorBin(c("navy", "red"), domain = shared_indust$data()$Fecha, bins = bins_indust)
+
+bins_ofic <- c(10, 15, 20, Inf)
+pal_ofic <- colorBin(c("navy", "red", "green"), domain = shared_ofic$data()$Fecha_inicio, bins = bins_ofic)
+
+bins_comer <- c(10, 15, Inf)
+pal_comer <- colorBin(c("navy", "red"), domain = shared_comer$data()$Fecha, bins = bins_comer)
 
 #Icons Diferenciados----
 
@@ -183,11 +232,11 @@ distpop <- paste0("<b>Distrito:</b> ", dist$distrito, "<br><b>Conurbano: </b>", 
 
 conurpop <- paste0("<b>Conurbano:</b> ", conur$Conurbanos)
 
-resipop <- paste0("<b>Nombre:</b> ", shared_resid$data()$Nombre, "<br><b>Distrito:</b> ", shared_resid$data()$Distrito,  "<br><b>Conurbano:</b> ", shared_resid$data()$Conurbano)
+resipop <- paste0("<b>Nombre:</b> ", shared_resid$data()$Nombre, "<br><b>Distrito:</b> ", shared_resid$data()$distrito,  "<br><b>Conurbano:</b> ", shared_resid$data()$Conurbanos)
 
-indupop <- paste0("<b>Nombre:</b> ", shared_indust$data()$Nombre, "<br><b>Tipo:</b> ", shared_indust$data()$Tipo,  "<br><b>Cant Personas:</b> ", shared_indust$data()$Cantidad_personas, "<br><b>Fecha:</b> ", shared_indust$data()$Fecha, "<br><b>Distrito:</b> ",  shared_indust$data()$Distrito,  "<br><b>Conurbano:</b> ", shared_indust$data()$Conurbano)
+indupop <- paste0("<b>Nombre:</b> ", shared_indust$data()$Nombre, "<br><b>Tipo:</b> ", shared_indust$data()$Tipo,  "<br><b>Cant Personas:</b> ", shared_indust$data()$Cantidad_personas, "<br><b>Fecha:</b> ", shared_indust$data()$Fecha, "<br><b>Distrito:</b> ",  shared_indust$data()$distrito,  "<br><b>Conurbano:</b> ", shared_indust$data()$Conurbanos)
 
-ofipop <- paste0("<b>Nombre:</b> ", shared_ofic$data()$Nombre, "<br><b>Area Arrendable:</b> ", shared_ofic$data()$Area_arrendable, " mts", "<br><b>Poblacion:</b> ", shared_ofic$data()$Poblacion, "<br><b>Fecha de inicio:</b> ", shared_ofic$data()$Fecha_inicio, "<br><b>Distrito:</b> ", shared_ofic$data()$Distrito,  "<br><b>Conurbano:</b> ", shared_ofic$data()$Conurbano)
+ofipop <- paste0("<b>Nombre:</b> ", shared_ofic$data()$Nombre, "<br><b>Area Arrendable:</b> ", shared_ofic$data()$Area_arrendable, " mts", "<br><b>Poblacion:</b> ", shared_ofic$data()$Poblacion, "<br><b>Fecha de inicio:</b> ", shared_ofic$data()$Fecha_inicio, "<br><b>Distrito:</b> ", shared_ofic$data()$distrito,  "<br><b>Conurbano:</b> ", shared_ofic$data()$Conurbanos)
 
 comerpop <- paste0("<b>Nombre:</b> ", shared_comer$data()$Nombre, "<br><b>Area:</b> ", shared_comer$data()$Area, " mts", "<br><b>Categoria:</b> ", shared_comer$data()$Categorias, "<br><b>Fecha:</b> ", shared_comer$data()$Fecha, "<br><b>Distrito:</b> ", shared_comer$data()$distrito,  "<br><b>Conurbano:</b> ", shared_comer$data()$Conurbanos)
 
@@ -276,12 +325,13 @@ map_resid <- leaflet(width = "100%")%>%
                   addPolygons(data=conur, group="Cornubanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
                   addPolygons(data=resid, group = "Limites de residenciales", color = "green", fillOpacity = 0.05)%>%
-                  addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre, icon = resicon, popup = resipop)%>% 
+                  addCircleMarkers(data = shared_resid, group = "Z.R rango fechas", color = ~pal_resid(FECHA), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>% 
+                  addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre, icon = resicon, popup = resipop)%>%
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Residenciales", "Limites de residenciales","Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Z. Residenciales", "Z.R rango fechas","Limites de residenciales","Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup("Limites de residenciales") %>% 
+                  hideGroup(c("Z.R rango fechas","Limites de residenciales")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -305,7 +355,8 @@ map_resid <- leaflet(width = "100%")%>%
                     polygonOptions = FALSE,
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
-                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
+                  addLegend(pal = pal_resid, values = shared_resid$data()$FECHA, opacity = 1, title = "Z.R rango fechas")
 
 #Mapa de Industriales----
 
@@ -319,12 +370,13 @@ map_indust <- leaflet(width = "100%")%>%
                   addPolygons(data=zon_pgam, group="Z.I. PlanGAM 2013", stroke = F, fillColor = "#BC0022")%>%
                   addPolygons(data=zoni_ind, group="Z.I. Planes Reguladores", color = "#FF6B00", fillColor = "#D2AA1B", weight = 2, popup = zoni_ind$Sitio)%>%
                   addPolygons(data=indust, group = "Limites de Z.Industriales", color = "green", fillOpacity = 0.05)%>%
+                  addCircleMarkers(data = shared_indust, group = "Z.I rango fechas", color = ~pal_indust(Fecha), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>%
                   addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, icon = indicon, popup = indupop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c("Z. Industriales", "Z.I rango fechas", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
+                  hideGroup(c("Z.I rango fechas", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -348,7 +400,8 @@ map_indust <- leaflet(width = "100%")%>%
                     polygonOptions = FALSE,
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
-                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
+                  addLegend(pal = pal_indust, values = shared_indust$data()$Fecha, opacity = 1, title = "Z.I rango fechas")
 
 #Mapa de Oficentros----
 
@@ -359,11 +412,13 @@ map_ofic <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%   
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
+                  addCircleMarkers(data = shared_ofic, group = "Oficentros rango fechas", color = ~pal_ofic(Fecha_inicio), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>%
                   addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, icon = oficon, popup = ofipop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Oficentros", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Oficentros", "Oficentros rango fechas","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  hideGroup("Oficentros rango fechas") %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -387,7 +442,8 @@ map_ofic <- leaflet(width = "100%")%>%
                     polygonOptions = FALSE,
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
-                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
+                  addLegend(pal = pal_ofic, values = shared_ofic$data()$Fecha_inicio, opacity = 1, title = "Oficentros rango fechas")
 
 #Mapa de Comerciales----
 
@@ -398,11 +454,13 @@ map_comer <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
+                  addCircleMarkers(data = shared_comer, group = "Comercial rango fechas", color = ~pal_comer(Fecha), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>%  
                   addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre, icon = comercon, popup = comerpop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Comerciales", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
+                      overlayGroups = c( "Comerciales", "Comercial rango fechas","Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  hideGroup("Comercial rango fechas") %>%  
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -426,7 +484,8 @@ map_comer <- leaflet(width = "100%")%>%
                     polygonOptions = FALSE,
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
-                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
+                  addLegend(pal = pal_comer, values = shared_comer$data()$Fecha, opacity = 1, title = "Comercial rango fechas")
 
 #Mapa de Restaurantes----
 
@@ -491,7 +550,7 @@ Cantidad de condominios, residencias o urbanizaciones: <b><big>`r summarywidget(
 ```{r}
 filter_select("residencial", "Busque el nombre del condominio, residencial o urbanizacion", shared_resid, group = ~Nombre, multiple = T)
 filter_checkbox("cate_resi", "Filtre por categoria", shared_resid, group = ~Categoria)
-filter_select("conurbano_r", "Filtre por conurbano", shared_resid, group = ~Conurbano, multiple = T)
+filter_select("conurbano_r", "Filtre por conurbano", shared_resid, group = ~Conurbanos, multiple = T)
 filter_checkbox("inv", "Esta en inventario", shared_resid, group = ~EN_INVENTARIO)
 filter_checkbox("tipo", "Tipo de condominio o residencial", shared_resid, group = ~TIPO)
 filter_slider("personr", "Filtre por la cantidad aproximada de personas", shared_resid, column = ~Personas)
@@ -534,7 +593,7 @@ Cantidad de zonas industriales: <b><big>`r summarywidget(shared_indust, statisti
 
 ```{r}
 filter_select("industrial", "Busque el nombre de la zona industrial", shared_indust, group = ~Nombre, multiple = T)
-filter_select("conurbano_i", "Filtre por conurbano", shared_indust, group = ~Conurbano, multiple = T)
+filter_select("conurbano_i", "Filtre por conurbano", shared_indust, group = ~Conurbanos, multiple = T)
 filter_checkbox("tipo_ind", "Seleccione el tipo de industria", shared_indust, group = ~Tipo, columns = 2)
 filter_slider("person", "Filtre por la cantidad aproximada de personas", shared_indust, column = ~Cantidad_personas)
 filter_slider("areaindu", "Filtre por area del sitio", shared_indust, column = ~Area, post = " mts")
@@ -602,7 +661,7 @@ Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count',
 filter_select("comerc", "Busque el nombre del comercio", shared_comer, group = ~Nombre, multiple = T)
 filter_checkbox("comerc_cat", "Seleccione la Categoria", shared_comer, group = ~Categorias)
 filter_select("conurbano_c", "Filtre por conurbano", shared_comer, group = ~Conurbanos, multiple = T)
-filter_slider("area", "Filtre por area", shared_comer, column = ~Area, post = " mts")
+filter_slider("area", "Filtre por area", shared_comer, column = ~Area_comer, post = " mts")
 filter_slider("arrendable", "Filtre por fecha de inicio", shared_comer, column = ~Fecha)
 #filter_select("fc", "Busque por id",  shared_comer, group = ~id, multiple = T)
 ```
