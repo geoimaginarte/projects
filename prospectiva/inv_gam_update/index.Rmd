@@ -91,11 +91,11 @@ zoni_ind <- st_read(conn2, layer="zoni_indust")
 
 #Uniones----
 
-inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Residenciales", range = cell_cols("A:AH"))
-inv_r[2:4] <- list(NULL)
-inv_r[3:8] <- list(NULL)
-inv_r[5:6] <- list(NULL)
-inv_r[23] <- NULL
+inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Residenciales", range = cell_cols("A:V"))
+#inv_r[2:4] <- list(NULL)
+#inv_r[3:8] <- list(NULL)
+#inv_r[5:6] <- list(NULL)
+#inv_r[23] <- NULL
 
 inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = "D1:G383")
 inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
@@ -124,7 +124,9 @@ rest_inv <- st_intersection(rest_inv, dist)
 #  mutate(Categ = ifelse(test = grepl("Plaza", comer_inv$Nombre),  "Plaza", 
 #                        ifelse(test = grepl("Centro", comer_inv$Nombre),  "Centro Comercial", "")))
 
-#library(writexl)
+library(writexl)
+
+write_xlsx(resid_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_residenciales\\tabla_residenciales.xlsx")
 
 #write_xlsx(indu_inv, "E:\\Trabajos Fran\\Prospectiva investigación de mercado\\InventarioGAM\\Datos\\otros_industrial\\tabla_industriales.xlsx")
 
@@ -204,27 +206,47 @@ restcon <- makeIcon(iconUrl = "restaurant.png")
   #McDonalds = makeIcon("brands/mcdonalds.png"),
   #rest = makeIcon(iconUrl = "restaurant.png"))
 
-## Clasificacion por anos
-
-bins_resid <- c(10, 15, Inf)
-pal_resid <- colorBin(c("navy", "red"), domain = shared_resid$data()$FECHA, bins = bins_resid)
-
-bins_indust <- c(10, 15, Inf)
-pal_indust <- colorBin(c("navy", "red"), domain = shared_indust$data()$Fecha, bins = bins_indust)
-
-bins_ofic <- c(10, 15, 20, Inf)
-pal_ofic <- colorBin(c("navy", "red", "green"), domain = shared_ofic$data()$Fecha_inicio, bins = bins_ofic)
-
-bins_comer <- c(10, 15, Inf)
-pal_comer <- colorBin(c("navy", "red"), domain = shared_comer$data()$Fecha, bins = bins_comer)
-
 #Icons Diferenciados----
+
+resid_rango <- icons(
+  iconUrl = ifelse(shared_resid$data()$FECHA < 15,
+    "bydate/house_10.png", ifelse(shared_resid$data()$FECHA < 20, "bydate/house_15.png", "bydate/house_NA.png"
+  )))
+
+indust_rango <- icons(
+  iconUrl = ifelse(shared_indust$data()$Fecha < 15,
+    "bydate/indust_10.png", ifelse(shared_indust$data()$Fecha < 20, "bydate/indust_15.png", "bydate/indust_NA.png"
+  )))
+
+ofic_rango <- icons(
+  iconUrl = ifelse(shared_ofic$data()$Fecha_inicio < 15,
+    "bydate/office_10.png", ifelse(shared_ofic$data()$Fecha_inicio < 20, "bydate/office_15.png", ifelse(shared_ofic$data()$Fecha_inicio < 30, "bydate/office_20.png", "bydate/office_NA.png"
+  ))))
+
+comer_rango <- icons(
+  iconUrl = ifelse(shared_comer$data()$Fecha < 15,
+    "bydate/comer_10.png", ifelse(shared_comer$data()$Fecha < 20, "bydate/comer_15.png", "bydate/comer_NA.png"
+  )))
 
 resticons <- icons(
   iconUrl = ifelse(shared_rest$data()$Cadena == "KFC",
     "brands/kfc.png", ifelse(shared_rest$data()$Cadena == "McDonalds",
     "brands/mcdonalds.png", "restaurant.png"
   )))
+
+## Clasificacion por anos
+
+bins_resid <- c(10, 15, 20)
+pal_resid <- colorBin(c("#058205", "#580505"), domain = shared_resid$data()$FECHA, bins = bins_resid)
+
+bins_indust <- c(10, 15, 20)
+pal_indust <- colorBin(c("#058205", "#580505"), domain = shared_indust$data()$Fecha, bins = bins_indust)
+
+bins_ofic <- c(10, 15, 20, 30)
+pal_ofic <- colorBin(c("#058205", "#580505", "#FF6600"), domain = shared_ofic$data()$Fecha_inicio, bins = bins_ofic)
+
+bins_comer <- c(10, 15, 20)
+pal_comer <- colorBin(c("#058205", "#580505"), domain = shared_comer$data()$Fecha, bins = bins_comer)
 
 #popups----
 
@@ -325,13 +347,12 @@ map_resid <- leaflet(width = "100%")%>%
                   addPolygons(data=conur, group="Cornubanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
                   addPolygons(data=resid, group = "Limites de residenciales", color = "green", fillOpacity = 0.05)%>%
-                  addCircleMarkers(data = shared_resid, group = "Z.R rango fechas", color = ~pal_resid(FECHA), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>% 
-                  addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre, icon = resicon, popup = resipop)%>%
+                  addMarkers(data= shared_resid, group = "Z. Residenciales", label = ~Nombre, icon = resid_rango, popup = resipop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Residenciales", "Z.R rango fechas","Limites de residenciales","Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Z. Residenciales", "Limites de residenciales","Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Z.R rango fechas","Limites de residenciales")) %>% 
+                  hideGroup("Limites de residenciales") %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -356,7 +377,7 @@ map_resid <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_resid, values = shared_resid$data()$FECHA, opacity = 1, title = "Z.R rango fechas")
+                  addLegend(pal = pal_resid, values = shared_resid$data()$FECHA, opacity = 1, title = "Rango fecha 2k")
 
 #Mapa de Industriales----
 
@@ -370,13 +391,12 @@ map_indust <- leaflet(width = "100%")%>%
                   addPolygons(data=zon_pgam, group="Z.I. PlanGAM 2013", stroke = F, fillColor = "#BC0022")%>%
                   addPolygons(data=zoni_ind, group="Z.I. Planes Reguladores", color = "#FF6B00", fillColor = "#D2AA1B", weight = 2, popup = zoni_ind$Sitio)%>%
                   addPolygons(data=indust, group = "Limites de Z.Industriales", color = "green", fillOpacity = 0.05)%>%
-                  addCircleMarkers(data = shared_indust, group = "Z.I rango fechas", color = ~pal_indust(Fecha), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>%
-                  addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, icon = indicon, popup = indupop)%>% 
+                  addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, icon = indust_rango, popup = indupop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c("Z. Industriales", "Z.I rango fechas", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Z.I rango fechas", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
+                  hideGroup(c("Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -401,7 +421,7 @@ map_indust <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_indust, values = shared_indust$data()$Fecha, opacity = 1, title = "Z.I rango fechas")
+                  addLegend(pal = pal_indust, values = shared_indust$data()$Fecha, opacity = 1, title = "Rango fecha 2k")
 
 #Mapa de Oficentros----
 
@@ -412,13 +432,11 @@ map_ofic <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%   
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
-                  addCircleMarkers(data = shared_ofic, group = "Oficentros rango fechas", color = ~pal_ofic(Fecha_inicio), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>%
-                  addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, icon = oficon, popup = ofipop)%>% 
+                  addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, icon = ofic_rango, popup = ofipop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Oficentros", "Oficentros rango fechas","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Oficentros", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup("Oficentros rango fechas") %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -443,7 +461,7 @@ map_ofic <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_ofic, values = shared_ofic$data()$Fecha_inicio, opacity = 1, title = "Oficentros rango fechas")
+                  addLegend(pal = pal_ofic, values = shared_ofic$data()$Fecha_inicio, opacity = 1, title = "Rango fecha 2k")
 
 #Mapa de Comerciales----
 
@@ -454,13 +472,11 @@ map_comer <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
-                  addCircleMarkers(data = shared_comer, group = "Comercial rango fechas", color = ~pal_comer(Fecha), radius = 7, stroke = FALSE, fillOpacity = 0.5) %>%  
-                  addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre, icon = comercon, popup = comerpop)%>% 
+                  addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre, icon = comer_rango, popup = comerpop)%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Comerciales", "Comercial rango fechas","Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
+                      overlayGroups = c( "Comerciales", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup("Comercial rango fechas") %>%  
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -485,7 +501,7 @@ map_comer <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_comer, values = shared_comer$data()$Fecha, opacity = 1, title = "Comercial rango fechas")
+                  addLegend(pal = pal_comer, values = shared_comer$data()$Fecha, opacity = 1, title = "Rango fecha 2k")
 
 #Mapa de Restaurantes----
 
