@@ -326,6 +326,8 @@ densi_comer <- densi_comer %>%
       center= list(lon=-84, lat=10)),
     coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
 
+#Mapas----
+
 #Mapa de Residenciales----
 
 map_resid <- leaflet(width = "100%")%>%
@@ -336,15 +338,16 @@ map_resid <- leaflet(width = "100%")%>%
                   addPolygons(data=conur, group="Cornubanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
                   addPolygons(data=resid, group = "Limites de residenciales", color = "green", fillOpacity = 0.05)%>%
+                  addRasterImage(resid_den, group = "Densidad residencial por personas", colors = pal_r, opacity = 0.8) %>%  
                   addMarkers(data= shared_resid, group = "Residenciales", label = ~Nombre, popup = resipop, 
                              icon = icons(iconUrl = ifelse(shared_resid$data()$Rango_Fechas == "2010-2015", "bydate/house_10.png", 
                                     ifelse(shared_resid$data()$Rango_Fechas == "2015-2020", "bydate/house_15.png", 
                                     "bydate/house_NA.png"))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Residenciales", "Limites de residenciales","Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Residenciales", "Limites de residenciales", "Densidad residencial por personas", "Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup("Limites de residenciales") %>% 
+                  hideGroup(c("Densidad residencial por personas","Limites de residenciales")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -383,15 +386,16 @@ map_indust <- leaflet(width = "100%")%>%
                   addPolygons(data=zon_pgam, group="Z.I. PlanGAM 2013", stroke = F, fillColor = "#BC0022")%>%
                   addPolygons(data=zoni_ind, group="Z.I. Planes Reguladores", color = "#FF6B00", fillColor = "#D2AA1B", weight = 2, popup = zoni_ind$Sitio)%>%
                   addPolygons(data=indust, group = "Limites de Z.Industriales", color = "green", fillOpacity = 0.05)%>%
+                  addRasterImage(indust_den, group = "Densidad industrial por cant.personas", colors = pal_i, opacity = 0.8) %>%  
                   addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, popup = indupop,
                              icon = icons(iconUrl = ifelse(shared_indust$data()$Rango_Fechas == "2010-2015", "bydate/indust_10.png", 
                                     ifelse(shared_indust$data()$Rango_Fechas == "2015-2020", "bydate/indust_15.png", 
                                     "bydate/indust_NA.png"))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Densidad industrial por cant.personas","Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
+                  hideGroup(c("Densidad industrial por cant.personas","Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -427,6 +431,7 @@ map_ofic <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%   
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
+                  addRasterImage(ofic_den, group = "Densidad oficentros por area arrendable", colors = pal_o, opacity = 0.8) %>%  
                   addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, popup = ofipop, 
                              icon = icons(iconUrl = ifelse(shared_ofic$data()$Rango_Fechas == "2010-2015", "bydate/office_10.png", 
                                     ifelse(shared_ofic$data()$Rango_Fechas == "2015-2020", "bydate/office_15.png", 
@@ -434,8 +439,9 @@ map_ofic <- leaflet(width = "100%")%>%
                                     "bydate/office_NA.png")))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Oficentros", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Oficentros", "Densidad oficentros por area arrendable", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  hideGroup("Densidad oficentros por area arrendable") %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -471,14 +477,16 @@ map_comer <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
+                  addRasterImage(comer_den, group = "Densidad comerciales por area", colors = pal_c, opacity = 0.8) %>%   
                   addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre, popup = comerpop, 
                              icon = icons(iconUrl = ifelse(shared_comer$data()$Rango_Fechas == "2010-2015", "bydate/comer_10.png", 
                                     ifelse(shared_comer$data()$Rango_Fechas == "2015-2020", "bydate/comer_15.png", 
                                     "bydate/comer_NA.png"))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Comerciales", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
+                      overlayGroups = c( "Comerciales", "Densidad comerciales por area", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
                       options = layersControlOptions(collapsed = FALSE))%>%
+                  hideGroup("Densidad comerciales por area") %>%   
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -558,13 +566,15 @@ map_rest <- leaflet(width = "100%")%>%
 ```
 
 
-
 Residenciales {data-icon="fa-home"}
 =====================================
 
 
 Input1 {.sidebar}
 -------------------------------------
+
+[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+
 
 Cantidad de condominios, residencias o urbanizaciones: <b><big>`r summarywidget(shared_resid, statistic='count', column='Categoria')`</big></b>
 
@@ -612,6 +622,8 @@ Industriales {data-icon="fa-industry"}
 Input2 {.sidebar}
 -------------------------------------
 
+[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+
 Cantidad de zonas industriales: <b><big>`r summarywidget(shared_indust, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
@@ -620,7 +632,7 @@ filter_select("conurbano_i", "Filtre por conurbano", shared_indust, group = ~Con
 filter_checkbox("tipo_ind", "Seleccione el tipo de industria", shared_indust, group = ~Tipo, columns = 2)
 filter_slider("person", "Filtre por la cantidad aproximada de personas", shared_indust, column = ~Cantidad_personas)
 filter_slider("areaindu", "Filtre por area del sitio", shared_indust, column = ~Area, post = " mts")
-filter_slider("fecha_i", "Filtre por fecha de inicio", shared_indust, column = ~Fecha)
+filter_slider("fecha_i", "Filtre por fecha, 2k_", shared_indust, column = ~Fecha)
 filter_checkbox("auto2", "Rango fechas", shared_indust, group = ~Rango_Fechas)
 ```
 
@@ -646,6 +658,8 @@ Oficentros {data-icon="fa-suitcase"}
 Input3 {.sidebar}
 -------------------------------------
 
+[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+
 Cantidad de Oficentros: <b><big>`r summarywidget(shared_ofic, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
@@ -654,7 +668,7 @@ filter_select("conurbano_o", "Filtre por conurbano", shared_ofic, group = ~Conur
 filter_checkbox("clasi", "Busque por clasificacion",  shared_ofic, group = ~Clasificacion, columns = 2)
 filter_slider("arrendable", "Filtre por area arrendable", shared_ofic, column = ~Area_arrendable, post = " mts")
 filter_slider("arrendable", "Filtre por poblacion", shared_ofic, column = ~Poblacion)
-filter_slider("arrendable", "Filtre por fecha de inicio antes o despues de 2010", shared_ofic, column = ~Fecha_inicio)
+filter_slider("arrendable", "Filtre por fecha, 2k_", shared_ofic, column = ~Fecha_inicio)
 filter_checkbox("auto3", "Rango fechas", shared_ofic, group = ~Rango_Fechas)
 ```
 
@@ -680,6 +694,8 @@ Comercial {data-icon="fa-shopping-bag"}
 Input4 {.sidebar}
 -------------------------------------
 
+[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+
 Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count', column='Categorias')`</big></b>
 
 ```{r}
@@ -687,9 +703,8 @@ filter_select("comerc", "Busque el nombre del comercio", shared_comer, group = ~
 filter_checkbox("comerc_cat", "Seleccione la Categoria", shared_comer, group = ~Categorias)
 filter_select("conurbano_c", "Filtre por conurbano", shared_comer, group = ~Conurbanos, multiple = T)
 filter_slider("area", "Filtre por area", shared_comer, column = ~Area_comer, post = " mts")
-filter_slider("arrendable", "Filtre por fecha de inicio", shared_comer, column = ~Fecha)
+filter_slider("arrendable", "Filtre por fecha, 2k_", shared_comer, column = ~Fecha)
 filter_checkbox("auto4", "Rango fechas", shared_comer, group = ~Rango_Fechas)
-#filter_select("fc", "Busque por id",  shared_comer, group = ~id, multiple = T)
 ```
 
 Column
@@ -713,6 +728,8 @@ Restaurantes {data-icon="fa-cutlery"}
 Input5 {.sidebar}
 -------------------------------------
 
+[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+
 Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
@@ -722,7 +739,6 @@ filter_select("restau_cad", "Busque segun cadena comercial del restaurante", sha
 filter_select("cat_rest", "Filtre por Categoria", shared_rest, group = ~Categoria, multiple = T)
 filter_select("conurbano_rest", "Filtre por conurbano", shared_rest, group = ~Conurbanos, multiple = T)
 filter_select("dir_rest", "Filtre por Direccion", shared_rest, group = ~Direccion, multiple = T)
-#filter_select("fr", "Busque por id",  shared_rest, group = ~id, multiple = T)
 ```
 
 <p><p><p><p>
@@ -742,7 +758,6 @@ Column
 ```{r}
 map_rest
 ```
-
 
 
 
