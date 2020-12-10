@@ -38,6 +38,7 @@ R packages are a collection of R functions, compiled code and sample data. They 
 
 library(readxl) #Read the data from excel sheet
 library(DT) #Show a dynamic table
+library(ggplot2) #Create Charts
 library(xts) #Create Time Series
 library(highcharter) #Represent the data in timeseries chart
 library(imager) #Open image
@@ -81,8 +82,45 @@ table <- datatable(Turtle, extensions = c('Buttons','FixedColumns', 'RowReorder'
 table
 ```
 
+## Summary of the data
 
-## Create the Time Series Dynamic Chart
+```{r echo = TRUE}
+summary(Turtle[,2:3])
+```
+
+## Create the Time Series Chart
+
+```{r echo = TRUE}
+
+#Create chart using ggplot tools
+
+Chart_1 <- Turtle %>% ggplot() + 
+  geom_line(mapping = aes(x = as.Date(Date, "%Y-%m", tz = "UTC"), y = nharv * 500000/100 ), 
+            colour="#ED7D31") + 
+  geom_point(mapping = aes(x = as.Date(Date, "%Y-%m", tz = "UTC"), y = nharv * 500000/100), 
+             size = 3, shape = 21, fill = "#ED7D31") +
+  geom_bar(mapping = aes(x = as.Date(Date, "%Y-%m", tz = "UTC"), y = egglaying), 
+           stat = "identity", colour = gray(0.5), fill = "#2F528F", alpha = 0.5) + 
+  scale_x_date(date_labels = "%b-%Y") +
+  scale_y_continuous(
+    name = "Egg Laying Females (total number)", 
+    sec.axis = sec_axis(~. * 100/500000, name="Nests Harvested (percent)"),
+    limits = c(0, 500000)) +
+  xlab("Date") +
+  ggtitle("Total number of Egg Laying Females and Percent of Nests Harvested
+       Ostional - Costa Rica, Period 2006-2010") + 
+  theme(panel.background = element_blank())
+
+```
+
+## Time Series Chart
+
+```{r}
+Chart_1
+```
+
+
+## Create the Time Series Vectors 
 
 A time series chart, also called a times series graph or time series plot, is a data visualization tool that illustrates data points at successive intervals of time. Each point on the chart corresponds to both a time and a quantity that is being measured.
 
@@ -91,14 +129,17 @@ A time series chart, also called a times series graph or time series plot, is a 
 
 Turtle.ts.eggs <- xts(Turtle$egglaying, Turtle$Date)
 Turtle.ts.nest <- xts(Turtle$nharv, Turtle$Date)
+
 ```
 
+
+## Create the Time Series Dynamic Chart
 
 ```{r echo = TRUE}
 
 #Create the Time Series Chart
 
-Chart <- highchart(type = "stock") %>% 
+Chart_2 <- highchart(type = "stock") %>% 
   hc_title(text = "Total number of Egg Laying Females and Percent of Nests Harvested
        <br>Ostional - Costa Rica, Period 2006-2010</br>") %>% 
   hc_subtitle(text = "Figure Adapted from: Valverde et al. 2012") %>% 
@@ -112,10 +153,10 @@ Chart <- highchart(type = "stock") %>%
   hc_xAxis(title= list(text='Date'), type='datetime')
 ```
 
-## TimeSeries Dynamic Chart
+## Time Series Dynamic Chart
 
 ```{r}
-Chart
+Chart_2
 ```
 
 ## Figure Adapted from: Valverde et al. 2012
