@@ -11,6 +11,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+setwd("E:/Trabajos Fran/Ostional")
 ```
 
 ## About this Document
@@ -26,7 +28,7 @@ R is a language and environment for statistical computing and graphics. R provid
 > - Determine the libraries to use
 > - Read the file and transform the data
 > - Select the more appropriate kind of chart to represent the information
-> - Create a dynamic timeline chart
+> - Create a dynamic time series chart
 
 ## Libraries Used {.smaller}
 
@@ -36,7 +38,9 @@ R packages are a collection of R functions, compiled code and sample data. They 
 
 library(readxl) #Read the data from excel sheet
 library(DT) #Show a dynamic table
+library(xts) #Create Time Series
 library(highcharter) #Represent the data in timeseries chart
+library(imager) #Open image
 
 ```
 
@@ -46,21 +50,14 @@ library(highcharter) #Represent the data in timeseries chart
 
 #Load the table, establishing the sheet, range and column types of the data
 
-Turtle <- read_excel("E:/Trabajos Fran/Ostional/Final.xlsx", 
-                     sheet = "Chart", range = cell_cols("A1:C43"), 
-                     col_types = c("numeric", "numeric", "date")) 
+Turtle <- read_excel("Turtles.xlsx", 
+                     sheet = "Chart", range = cell_cols("A:C"), 
+                     col_types = c("date","numeric", "numeric")) 
 
 #Change column names
 
-names(Turtle)[1] <- "egglaying"
-names(Turtle)[2] <- "nharv"
-
-#Convert Date column to Timeseries column
-
-turtle.date <- ts(data=Turtle, 
-                  start = c(2006,06), 
-                  end = c(2010,12), 
-                  frequency = 12)
+names(Turtle)[2] <- "egglaying"
+names(Turtle)[3] <- "nharv"
 
 ```
 
@@ -68,7 +65,7 @@ turtle.date <- ts(data=Turtle,
 
 ```{r echo = TRUE}
 
-table <- datatable(turtle.date, extensions = c('Buttons','FixedColumns', 'RowReorder'),
+table <- datatable(Turtle, extensions = c('Buttons','FixedColumns', 'RowReorder'),
   filter = list(position = 'top', clear = FALSE),
   options = list(dom = 'Bfrtip',
     buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), dom = 't',
@@ -85,26 +82,32 @@ table
 ```
 
 
-## Create the TimeSeries Dynamic Chart
+## Create the Time Series Dynamic Chart
+
+A time series chart, also called a times series graph or time series plot, is a data visualization tool that illustrates data points at successive intervals of time. Each point on the chart corresponds to both a time and a quantity that is being measured.
+
+```{r echo = TRUE}
+# Change dataset to Time Series format
+
+Turtle.ts.eggs <- xts(Turtle$egglaying, Turtle$Date)
+Turtle.ts.nest <- xts(Turtle$nharv, Turtle$Date)
+```
+
 
 ```{r echo = TRUE}
 
-#Create the Timeseries chart
+#Create the Time Series Chart
 
 Chart <- highchart(type = "stock") %>% 
   hc_title(text = "Total number of Egg Laying Females and Percent of Nests Harvested
-           <br>Ostional - Costa Rica, Period 2006-2010</br>") %>% 
+       <br>Ostional - Costa Rica, Period 2006-2010</br>") %>% 
   hc_subtitle(text = "Figure Adapted from: Valverde et al. 2012") %>% 
-  hc_yAxis_multiples(list(title = list(text = "Egg Laying Females (total number)"), 
-                          opposite = FALSE),
-                    list(showLastLabel = FALSE, opposite = TRUE, 
-                            title = list(text = "Nests Harvested (percent)"))) %>% 
-  hc_add_series(turtle.date[,1],  yAxis = 0, type = "column", 
-                pointInterval= 30*24*3600*1000, 
-                name="Egg Laying Females", color = "#2F528F")%>%
-  hc_add_series(turtle.date[,2],  yAxis = 1, type = "spline", 
-                pointInterval= 30*24*3600*1000, 
-                name="Percentage of Nests Harvested", color = "#ED7D31")%>%
+  hc_yAxis_multiples(list(title = list(text = "Egg Laying Females (total number)"), opposite = FALSE),
+      list(showLastLabel = FALSE, opposite = TRUE, title = list(text = "Nests Harvested (percent)"))) %>% 
+  hc_add_series(Turtle.ts.eggs,  yAxis = 0, type = "column", 
+      pointInterval= 30*24*3600*1000, name="Egg Laying Females", color = "#2F528F")%>%
+  hc_add_series(Turtle.ts.nest,  yAxis = 1, type = "spline", 
+      pointInterval= 30*24*3600*1000, name="Percentage of Nests Harvested", color = "#ED7D31")%>%
   hc_plotOptions(spline = list(marker = list(enabled = TRUE, radius = 4))) %>% 
   hc_xAxis(title= list(text='Date'), type='datetime')
 ```
@@ -114,4 +117,16 @@ Chart <- highchart(type = "stock") %>%
 ```{r}
 Chart
 ```
+
+## Figure Adapted from: Valverde et al. 2012
+
+```{r echo = TRUE}
+
+im <- load.image("chart2.jpg")
+im %>% plot(axes=F)
+
+```
+
+
+
 
