@@ -160,7 +160,7 @@ wgs <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
 #Density Analysis Nearest Neighbour----
 
-reclass_df <- c(0, 1, NA,
+reclass_df <- c(0, 1, 0,
               1, 2, 1,
               2, Inf, 2)
 reclass_m <- matrix(reclass_df,
@@ -172,83 +172,100 @@ GAM <- st_union(conur) %>% st_transform(5367) %>% as.owin() #%>% as.mask()
 #Densidades por subsector----
 
 #Residenciales densidades
-r_p <- st_transform(resid_inv, 5367) %>% as.ppp()
-dresid <- nndensity(x=r_p, k = r_p$Personas, W=GAM) %>% raster(crs= crtm)
+r_p <- st_transform(resid_inv, 5367)
+r_p$Personas[is.na(r_p$Personas)] <- 0
+r_p <- ppp(x = st_coordinates(r_p$geom)[,1], y = st_coordinates(r_p$geom)[,2], marks=r_p$Personas,window=GAM)
+dresid <- spatstat::idw(X=r_p, power = 3, at="pixels") %>% raster(crs= crtm)
 resid_den <- projectRaster(dresid, crs = wgs)
 resid_den_r <- cut(resid_den, breaks = 3) %>% reclassify(reclass_m)
 
 r_p_15 <- st_transform(filter(resid_inv, Rango_Fechas == '2010-2015'), 5367)
+r_p_15$Personas[is.na(r_p_15$Personas)] <- 0
 r_p_15 <- ppp(x = st_coordinates(r_p_15$geom)[,1], y = st_coordinates(r_p_15$geom)[,2], marks=r_p_15$Personas,window=GAM)
-dresid_15 <- nndensity(x=r_p_15) %>% raster(crs= crtm)
+dresid_15 <- spatstat::idw(X=r_p_15, power = 3, at="pixels") %>% raster(crs= crtm)
 resid_den_15 <- projectRaster(dresid_15, crs = wgs)
 resid_den_r15 <- cut(resid_den_15, breaks = 3) %>% reclassify(reclass_m)
 
 r_p_20 <- st_transform(filter(resid_inv, Rango_Fechas == '2015-2020'), 5367)
+r_p_20$Personas[is.na(r_p_20$Personas)] <- 0
 r_p_20 <- ppp(x = st_coordinates(r_p_20$geom)[,1], y = st_coordinates(r_p_20$geom)[,2], marks=r_p_20$Personas,window=GAM)
-dresid_20 <- nndensity(x=r_p_20) %>% raster(crs= crtm)
+dresid_20 <- spatstat::idw(X=r_p_20, power = 3, at="pixels") %>% raster(crs= crtm)
 resid_den_20 <- projectRaster(dresid_20, crs = wgs)
 resid_den_r20 <- cut(resid_den_20, breaks = 3) %>% reclassify(reclass_m)
 
 
 #Industriales densidades
-i_p <- st_transform(indu_inv, 5367) %>% as.ppp()
-dindu <- nndensity(x=i_p, k = i_p$Cantidad_personas, W=GAM) %>% raster(crs= crtm)
+i_p <- st_transform(indu_inv, 5367)
+i_p$Cantidad_personas[is.na(i_p$Cantidad_personas)] <- 0
+i_p <- ppp(x = st_coordinates(i_p$geom)[,1], y = st_coordinates(i_p$geom)[,2], marks=i_p$Cantidad_personas,window=GAM)
+dindu <- spatstat::idw(X=i_p, power = 3, at="pixels") %>% raster(crs= crtm)
 indust_den <- projectRaster(dindu, crs = wgs)
 indust_den_r <- cut(indust_den, breaks = 3)%>% reclassify(reclass_m)
 
 i_p_15 <- st_transform(filter(indu_inv, Rango_Fechas == '2010-2015'), 5367)
+i_p_15$Cantidad_personas[is.na(i_p_15$Cantidad_personas)] <- 0
 i_p_15 <- ppp(x = st_coordinates(i_p_15$geom)[,1], y = st_coordinates(i_p_15$geom)[,2], marks=i_p_15$Cantidad_personas,window=GAM)
-dindu_15 <- nndensity(x=i_p_15) %>% raster(crs= crtm)
+dindu_15 <- spatstat::idw(X=i_p_15, power =3 , at="pixels") %>% raster(crs= crtm)
 indust_den_15 <- projectRaster(dindu_15, crs = wgs)
 indust_den_r15 <- cut(indust_den_15, breaks = 3)%>% reclassify(reclass_m)
 
 i_p_20 <- st_transform(filter(indu_inv, Rango_Fechas == '2015-2020'), 5367)
+i_p_20$Cantidad_personas[is.na(i_p_20$Cantidad_personas)] <- 0
 i_p_20 <- ppp(x = st_coordinates(i_p_20$geom)[,1], y = st_coordinates(i_p_20$geom)[,2], marks=i_p_20$Cantidad_personas,window=GAM)
-dindu_20 <- nndensity(x=i_p_20) %>% raster(crs= crtm)
+dindu_20 <- spatstat::idw(X=i_p_20, power = 3, at="pixels") %>% raster(crs= crtm)
 indust_den_20 <- projectRaster(dindu_20, crs = wgs)
 indust_den_r20 <- cut(indust_den_20, breaks = 3)%>% reclassify(reclass_m)
 
 
 #Oficentros densidades
-o_p <- st_transform(ofic_inv, 5367) %>% as.ppp()
-dofic <- nndensity(x=o_p, k = o_p$Area_arrendable, W=GAM) %>% raster(crs= crtm)
+o_p <- st_transform(ofic_inv, 5367)
+o_p$Personas[is.na(o_p$Area_arrendable)] <- 0
+o_p <- ppp(x = st_coordinates(o_p$geom)[,1], y = st_coordinates(o_p$geom)[,2], marks=o_p$Area_arrendable,window=GAM)
+dofic <- spatstat::idw(X=o_p, power = 3, at="pixels")  %>% raster(crs= crtm)
 ofic_den <- projectRaster(dofic, crs = wgs)
 ofic_den_r <- cut(ofic_den, breaks = 3)%>% reclassify(reclass_m)
 
 o_p_15 <- st_transform(filter(ofic_inv, Rango_Fechas == '2010-2015'), 5367)
+o_p_15$Area_arrendable[is.na(o_p_15$Area_arrendable)] <- 0
 o_p_15 <- ppp(x = st_coordinates(o_p_15$geom)[,1], y = st_coordinates(o_p_15$geom)[,2], marks=o_p_15$Area_arrendable,window=GAM)
-dofic_15 <- nndensity(o_p_15) %>% raster(crs= crtm)
+dofic_15 <- spatstat::idw(X=o_p_15, power = 3, at="pixels") %>% raster(crs= crtm)
 ofic_den_15 <- projectRaster(dofic_15, crs = wgs)
 ofic_den_r15 <- cut(ofic_den_15, breaks = 3)%>% reclassify(reclass_m)
 
 o_p_20 <- st_transform(ofic_inv[ofic_inv$Rango_Fechas=="2015-2020",], 5367)
+o_p_20$Area_arrendable[is.na(o_p_20$Area_arrendable)] <- 0
 o_p_20 <- ppp(x = st_coordinates(o_p_20$geom)[,1], y = st_coordinates(o_p_20$geom)[,2], marks=o_p_20$Area_arrendable,window=GAM)
-dofic_20 <- nndensity(o_p_20) %>% raster(crs= crtm)
+dofic_20 <- spatstat::idw(X=o_p_20, power = 3, at="pixels") %>% raster(crs= crtm)
 ofic_den_20 <- projectRaster(dofic_20, crs = wgs)
 ofic_den_r20 <- cut(ofic_den_20, breaks = 3)%>% reclassify(reclass_m)
 
 o_p_30 <- st_transform(filter(ofic_inv, Rango_Fechas == '2020-2030'), 5367)
+o_p_30$Area_arrendable[is.na(o_p_30$Area_arrendable)] <- 0
 o_p_30 <- ppp(x = st_coordinates(o_p_30$geom)[,1], y = st_coordinates(o_p_30$geom)[,2], marks=o_p_30$Area_arrendable,window=GAM)
-dofic_30 <- nndensity(o_p_30) %>% raster(crs= crtm)
+dofic_30 <- spatstat::idw(X=o_p_30, power = 3, at="pixels") %>% raster(crs= crtm)
 ofic_den_30 <- projectRaster(dofic_30, crs = wgs)
 ofic_den_r30 <- cut(ofic_den_30, breaks = 3)%>% reclassify(reclass_m)
 
 
 #Comercial densidades
-c_p <- st_transform(comer_inv, 5367) %>% as.ppp()
-dcomer <- nndensity(x=c_p, k = c_p$Area, W=GAM) %>% raster(crs= crtm)
+c_p <- st_transform(comer_inv, 5367)
+c_p$Area[is.na(c_p$Area)] <- 0
+c_p <- ppp(x = st_coordinates(c_p$geom)[,1], y = st_coordinates(c_p$geom)[,2], marks=c_p$Area,window=GAM)
+dcomer <- spatstat::idw(X=c_p, power = 3, at="pixels")  %>% raster(crs= crtm)
 comer_den <- projectRaster(dofic, crs = wgs)
 comer_den_r <- cut(comer_den, breaks = 3)%>% reclassify(reclass_m)
 
 c_p_15 <- st_transform(filter(comer_inv, Rango_Fechas == '2010-2015'), 5367)
+c_p_15$Area[is.na(c_p_15$Area)] <- 0
 c_p_15 <- ppp(x = st_coordinates(c_p_15$geom)[,1], y = st_coordinates(c_p_15$geom)[,2], marks=c_p_15$Area,window=GAM)
-dcomer_15 <- density(x=c_p_15) %>% raster(crs= crtm)
+dcomer_15 <- spatstat::idw(X=c_p_15, power = 3, at="pixels") %>% raster(crs= crtm)
 comer_den_15 <- projectRaster(dcomer_15, crs = wgs)
 comer_den_r15 <- cut(comer_den_15, breaks = 3)%>% reclassify(reclass_m)
 
 c_p_20 <- st_transform(filter(comer_inv, Rango_Fechas == '2015-2020'), 5367)
+c_p_20$Area[is.na(c_p_20$Area)] <- 0
 c_p_20 <- ppp(x = st_coordinates(c_p_20$geom)[,1], y = st_coordinates(c_p_20$geom)[,2], marks=c_p_20$Area,window=GAM)
-dcomer_20 <- nndensity(x=c_p_20) %>% raster(crs= crtm)
+dcomer_20 <- spatstat::idw(X=c_p_15, power = 3, at="pixels") %>% raster(crs= crtm)
 comer_den_20 <- projectRaster(dcomer_20, crs = wgs)
 comer_den_r20 <- cut(comer_den_20, breaks = 3)%>% reclassify(reclass_m)
 
@@ -318,7 +335,7 @@ distpop <- paste0("<b>Distrito:</b> ", dist$distrito, "<br><b>Conurbano: </b>", 
 
 conurpop <- paste0("<b>Conurbano:</b> ", conur$Conurbanos)
 
-resipop <- paste0("<b>Nombre:</b> ", shared_resid$data()$Nombre, "<br><b>Fecha: </b>", shared_resid$data()$FECHA,"<br><b>Distrito:</b>", shared_resid$data()$distrito,  "<br><b>Conurbano:</b> ", shared_resid$data()$Conurbanos)
+resipop <- paste0("<b>Nombre:</b> ", shared_resid$data()$Nombre, "<br><b>Fecha: </b>", shared_resid$data()$FECHA, "<br><b>Cant Personas: </b>", shared_resid$data()$Personas,"<br><b>Distrito:</b>", shared_resid$data()$distrito,  "<br><b>Conurbano:</b> ", shared_resid$data()$Conurbanos)
 
 indupop <- paste0("<b>Nombre:</b> ", shared_indust$data()$Nombre, "<br><b>Tipo:</b> ", shared_indust$data()$Tipo,  "<br><b>Cant Personas:</b> ", shared_indust$data()$Cantidad_personas, "<br><b>Fecha:</b> ", shared_indust$data()$Fecha, "<br><b>Distrito:</b> ",  shared_indust$data()$distrito,  "<br><b>Conurbano:</b> ", shared_indust$data()$Conurbanos)
 
@@ -351,7 +368,6 @@ map_resid <- leaflet(width = "100%")%>%
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Residenciales", "Limites de residenciales", "Densidad R. por personas, 2010-15", "Densidad R. por personas, 2015-20", "Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad R. por personas, 2010-15","Densidad R. por personas, 2015-20", "Limites de residenciales")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -376,7 +392,11 @@ map_resid <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_resid, values = shared_resid$data()$FECHA, opacity = 1, title = "Rango fecha 2k")
+                  addLegend(pal = pal_resid, values = shared_resid$data()$FECHA,  group = "Residenciales", opacity = 1, title = "Rango fecha 2k") %>% 
+                 addLegend(pal = pal_r15, values = values(resid_den_15), opacity = 1, title = "Densidad 2010-15", group = "Densidad R. por personas, 2010-15") %>% 
+                addLegend(pal = pal_r20, values = values(resid_den_20), opacity = 1, title = "Densidad 2015-20", group = "Densidad R. por personas, 2015-20") %>%
+                addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente")) %>% 
+                    hideGroup(c("Densidad R. por personas, 2010-15","Densidad R. por personas, 2015-20", "Limites de residenciales"))
 
 #Mapa de Industriales----
 
@@ -399,8 +419,7 @@ map_indust <- leaflet(width = "100%")%>%
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Densidad I. por personas, 2010-15","Densidad I. por personas, 2015-20", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
-                      options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad I. por personas, 2010-15","Densidad I. por personas, 2015-20","Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
+                      options = layersControlOptions(collapsed = FALSE)) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -425,7 +444,11 @@ map_indust <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_indust, values = shared_indust$data()$Fecha, opacity = 1, title = "Rango fecha 2k")
+                  addLegend(pal = pal_indust, values = shared_indust$data()$Fecha, group = "Z. Industriales", opacity = 1, title = "Rango fecha 2k") %>% 
+                 addLegend(pal = pal_i15, values = values(indust_den_15), opacity = 1, title = "Densidad 2010-15", group = "Densidad I. por personas, 2010-15") %>% 
+                addLegend(pal = pal_i20, values = values(indust_den_20), opacity = 1, title = "Densidad 2015-20", group = "Densidad I. por personas, 2015-20") %>%
+                addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente")) %>%
+                  hideGroup(c("Densidad I. por personas, 2010-15","Densidad I. por personas, 2015-20","Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013"))
 
 #Mapa de Oficentros----
 
@@ -447,8 +470,7 @@ map_ofic <- leaflet(width = "100%")%>%
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Oficentros", "Densidad O. por area arrendable, 2010-15", "Densidad O. por area arrendable, 2015-20", "Densidad O. por area arrendable, 2020-30", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
-                      options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad O. por area arrendable, 2010-15", "Densidad O. por area arrendable, 2015-20", "Densidad O. por area arrendable, 2020-30")) %>% 
+                      options = layersControlOptions(collapsed = FALSE)) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -473,7 +495,12 @@ map_ofic <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_ofic, values = shared_ofic$data()$Fecha_inicio, opacity = 1, title = "Rango fecha 2k")
+                  addLegend(pal = pal_ofic, values = shared_ofic$data()$Fecha_inicio, opacity = 1, group = "Oficentros", title = "Rango fecha 2k")  %>% 
+                 addLegend(pal = pal_o15, values = values(ofic_den_15), opacity = 1, title = "Densidad 2010-15", group = "Densidad O. por area arrendable, 2010-15")%>%
+                addLegend(pal = pal_o20, values = values(ofic_den_20), opacity = 1, title = "Densidad 2015-20", group = "Densidad O. por area arrendable, 2015-20")%>%
+              addLegend(pal = pal_o30, values = values(ofic_den_30), opacity = 1, title = "Densidad 2020-30", group = "Densidad O. por area arrendable, 2020-30")%>%
+                addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente"))%>%
+                  hideGroup(c("Densidad O. por area arrendable, 2010-15", "Densidad O. por area arrendable, 2015-20", "Densidad O. por area arrendable, 2020-30"))
 
 #Mapa de Comerciales----
 
@@ -493,8 +520,7 @@ map_comer <- leaflet(width = "100%")%>%
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
                       overlayGroups = c( "Comerciales", "Densidad C. por area, 2010-15", "Densidad C. por area, 2015-20", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
-                      options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad C. por area, 2010-15", "Densidad C. por area, 2015-20")) %>%   
+                      options = layersControlOptions(collapsed = FALSE)) %>%   
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -519,7 +545,11 @@ map_comer <- leaflet(width = "100%")%>%
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
                     editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))%>%
-                  addLegend(pal = pal_comer, values = shared_comer$data()$Fecha, opacity = 1, title = "Rango fecha 2k")
+                  addLegend(pal = pal_comer, values = shared_comer$data()$Fecha,  group = "Comerciales", opacity = 1, title = "Rango fecha 2k") %>% 
+                 addLegend(pal = pal_c15, values = values(comer_den_15),  opacity = 1, title = "Densidad 2010-15", group = "Densidad C. por area, 2010-15")%>%  
+                addLegend(pal = pal_c20, values = values(comer_den_20),  opacity = 1, title = "Densidad 2015-20", group = "Densidad C. por area, 2015-20")%>%
+                addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente"))%>%
+                  hideGroup(c("Densidad C. por area, 2010-15", "Densidad C. por area, 2015-20"))
 
 #Mapa de Restaurantes----
 
@@ -534,7 +564,6 @@ map_rest <- leaflet(width = "100%")%>%
                   addRasterImage(indust_den, group = "Densidad industrial por cant.personas", colors = pal_i, opacity = 0.8) %>%
                   addRasterImage(ofic_den, group = "Densidad oficentros por area arrendable", colors = pal_o, opacity = 0.8) %>%
                   addRasterImage(comer_den, group = "Densidad comerciales por area", colors = pal_c, opacity = 0.8) %>% 
-                  addRasterImage(union_den, group = "Zona determinada por mayores densidades", colors = "green", opacity = 0.8) %>%  
                   addWebGLHeatmap(data = shared_rest, group = "Densidad de Restaurantes", size = "2000", units = "m", opacity = 0.5, gradientTexture = "deep-sea", alphaRange = 0.5) %>% 
                   addMarkers(data= shared_rest, group = "Restaurantes", label = ~Nombre, popup = restpop, 
                              icon = icons(iconUrl = ifelse(shared_rest$data()$Cadena == "KFC", "brands/kfc.png", 
@@ -542,9 +571,8 @@ map_rest <- leaflet(width = "100%")%>%
                                     "restaurant.png"))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes", "Zona determinada por mayores densidades", "Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
-                      options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Zona determinada por mayores densidades", "Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area"))%>% 
+                      overlayGroups = c( "Restaurantes", "Densidad de Restaurantes", "Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area","Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      options = layersControlOptions(collapsed = FALSE))%>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -568,7 +596,13 @@ map_rest <- leaflet(width = "100%")%>%
                     polygonOptions = FALSE,
                     rectangleOptions = FALSE,
                     circleMarkerOptions = FALSE,
-                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions()))
+                    editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions())) %>% 
+                  addLegend(pal = pal_r, values = values(resid_den), opacity = 1, title = "Densidad Residencial <br>por personas <br>2010-20", group = "Densidad residencial por personas")%>% 
+                  addLegend(pal = pal_i, values = values(indust_den), opacity = 1, title = "Densidad Industrial <br>por personas <br>2010-20",  group = "Densidad industrial por cant.personas")%>%
+                  addLegend(pal = pal_o, values = values(ofic_den), opacity = 1, title = "Densidad Oficentros <br>por area arrendable <br>2010-30",  group = "Densidad oficentros por area arrendable")%>%
+                  addLegend(pal = pal_c, values = values(comer_den), opacity = 1, title = "Densidad Comercial <br>por area <br>2010-20", group = "Densidad comerciales por area")%>%
+                  addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente"))%>%
+                  hideGroup(c("Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area"))
 
 
 ```
@@ -581,20 +615,20 @@ Residenciales {data-icon="fa-home"}
 Input1 {.sidebar}
 -------------------------------------
 
-[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+[RESET](#residenciales)
 
 
 Cantidad de condominios, residencias o urbanizaciones: <b><big>`r summarywidget(shared_resid, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
-filter_select("residencial", "Busque el nombre del condominio, residencial o urbanizacion", shared_resid, group = ~Nombre, multiple = T)
-filter_checkbox("cate_resi", "Filtre por categoria", shared_resid, group = ~Categoria)
-filter_select("conurbano_r", "Filtre por conurbano", shared_resid, group = ~Conurbanos, multiple = T)
-filter_checkbox("inv", "Esta en inventario", shared_resid, group = ~EN_INVENTARIO)
-filter_checkbox("tipo", "Tipo de condominio o residencial", shared_resid, group = ~TIPO)
+filter_select("residencial", "Busque el nombre del condominio, residencial o urbanizacion", shared_resid, group = ~Nombre, multiple = T, allLevels=T)
+filter_checkbox("cate_resi", "Filtre por categoria", shared_resid, group = ~Categoria, allLevels=T)
+filter_select("conurbano_r", "Filtre por conurbano", shared_resid, group = ~Conurbanos, multiple = T, allLevels=T)
+filter_checkbox("inv", "Esta en inventario", shared_resid, group = ~EN_INVENTARIO, allLevels=T)
+filter_checkbox("tipo", "Tipo de condominio o residencial", shared_resid, group = ~TIPO, allLevels=T)
 filter_slider("personr", "Filtre por la cantidad aproximada de personas", shared_resid, column = ~Personas)
 filter_slider("fechar", "Filtre por fecha", shared_resid, column = ~FECHA)
-filter_checkbox("auto", "Rango fechas", shared_resid, group = ~Rango_Fechas)
+filter_checkbox("auto", "Rango fechas", shared_resid, group = ~Rango_Fechas, allLevels=T)
 
 ```
 
@@ -624,18 +658,18 @@ Industriales {data-icon="fa-industry"}
 Input2 {.sidebar}
 -------------------------------------
 
-[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+[RESET](#industriales)
 
 Cantidad de zonas industriales: <b><big>`r summarywidget(shared_indust, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
-filter_select("industrial", "Busque el nombre de la zona industrial", shared_indust, group = ~Nombre, multiple = T)
-filter_select("conurbano_i", "Filtre por conurbano", shared_indust, group = ~Conurbanos, multiple = T)
-filter_checkbox("tipo_ind", "Seleccione el tipo de industria", shared_indust, group = ~Tipo, columns = 2)
+filter_select("industrial", "Busque el nombre de la zona industrial", shared_indust, group = ~Nombre, multiple = T, allLevels=T)
+filter_select("conurbano_i", "Filtre por conurbano", shared_indust, group = ~Conurbanos, multiple = T, allLevels=T)
+filter_checkbox("tipo_ind", "Seleccione el tipo de industria", shared_indust, group = ~Tipo, columns = 2, allLevels=T)
 filter_slider("person", "Filtre por la cantidad aproximada de personas", shared_indust, column = ~Cantidad_personas)
 filter_slider("areaindu", "Filtre por area del sitio", shared_indust, column = ~Area, post = " mts")
 filter_slider("fecha_i", "Filtre por fecha, 2k_", shared_indust, column = ~Fecha)
-filter_checkbox("auto2", "Rango fechas", shared_indust, group = ~Rango_Fechas)
+filter_checkbox("auto2", "Rango fechas", shared_indust, group = ~Rango_Fechas, allLevels=T)
 ```
 
 Column
@@ -654,18 +688,18 @@ Oficentros {data-icon="fa-suitcase"}
 Input3 {.sidebar}
 -------------------------------------
 
-[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+[RESET](#oficentros)
 
 Cantidad de Oficentros: <b><big>`r summarywidget(shared_ofic, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
-filter_select("oficent", "Busque el nombre del oficentro", shared_ofic, group = ~Nombre, multiple = T)
-filter_select("conurbano_o", "Filtre por conurbano", shared_ofic, group = ~Conurbanos, multiple = T)
-filter_checkbox("clasi", "Busque por clasificacion",  shared_ofic, group = ~Clasificacion, columns = 2)
+filter_select("oficent", "Busque el nombre del oficentro", shared_ofic, group = ~Nombre, multiple = T, allLevels=T)
+filter_select("conurbano_o", "Filtre por conurbano", shared_ofic, group = ~Conurbanos, multiple = T, allLevels=T)
+filter_checkbox("clasi", "Busque por clasificacion",  shared_ofic, group = ~Clasificacion, columns = 2, allLevels=T)
 filter_slider("arrendable", "Filtre por area arrendable", shared_ofic, column = ~Area_arrendable, post = " mts")
 filter_slider("arrendable", "Filtre por poblacion", shared_ofic, column = ~Poblacion)
 filter_slider("arrendable", "Filtre por fecha, 2k_", shared_ofic, column = ~Fecha_inicio)
-filter_checkbox("auto3", "Rango fechas", shared_ofic, group = ~Rango_Fechas)
+filter_checkbox("auto3", "Rango fechas", shared_ofic, group = ~Rango_Fechas, allLevels=T)
 ```
 
 Column
@@ -684,17 +718,17 @@ Comercial {data-icon="fa-shopping-bag"}
 Input4 {.sidebar}
 -------------------------------------
 
-[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+[RESET](#comercial)
 
 Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count', column='Categorias')`</big></b>
 
 ```{r}
-filter_select("comerc", "Busque el nombre del comercio", shared_comer, group = ~Nombre, multiple = T)
-filter_checkbox("comerc_cat", "Seleccione la Categoria", shared_comer, group = ~Categorias)
-filter_select("conurbano_c", "Filtre por conurbano", shared_comer, group = ~Conurbanos, multiple = T)
+filter_select("comerc", "Busque el nombre del comercio", shared_comer, group = ~Nombre, multiple = T, allLevels=T)
+filter_checkbox("comerc_cat", "Seleccione la Categoria", shared_comer, group = ~Categorias, allLevels=T)
+filter_select("conurbano_c", "Filtre por conurbano", shared_comer, group = ~Conurbanos, multiple = T, allLevels=T)
 filter_slider("area", "Filtre por area", shared_comer, column = ~Area_comer, post = " mts")
 filter_slider("arrendable", "Filtre por fecha, 2k_", shared_comer, column = ~Fecha)
-filter_checkbox("auto4", "Rango fechas", shared_comer, group = ~Rango_Fechas)
+filter_checkbox("auto4", "Rango fechas", shared_comer, group = ~Rango_Fechas, allLevels=T)
 ```
 
 Column
@@ -713,24 +747,24 @@ Restaurantes {data-icon="fa-cutlery"}
 Input5 {.sidebar}
 -------------------------------------
 
-[RESET](https://geoimaginarte.github.io/projects/prospectiva/inv_gam_update/)
+[RESET](#restaurantes)
 
 Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count', column='Categoria')`</big></b>
 
 ```{r}
 #filter_select("restau", "Busque el nombre del restaurante", shared_rest, group = ~Nombre, multiple = T)
-filter_checkbox("auto", "Selectivo de cadenas", shared_rest, ~ifelse(Cadena == "KFC", "KFC", ifelse(Cadena == "McDonalds", "McDonalds", "Otras Cadenas")))
-filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T)
-filter_select("cat_rest", "Filtre por Categoria", shared_rest, group = ~Categoria, multiple = T)
-filter_select("conurbano_rest", "Filtre por conurbano", shared_rest, group = ~Conurbanos, multiple = T)
-filter_select("dir_rest", "Filtre por Direccion", shared_rest, group = ~Direccion, multiple = T)
+filter_checkbox("auto", "Selectivo de cadenas", shared_rest, ~ifelse(Cadena == "KFC", "KFC", ifelse(Cadena == "McDonalds", "McDonalds", "Otras Cadenas")), allLevels=T)
+filter_select("restau_cad", "Busque segun cadena comercial del restaurante", shared_rest, group = ~Cadena, multiple = T, allLevels=T)
+filter_select("cat_rest", "Filtre por Categoria", shared_rest, group = ~Categoria, multiple = T, allLevels=T)
+filter_select("conurbano_rest", "Filtre por conurbano", shared_rest, group = ~Conurbanos, multiple = T, allLevels=T)
+filter_select("dir_rest", "Filtre por Direccion", shared_rest, group = ~Direccion, multiple = T, allLevels=T)
 ```
 
 <p><p><p><p>
 <b>Creado por:</b> Jose Francisco Nuñez O. [Web page](https://geoimaginarte.github.io/mysite)
 <br><b>Fecha:</b> "`r format(Sys.time(), '%d %B %Y')`"
 <br><b>Fuente:</b> Sitios web de los restaurantes, API Open Street Map, Google Maps, Foursquare
-<br><b>Analisis de densidades:</b> Interpolacion mediante el metodo de Natural Neighbor
+<br><b>Analisis de densidades:</b> Interpolacion mediante el metodo de IDW
 <br><b>Para:</b> Prospectiva & TopBox Research
 <p>
 <p>
