@@ -45,31 +45,28 @@ resid_p <- st_centroid(resid) %>%
   dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
 
 resid_p$ID <- as.numeric(as.character(resid_p$ID))
-#resid_p <- st_read(conn, layer="residenciales", query="select fid, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from residenciales")
+
 
 indust <- st_read(conn, layer="industriales", fid_column_name = 'fid', stringsAsFactors = FALSE)
 indust_p <- st_centroid(indust) %>% 
   dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
 
 indust_p$ID <- as.numeric(as.character(indust_p$ID))
-#indust_p <- st_read(conn, layer="industriales", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from industriales")
+
 
 ofic <- st_read(conn, layer="oficentros", fid_column_name = 'fid')
 ofic_p <- st_centroid(ofic) %>% 
   dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
 
 ofic_p$ID <- as.numeric(as.character(ofic_p$ID))
-#ofic_p <- st_read(conn, layer="oficentros_polygon", query="select fid, fid as id, Nombre, Categoria, Area, Canton, Distrito, Conurbano, st_x(st_centroid(geom)) as x, st_y(st_centroid(geom)) as y, st_centroid(geom) as geom from oficentros_polygon")
+
 
 comer <- st_read(conn, layer="comerciales", fid_column_name = 'fid') %>% dplyr::filter(shop == "mall")
 comer_p <- st_centroid(comer) %>% 
   dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2])
 
 comer_p$ID <- as.numeric(as.character(comer_p$ID))
-#comer%>%dplyr::mutate(Long = st_coordinates(geom)[,1], Lat = st_coordinates(geom)[,2]) %>% 
-  #dplyr::filter(shop == c("mall", "mall2"))
-#comer <- st_cast(comer, "POINT")
-#query="select fid, fid as id, Nombre, Categorias, shop, st_x(geom) as x, st_y(geom) as y, geom from comercials_point where shop = 'mall'")
+
 
 rest_p <- st_read(conn, layer="restaurantes", fid_column_name = 'fid') %>% 
   dplyr::filter(!Cadena %in% c("Campe", "App", "Popeyes", "Nikk")) %>% 
@@ -78,7 +75,7 @@ rest_p <- st_read(conn, layer="restaurantes", fid_column_name = 'fid') %>%
   dplyr::mutate(ID = fid, Long = st_coordinates(geom)[,1], lat = st_coordinates(geom)[,2])
 
 rest_p$ID <- as.numeric(as.character(rest_p$ID))
-#query="select fid, fid as id, Nombre, Categoria, Cadena, Servicios, Cocina, geom from restaurantes_point where Cadena IS NOT NULL AND Cadena NOT LIKE 'Campe%' AND Cadena NOT LIKE 'App%' AND  Cadena NOT LIKE'Popeyes' AND Cadena NOT LIKE 'Nikk%'")
+
 
 dist <- st_read("E:/Trabajos Fran/Prospectiva investigación de mercado/Datos_Base/conurbanos.gpkg", layer="Distritos_GAM")
 conur <- st_read("E:/Trabajos Fran/Prospectiva investigación de mercado/Datos_Base/conurbanos.gpkg", layer="conurbanos")
@@ -95,10 +92,7 @@ inv_r <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/Inve
 inv_r$Rango_Fechas <- ifelse(inv_r$FECHA < 15, "2010-2015", 
                    ifelse(inv_r$FECHA <= 20, "2015-2020", NA))
 inv_r$Rango_Fechas[is.na(inv_r$Rango_Fechas)] <- "SinDatos"
-#inv_r[2:4] <- list(NULL)
-#inv_r[3:8] <- list(NULL)
-#inv_r[5:6] <- list(NULL)
-#inv_r[23] <- NULL
+
 
 inv_i <- read_excel("E:/Trabajos Fran/Prospectiva investigación de mercado/InventarioGAM/Datos/DATASET_ENINVENTARIO.xlsx", sheet = "Industrial", range = cell_cols("D:G"), na = "")
 inv_i$Cantidad_personas <- as.integer(inv_i$Cantidad_personas)
@@ -163,48 +157,136 @@ rest_inv <- st_intersection(rest_inv, dist)
 crtm <- "+proj=tmerc +lat_0=0 +lon_0=-84 +k=0.9999 +x_0=500000 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 wgs <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
+
 #Density Analysis Nearest Neighbour----
 
-reclass_df <- c(0, 1.5, NA,
-              1.5, 3, 1,
-              3, Inf, 2)
+reclass_df <- c(0, 1, NA,
+              1, 2, 1,
+              2, Inf, 2)
 reclass_m <- matrix(reclass_df,
                 ncol = 3,
                 byrow = TRUE)
 
-GAM <- st_transform(conur, 5367) %>% as.owin() %>% as.mask()
+GAM <- st_union(conur) %>% st_transform(5367) %>% as.owin() #%>% as.mask()
 
+#Densidades por subsector----
+
+#Residenciales densidades
 r_p <- st_transform(resid_inv, 5367) %>% as.ppp()
 dresid <- nndensity(x=r_p, k = r_p$Personas, W=GAM) %>% raster(crs= crtm)
 resid_den <- projectRaster(dresid, crs = wgs)
 resid_den_r <- cut(resid_den, breaks = 3) %>% reclassify(reclass_m)
 
+r_p_15 <- st_transform(filter(resid_inv, Rango_Fechas == '2010-2015'), 5367)
+r_p_15 <- ppp(x = st_coordinates(r_p_15$geom)[,1], y = st_coordinates(r_p_15$geom)[,2], marks=r_p_15$Personas,window=GAM)
+dresid_15 <- nndensity(x=r_p_15) %>% raster(crs= crtm)
+resid_den_15 <- projectRaster(dresid_15, crs = wgs)
+resid_den_r15 <- cut(resid_den_15, breaks = 3) %>% reclassify(reclass_m)
+
+r_p_20 <- st_transform(filter(resid_inv, Rango_Fechas == '2015-2020'), 5367)
+r_p_20 <- ppp(x = st_coordinates(r_p_20$geom)[,1], y = st_coordinates(r_p_20$geom)[,2], marks=r_p_20$Personas,window=GAM)
+dresid_20 <- nndensity(x=r_p_20) %>% raster(crs= crtm)
+resid_den_20 <- projectRaster(dresid_20, crs = wgs)
+resid_den_r20 <- cut(resid_den_20, breaks = 3) %>% reclassify(reclass_m)
+
+
+#Industriales densidades
 i_p <- st_transform(indu_inv, 5367) %>% as.ppp()
 dindu <- nndensity(x=i_p, k = i_p$Cantidad_personas, W=GAM) %>% raster(crs= crtm)
 indust_den <- projectRaster(dindu, crs = wgs)
 indust_den_r <- cut(indust_den, breaks = 3)%>% reclassify(reclass_m)
 
+i_p_15 <- st_transform(filter(indu_inv, Rango_Fechas == '2010-2015'), 5367)
+i_p_15 <- ppp(x = st_coordinates(i_p_15$geom)[,1], y = st_coordinates(i_p_15$geom)[,2], marks=i_p_15$Cantidad_personas,window=GAM)
+dindu_15 <- nndensity(x=i_p_15) %>% raster(crs= crtm)
+indust_den_15 <- projectRaster(dindu_15, crs = wgs)
+indust_den_r15 <- cut(indust_den_15, breaks = 3)%>% reclassify(reclass_m)
+
+i_p_20 <- st_transform(filter(indu_inv, Rango_Fechas == '2015-2020'), 5367)
+i_p_20 <- ppp(x = st_coordinates(i_p_20$geom)[,1], y = st_coordinates(i_p_20$geom)[,2], marks=i_p_20$Cantidad_personas,window=GAM)
+dindu_20 <- nndensity(x=i_p_20) %>% raster(crs= crtm)
+indust_den_20 <- projectRaster(dindu_20, crs = wgs)
+indust_den_r20 <- cut(indust_den_20, breaks = 3)%>% reclassify(reclass_m)
+
+
+#Oficentros densidades
 o_p <- st_transform(ofic_inv, 5367) %>% as.ppp()
 dofic <- nndensity(x=o_p, k = o_p$Area_arrendable, W=GAM) %>% raster(crs= crtm)
 ofic_den <- projectRaster(dofic, crs = wgs)
 ofic_den_r <- cut(ofic_den, breaks = 3)%>% reclassify(reclass_m)
 
+o_p_15 <- st_transform(filter(ofic_inv, Rango_Fechas == '2010-2015'), 5367)
+o_p_15 <- ppp(x = st_coordinates(o_p_15$geom)[,1], y = st_coordinates(o_p_15$geom)[,2], marks=o_p_15$Area_arrendable,window=GAM)
+dofic_15 <- nndensity(o_p_15) %>% raster(crs= crtm)
+ofic_den_15 <- projectRaster(dofic_15, crs = wgs)
+ofic_den_r15 <- cut(ofic_den_15, breaks = 3)%>% reclassify(reclass_m)
+
+o_p_20 <- st_transform(ofic_inv[ofic_inv$Rango_Fechas=="2015-2020",], 5367)
+o_p_20 <- ppp(x = st_coordinates(o_p_20$geom)[,1], y = st_coordinates(o_p_20$geom)[,2], marks=o_p_20$Area_arrendable,window=GAM)
+dofic_20 <- nndensity(o_p_20) %>% raster(crs= crtm)
+ofic_den_20 <- projectRaster(dofic_20, crs = wgs)
+ofic_den_r20 <- cut(ofic_den_20, breaks = 3)%>% reclassify(reclass_m)
+
+o_p_30 <- st_transform(filter(ofic_inv, Rango_Fechas == '2020-2030'), 5367)
+o_p_30 <- ppp(x = st_coordinates(o_p_30$geom)[,1], y = st_coordinates(o_p_30$geom)[,2], marks=o_p_30$Area_arrendable,window=GAM)
+dofic_30 <- nndensity(o_p_30) %>% raster(crs= crtm)
+ofic_den_30 <- projectRaster(dofic_30, crs = wgs)
+ofic_den_r30 <- cut(ofic_den_30, breaks = 3)%>% reclassify(reclass_m)
+
+
+#Comercial densidades
 c_p <- st_transform(comer_inv, 5367) %>% as.ppp()
-dofic <- nndensity(x=c_p, k = c_p$Area, W=GAM) %>% raster(crs= crtm)
+dcomer <- nndensity(x=c_p, k = c_p$Area, W=GAM) %>% raster(crs= crtm)
 comer_den <- projectRaster(dofic, crs = wgs)
 comer_den_r <- cut(comer_den, breaks = 3)%>% reclassify(reclass_m)
 
+c_p_15 <- st_transform(filter(comer_inv, Rango_Fechas == '2010-2015'), 5367)
+c_p_15 <- ppp(x = st_coordinates(c_p_15$geom)[,1], y = st_coordinates(c_p_15$geom)[,2], marks=c_p_15$Area,window=GAM)
+dcomer_15 <- density(x=c_p_15) %>% raster(crs= crtm)
+comer_den_15 <- projectRaster(dcomer_15, crs = wgs)
+comer_den_r15 <- cut(comer_den_15, breaks = 3)%>% reclassify(reclass_m)
+
+c_p_20 <- st_transform(filter(comer_inv, Rango_Fechas == '2015-2020'), 5367)
+c_p_20 <- ppp(x = st_coordinates(c_p_20$geom)[,1], y = st_coordinates(c_p_20$geom)[,2], marks=c_p_20$Area,window=GAM)
+dcomer_20 <- nndensity(x=c_p_20) %>% raster(crs= crtm)
+comer_den_20 <- projectRaster(dcomer_20, crs = wgs)
+comer_den_r20 <- cut(comer_den_20, breaks = 3)%>% reclassify(reclass_m)
+
+
+#Union de las densidades
 union_den <- raster::merge(resid_den_r, indust_den_r, ofic_den_r, comer_den_r)
+
 
 #Paletas de color de rasters----
 
 pal_r <- colorNumeric(palette = c("transparent", "#41B6C4", "#0C2C84"),  domain = values(resid_den),
   na.color = "transparent")
+pal_r15 <- colorNumeric(palette = c("transparent", "#41B6C4", "#0C2C84"),  domain = values(resid_den_15),
+  na.color = "transparent")
+pal_r20 <- colorNumeric(palette = c("transparent", "#41B6C4", "#0C2C84"),  domain = values(resid_den_20),
+  na.color = "transparent")
+
 pal_i <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(indust_den),
   na.color = "transparent")
+pal_i15 <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(indust_den_15),
+  na.color = "transparent")
+pal_i20 <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(indust_den_20),
+  na.color = "transparent")
+
 pal_o <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(ofic_den),
   na.color = "transparent")
+pal_o15 <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(ofic_den_15),
+  na.color = "transparent")
+pal_o20 <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(ofic_den_20),
+  na.color = "transparent")
+pal_o30 <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(ofic_den_30),
+  na.color = "transparent")
+
 pal_c <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(comer_den),
+  na.color = "transparent")
+pal_c15 <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(comer_den_15),
+  na.color = "transparent")
+pal_c20 <- colorNumeric(c("transparent", "#41B6C4", "#0C2C84"), values(comer_den_20),
   na.color = "transparent")
 
 #Layers_Filtros----
@@ -215,13 +297,6 @@ shared_ofic <- SharedData$new(ofic_inv, group = "inventario")
 shared_comer <- SharedData$new(comer_inv, group = "inventario")
 shared_rest <- SharedData$new(rest_inv, group = "inventario")
 
-#Icons----
-
-#resicon <- makeIcon(iconUrl = "house.png")
-#indicon <- makeIcon(iconUrl = "industry.png")
-#oficon <- makeIcon(iconUrl = "office.png")
-#comercon <- makeIcon(iconUrl = "market.png")
-#restcon <- makeIcon(iconUrl = "restaurant.png")
 
 ## Clasificacion por anos
 
@@ -253,78 +328,6 @@ comerpop <- paste0("<b>Nombre:</b> ", shared_comer$data()$Nombre, "<br><b>Area:<
 
 restpop <- paste0("<b>Nombre:</b> ", shared_rest$data()$Nombre, "<br><b>Categoria:</b> ", shared_rest$data()$Categoria, "<br><b>Direccion:</b> ", shared_rest$data()$Direccion, "<br><b>Distrito:</b> ", shared_comer$data()$distrito,  "<br><b>Conurbano:</b> ", shared_comer$data()$Conurbanos)
 
-#Graficos de densidad----
-
-densi_resid <- shared_resid
-densi_resid <- densi_resid %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Personas,
-    coloraxis = 'coloraxis',
-    radius = 10)
-densi_resid <- densi_resid %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
-
-densi_indust <- shared_indust
-densi_indust <- densi_indust %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Cantidad_personas,
-    coloraxis = 'coloraxis',
-    radius = 10)
-densi_indust <- densi_indust %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
-
-densi_ofic <- shared_ofic
-densi_ofic <- densi_ofic %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Area_arrendable,
-    coloraxis = 'coloraxis',
-    radius = 10,
-    #frame = ~Fecha_inicio,
-    alpha = 0.3)
-#densi_ofic <- densi_ofic %>% animation_slider(currentvalue = list(prefix = "Fecha de inicio "))
-densi_ofic <- densi_ofic %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
-
-densi_comer <- shared_comer
-densi_comer <- densi_comer %>% 
-  plot_ly(
-    type = 'densitymapbox',
-    lat = ~Lat,
-    lon = ~Long,
-    z = ~Area,
-    coloraxis = 'coloraxis',
-    radius = 10)
-densi_comer <- densi_comer %>%
-  layout(
-    mapbox = list(
-      style="carto-darkmatter",
-      zoom =9,
-      center= list(lon=-84, lat=10)),
-    coloraxis = list(colorscale = "Viridis")) %>% config(displaylogo = F)
 
 #Mapas----
 
@@ -338,16 +341,17 @@ map_resid <- leaflet(width = "100%")%>%
                   addPolygons(data=conur, group="Cornubanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
                   addPolygons(data=resid, group = "Limites de residenciales", color = "green", fillOpacity = 0.05)%>%
-                  addRasterImage(resid_den, group = "Densidad residencial por personas", colors = pal_r, opacity = 0.8) %>%  
+                  addRasterImage(resid_den_15, group = "Densidad R. por personas, 2010-15", colors = pal_r15, opacity = 0.8) %>%  
+                  addRasterImage(resid_den_20, group = "Densidad R. por personas, 2015-20", colors = pal_r20, opacity = 0.8) %>%   
                   addMarkers(data= shared_resid, group = "Residenciales", label = ~Nombre, popup = resipop, 
                              icon = icons(iconUrl = ifelse(shared_resid$data()$Rango_Fechas == "2010-2015", "bydate/house_10.png", 
                                     ifelse(shared_resid$data()$Rango_Fechas == "2015-2020", "bydate/house_15.png", 
                                     "bydate/house_NA.png"))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Residenciales", "Limites de residenciales", "Densidad residencial por personas", "Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Residenciales", "Limites de residenciales", "Densidad R. por personas, 2010-15", "Densidad R. por personas, 2015-20", "Distritos GAM", "Cornubanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad residencial por personas","Limites de residenciales")) %>% 
+                  hideGroup(c("Densidad R. por personas, 2010-15","Densidad R. por personas, 2015-20", "Limites de residenciales")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -386,16 +390,17 @@ map_indust <- leaflet(width = "100%")%>%
                   addPolygons(data=zon_pgam, group="Z.I. PlanGAM 2013", stroke = F, fillColor = "#BC0022")%>%
                   addPolygons(data=zoni_ind, group="Z.I. Planes Reguladores", color = "#FF6B00", fillColor = "#D2AA1B", weight = 2, popup = zoni_ind$Sitio)%>%
                   addPolygons(data=indust, group = "Limites de Z.Industriales", color = "green", fillOpacity = 0.05)%>%
-                  addRasterImage(indust_den, group = "Densidad industrial por cant.personas", colors = pal_i, opacity = 0.8) %>%  
+                  addRasterImage(indust_den_15, group = "Densidad I. por personas, 2010-15", colors = pal_i15, opacity = 0.8) %>%  
+                  addRasterImage(indust_den_20, group = "Densidad I. por personas, 2015-20", colors = pal_i20, opacity = 0.8) %>%    
                   addMarkers(data= shared_indust, group = "Z. Industriales", label = ~Nombre, popup = indupop,
                              icon = icons(iconUrl = ifelse(shared_indust$data()$Rango_Fechas == "2010-2015", "bydate/indust_10.png", 
                                     ifelse(shared_indust$data()$Rango_Fechas == "2015-2020", "bydate/indust_15.png", 
                                     "bydate/indust_NA.png"))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Densidad industrial por cant.personas","Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Z. Industriales", "Limites de Z.Industriales", "Densidad I. por personas, 2010-15","Densidad I. por personas, 2015-20", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup(c("Densidad industrial por cant.personas","Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
+                  hideGroup(c("Densidad I. por personas, 2010-15","Densidad I. por personas, 2015-20","Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -431,7 +436,9 @@ map_ofic <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%   
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
-                  addRasterImage(ofic_den, group = "Densidad oficentros por area arrendable", colors = pal_o, opacity = 0.8) %>%  
+                  addRasterImage(ofic_den_15, group = "Densidad O. por area arrendable, 2010-15", colors = pal_o15, opacity = 0.8) %>%  
+                  addRasterImage(ofic_den_20, group = "Densidad O. por area arrendable, 2015-20", colors = pal_o20, opacity = 0.8) %>% 
+                  addRasterImage(ofic_den_30, group = "Densidad O. por area arrendable, 2020-30", colors = pal_o30, opacity = 0.8) %>% 
                   addMarkers(data= shared_ofic, group = "Oficentros", label = ~Nombre, popup = ofipop, 
                              icon = icons(iconUrl = ifelse(shared_ofic$data()$Rango_Fechas == "2010-2015", "bydate/office_10.png", 
                                     ifelse(shared_ofic$data()$Rango_Fechas == "2015-2020", "bydate/office_15.png", 
@@ -439,9 +446,9 @@ map_ofic <- leaflet(width = "100%")%>%
                                     "bydate/office_NA.png")))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Oficentros", "Densidad oficentros por area arrendable", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
+                      overlayGroups = c( "Oficentros", "Densidad O. por area arrendable, 2010-15", "Densidad O. por area arrendable, 2015-20", "Densidad O. por area arrendable, 2020-30", "Distritos GAM", "Conurbanos GAM", 'Nuevo Dibujo'),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup("Densidad oficentros por area arrendable") %>% 
+                  hideGroup(c("Densidad O. por area arrendable, 2010-15", "Densidad O. por area arrendable, 2015-20", "Densidad O. por area arrendable, 2020-30")) %>% 
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -477,16 +484,17 @@ map_comer <- leaflet(width = "100%")%>%
                   setView(-84.18763889, 9.92698333, zoom = 11) %>%
                   addPolygons(data=conur, group="Conurbanos GAM", color = "#0F9D58", popup= conurpop, fillOpacity = 0.05)%>%  
                   addPolygons(data=dist, group="Distritos GAM", color = "#698eff", popup= distpop, fillOpacity = 0.05)%>%
-                  addRasterImage(comer_den, group = "Densidad comerciales por area", colors = pal_c, opacity = 0.8) %>%   
+                  addRasterImage(comer_den_15, group = "Densidad C. por area, 2010-15", colors = pal_c15, opacity = 0.8) %>%  
+                  addRasterImage(comer_den_20, group = "Densidad C. por area, 2015-20", colors = pal_c20, opacity = 0.8) %>%    
                   addMarkers(data= shared_comer, group = "Comerciales", label = ~Nombre, popup = comerpop, 
                              icon = icons(iconUrl = ifelse(shared_comer$data()$Rango_Fechas == "2010-2015", "bydate/comer_10.png", 
                                     ifelse(shared_comer$data()$Rango_Fechas == "2015-2020", "bydate/comer_15.png", 
                                     "bydate/comer_NA.png"))))%>% 
                   addLayersControl(position = "topleft",
                       baseGroups = c("OSM", "Calles en oscuro", "Satelite"),
-                      overlayGroups = c( "Comerciales", "Densidad comerciales por area", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
+                      overlayGroups = c( "Comerciales", "Densidad C. por area, 2010-15", "Densidad C. por area, 2015-20", "Distritos GAM", "Conurbanos GAM", "Nuevo Dibujo"),
                       options = layersControlOptions(collapsed = FALSE))%>%
-                  hideGroup("Densidad comerciales por area") %>%   
+                  hideGroup(c("Densidad C. por area, 2010-15", "Densidad C. por area, 2015-20")) %>%   
                   addEasyprint(options = easyprintOptions(
                     title = 'Print map',
                     position = 'bottomleft',
@@ -609,12 +617,6 @@ Column
 map_resid
 ```
 
-### Mapa de Densidad de Residenciales por magnitud de Cantidad de Personas
-
-```{r}
-densi_resid
-```
-
 
 Industriales {data-icon="fa-industry"}
 =====================================
@@ -643,12 +645,6 @@ Column
 
 ```{r}
 map_indust
-```
-
-### Mapa de Densidad de Z.Industriales por magnitud de Cantidad de Personas
-
-```{r}
-densi_indust
 ```
 
 
@@ -681,12 +677,6 @@ Column
 map_ofic
 ```
 
-### Mapa de Densidad de Oficentros por magnitud de Area Arrendable
-
-```{r}
-densi_ofic
-```
-
 
 Comercial {data-icon="fa-shopping-bag"}
 =====================================
@@ -716,11 +706,6 @@ Column
 map_comer
 ```
 
-### Mapa de Densidad de Comerciales por magnitud de Area
-
-```{r}
-densi_comer
-```
 
 Restaurantes {data-icon="fa-cutlery"}
 =====================================
