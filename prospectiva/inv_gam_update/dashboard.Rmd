@@ -15,11 +15,13 @@ library(flexdashboard)
 library(dplyr)
 library(crosstalk)
 library(leaflet)
+library(leaflet.extras)
+library(leaflet.extras2)
+library(leafem)
 library(RSQLite)
 library(sf)
 library(sp)
 library(rgdal)
-library(leaflet.extras)
 library(htmltools)
 library(summarywidget)
 library(readxl)
@@ -28,7 +30,7 @@ library(plotly)
 library(viridis)
 library(viridisLite)
 library(raster)
-library(leaflet.extras2)
+
 library(spatstat)
 
 #Data----
@@ -348,6 +350,9 @@ restpop <- paste0("<b>Nombre:</b> ", shared_rest$data()$Nombre, "<br><b>Categori
 
 #Mapas----
 
+destfile = tempfile(fileext = ".kml")
+st_write(st_as_sf(gadmCHE), dsn = destfile)
+
 #Mapa de Residenciales----
 
 map_resid <- leaflet(width = "100%")%>%
@@ -396,7 +401,8 @@ map_resid <- leaflet(width = "100%")%>%
                  addLegend(pal = pal_r15, values = values(resid_den_15), opacity = 1, title = "Densidad 2010-15", group = "Densidad R. por personas, 2010-15") %>% 
                 addLegend(pal = pal_r20, values = values(resid_den_20), opacity = 1, title = "Densidad 2015-20", group = "Densidad R. por personas, 2015-20") %>%
                 addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente")) %>% 
-                    hideGroup(c("Densidad R. por personas, 2010-15","Densidad R. por personas, 2015-20", "Limites de residenciales"))
+                    hideGroup(c("Densidad R. por personas, 2010-15","Densidad R. por personas, 2015-20", "Limites de residenciales"))%>%
+                addResetMapButton() %>% leafem::addMouseCoordinates()
 
 #Mapa de Industriales----
 
@@ -448,7 +454,8 @@ map_indust <- leaflet(width = "100%")%>%
                  addLegend(pal = pal_i15, values = values(indust_den_15), opacity = 1, title = "Densidad 2010-15", group = "Densidad I. por personas, 2010-15") %>% 
                 addLegend(pal = pal_i20, values = values(indust_den_20), opacity = 1, title = "Densidad 2015-20", group = "Densidad I. por personas, 2015-20") %>%
                 addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente")) %>%
-                  hideGroup(c("Densidad I. por personas, 2010-15","Densidad I. por personas, 2015-20","Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013"))
+                  hideGroup(c("Densidad I. por personas, 2010-15","Densidad I. por personas, 2015-20","Limites de Z.Industriales", "Z.I. Planes Reguladores", "Z.I. PlanGAM 2013"))%>%
+                addResetMapButton() %>% leafem::addMouseCoordinates()
 
 #Mapa de Oficentros----
 
@@ -500,7 +507,8 @@ map_ofic <- leaflet(width = "100%")%>%
                 addLegend(pal = pal_o20, values = values(ofic_den_20), opacity = 1, title = "Densidad 2015-20", group = "Densidad O. por area arrendable, 2015-20")%>%
               addLegend(pal = pal_o30, values = values(ofic_den_30), opacity = 1, title = "Densidad 2020-30", group = "Densidad O. por area arrendable, 2020-30")%>%
                 addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente"))%>%
-                  hideGroup(c("Densidad O. por area arrendable, 2010-15", "Densidad O. por area arrendable, 2015-20", "Densidad O. por area arrendable, 2020-30"))
+                  hideGroup(c("Densidad O. por area arrendable, 2010-15", "Densidad O. por area arrendable, 2015-20", "Densidad O. por area arrendable, 2020-30"))%>%
+                addResetMapButton() %>% leafem::addMouseCoordinates()
 
 #Mapa de Comerciales----
 
@@ -549,7 +557,8 @@ map_comer <- leaflet(width = "100%")%>%
                  addLegend(pal = pal_c15, values = values(comer_den_15),  opacity = 1, title = "Densidad 2010-15", group = "Densidad C. por area, 2010-15")%>%  
                 addLegend(pal = pal_c20, values = values(comer_den_20),  opacity = 1, title = "Densidad 2015-20", group = "Densidad C. por area, 2015-20")%>%
                 addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente"))%>%
-                  hideGroup(c("Densidad C. por area, 2010-15", "Densidad C. por area, 2015-20"))
+                  hideGroup(c("Densidad C. por area, 2010-15", "Densidad C. por area, 2015-20"))%>%
+                addResetMapButton() %>% leafem::addMouseCoordinates()
 
 #Mapa de Restaurantes----
 
@@ -602,7 +611,8 @@ map_rest <- leaflet(width = "100%")%>%
                   addLegend(pal = pal_o, values = values(ofic_den), opacity = 1, title = "Densidad Oficentros <br>por area arrendable <br>2010-30",  group = "Densidad oficentros por area arrendable")%>%
                   addLegend(pal = pal_c, values = values(comer_den), opacity = 1, title = "Densidad Comercial <br>por area <br>2010-20", group = "Densidad comerciales por area")%>%
                   addHistory(options = historyOptions(position = "topleft", maxMovesToSave = 20, backTooltip = "Vista previa", forwardTooltip = "Vista siguiente"))%>%
-                  hideGroup(c("Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area"))
+                  hideGroup(c("Densidad residencial por personas","Densidad industrial por cant.personas","Densidad oficentros por area arrendable", "Densidad comerciales por area"))%>%
+                addResetMapButton() %>% leafem::addMouseCoordinates()
 
 
 ```
@@ -615,7 +625,7 @@ Residenciales {data-icon="fa-home"}
 Input1 {.sidebar}
 -------------------------------------
 
-[RESET](#residenciales)
+[RESET](<input type="reset">)
 
 
 Cantidad de condominios, residencias o urbanizaciones: <b><big>`r summarywidget(shared_resid, statistic='count', column='Categoria')`</big></b>
@@ -637,6 +647,7 @@ filter_checkbox("auto", "Rango fechas", shared_resid, group = ~Rango_Fechas, all
 <b>Creado por:</b> Jose Francisco Nuñez O. [Web page](https://geoimaginarte.github.io/mysite)
 <br><b>Fecha:</b> "`r format(Sys.time(), '%d %B %Y')`"
 <br><b>Fuente:</b> API Open Street Map
+<br><b>Analisis de densidades:</b> Interpolacion mediante el metodo de IDW
 <br><b>Para:</b> Prospectiva & TopBox Research
 <p>
 <p>
@@ -658,7 +669,7 @@ Industriales {data-icon="fa-industry"}
 Input2 {.sidebar}
 -------------------------------------
 
-[RESET](#industriales)
+[RESET](<input type="reset">)
 
 Cantidad de zonas industriales: <b><big>`r summarywidget(shared_indust, statistic='count', column='Categoria')`</big></b>
 
@@ -688,7 +699,7 @@ Oficentros {data-icon="fa-suitcase"}
 Input3 {.sidebar}
 -------------------------------------
 
-[RESET](#oficentros)
+[RESET](<input type="reset">)
 
 Cantidad de Oficentros: <b><big>`r summarywidget(shared_ofic, statistic='count', column='Categoria')`</big></b>
 
@@ -718,7 +729,7 @@ Comercial {data-icon="fa-shopping-bag"}
 Input4 {.sidebar}
 -------------------------------------
 
-[RESET](#comercial)
+[RESET](<input type="reset">)
 
 Cantidad de Comercios: <b><big>`r summarywidget(shared_comer, statistic='count', column='Categorias')`</big></b>
 
@@ -747,7 +758,7 @@ Restaurantes {data-icon="fa-cutlery"}
 Input5 {.sidebar}
 -------------------------------------
 
-[RESET](#restaurantes)
+[RESET](<input type="reset">)
 
 Cantidad de Restaurantes: <b><big>`r summarywidget(shared_rest, statistic='count', column='Categoria')`</big></b>
 
