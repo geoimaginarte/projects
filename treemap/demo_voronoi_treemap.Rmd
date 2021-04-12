@@ -1,0 +1,110 @@
+---
+title: "Voronoi-Treemap Chart of Falconiformes, Costa Rica year 2020 (data from GBIF)"
+author: "Jose Francisco Nuñez Obando"
+date: "4/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+user_n <- "frgeoimagen@gmail.com"
+pass_n <- "Accvc2015."
+
+dir <- "E:/MSc_Computacion/Cursos/Informaticaparalabiodiversidad/Presentacion_1/"
+```
+
+## Libraries
+
+```{r message=FALSE, warning=FALSE}
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(voronoiTreemap)
+library(RColorBrewer)
+```
+
+## Download the Data from GBIF
+
+{
+  "type": "and",
+  "predicates": [
+    {
+      "type": "equals",
+      "key": "COUNTRY",
+      "value": "CR",
+      "matchCase": false
+    },
+    {
+      "type": "equals",
+      "key": "DATASET_KEY",
+      "value": "4fa7b334-ce0d-4e88-aaae-2e0c138d049e",
+      "matchCase": false
+    },
+    {
+      "type": "equals",
+      "key": "TAXON_KEY",
+      "value": "7191407",
+      "matchCase": false
+    },
+    {
+      "type": "equals",
+      "key": "YEAR",
+      "value": "2019",
+      "matchCase": false
+    }
+  ]
+}
+
+
+## Load and Transform the Data
+
+```{r message=FALSE, warning=FALSE}
+
+# Load the dataframe
+
+gbif_dt <- read.csv(file = paste0(dir,"gbif.csv"), sep = "\t", encoding = "UTF-8")
+
+# Selection of columns and creation of a new column of weight 
+
+gbif_dt <- gbif_dt %>% select(family,genus,species) %>% 
+  group_by(genus, species, family) %>% 
+  summarise(weight = n()) 
+
+# Create a color for each "genus"
+
+(jColors <-
+   with(gbif_dt,
+        data.frame(genus = levels(genus),
+                   color = I(brewer.pal(nlevels(genus), name = 'Dark2'))))) 
+
+# Merge of the column "Color" to dataframe
+
+(gbif_dt <- merge(gbif_dt, jColors))
+
+# Reorganize of the columns
+
+gbif_dt <- gbif_dt %>% relocate(family, genus, species, color, weight)
+
+# Rename of the columns
+
+names(gbif_dt)[1] <- "h1"
+names(gbif_dt)[2] <- "h2"
+names(gbif_dt)[3] <- "h3"
+
+# Creation of the column "codes"
+
+gbif_dt$codes <- as.character(gbif_dt$h3)
+
+
+```
+
+## Voronoi-treemap chart
+
+```{r}
+
+gbif_json <- vt_export_json(vt_input_from_df(gbif_dt, scaleToPerc = FALSE))
+vt_d3(gbif_json, legend = TRUE, label=FALSE, legend_title = "Genus (Genero)", seed = 1)
+
+```
+
