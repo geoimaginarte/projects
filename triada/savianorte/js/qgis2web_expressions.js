@@ -754,3 +754,17 @@ function fnc__specialcol_(values, context) {
 function fnc_project_color(values, context) {
     return false;
 };
+
+
+
+function exp_label_Puntosdedestinoderuta_10_eval_expression(context) {
+    // name || ' (Id: ' || id || ')'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (((feature.properties['name']  + ' (Id: ') + feature.properties['id'] ) + ')');
+    } else {
+        return (((feature['name']  + ' (Id: ') + feature['id'] ) + ')');
+    }
+}

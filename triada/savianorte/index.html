@@ -34,20 +34,20 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet-measure.js"></script>
-        <script src="data/20min_2.js"></script>
-        <script src="data/15min_3.js"></script>
-        <script src="data/10min_4.js"></script>
+        <script src="data/Areadeisocrona20min_2.js"></script>
+        <script src="data/Areadeisocrona15min_3.js"></script>
+        <script src="data/Areadeisocrona10min_4.js"></script>
         <script src="data/Distritos_5.js"></script>
         <script src="data/RutasOrigenSaviaNorte_6.js"></script>
-        <script src="data/Residencial_7.js"></script>
-        <script src="data/CorporativoOficentros_8.js"></script>
-        <script src="data/Comercial_9.js"></script>
+        <script src="data/ReferenciaResidencial_7.js"></script>
+        <script src="data/ReferenciaCorporativoOficentros_8.js"></script>
+        <script src="data/ReferenciaComercial_9.js"></script>
         <script src="data/Puntosdedestinoderuta_10.js"></script>
         <script src="data/ProyectoSaviaNorte_11.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[9.88802188509022,-84.25657699676962],[10.043907907006195,-84.0464434458816]]);
+        }).fitBounds([[9.829131817978997,-84.33656824826846],[10.120258345204384,-83.94413119604485]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -92,7 +92,7 @@
         });
         layer_GoogleHybrid_1;
         map.addLayer(layer_GoogleHybrid_1);
-        function pop_20min_2(feature, layer) {
+        function pop_Areadeisocrona20min_2(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">tiempos</th>\
@@ -102,9 +102,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_20min_2_0() {
+        function style_Areadeisocrona20min_2_0() {
             return {
-                pane: 'pane_20min_2',
+                pane: 'pane_Areadeisocrona20min_2',
                 opacity: 1,
                 color: 'rgba(0,255,149,0.376)',
                 dashArray: '',
@@ -117,21 +117,21 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_20min_2');
-        map.getPane('pane_20min_2').style.zIndex = 402;
-        map.getPane('pane_20min_2').style['mix-blend-mode'] = 'normal';
-        var layer_20min_2 = new L.geoJson(json_20min_2, {
+        map.createPane('pane_Areadeisocrona20min_2');
+        map.getPane('pane_Areadeisocrona20min_2').style.zIndex = 402;
+        map.getPane('pane_Areadeisocrona20min_2').style['mix-blend-mode'] = 'normal';
+        var layer_Areadeisocrona20min_2 = new L.geoJson(json_Areadeisocrona20min_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_20min_2',
-            layerName: 'layer_20min_2',
-            pane: 'pane_20min_2',
-            onEachFeature: pop_20min_2,
-            style: style_20min_2_0,
+            dataVar: 'json_Areadeisocrona20min_2',
+            layerName: 'layer_Areadeisocrona20min_2',
+            pane: 'pane_Areadeisocrona20min_2',
+            onEachFeature: pop_Areadeisocrona20min_2,
+            style: style_Areadeisocrona20min_2_0,
         });
-        bounds_group.addLayer(layer_20min_2);
-        map.addLayer(layer_20min_2);
-        function pop_15min_3(feature, layer) {
+        bounds_group.addLayer(layer_Areadeisocrona20min_2);
+        map.addLayer(layer_Areadeisocrona20min_2);
+        function pop_Areadeisocrona15min_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">tiempos</th>\
@@ -141,9 +141,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_15min_3_0() {
+        function style_Areadeisocrona15min_3_0() {
             return {
-                pane: 'pane_15min_3',
+                pane: 'pane_Areadeisocrona15min_3',
                 opacity: 1,
                 color: 'rgba(0,255,149,0.376)',
                 dashArray: '',
@@ -156,21 +156,21 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_15min_3');
-        map.getPane('pane_15min_3').style.zIndex = 403;
-        map.getPane('pane_15min_3').style['mix-blend-mode'] = 'normal';
-        var layer_15min_3 = new L.geoJson(json_15min_3, {
+        map.createPane('pane_Areadeisocrona15min_3');
+        map.getPane('pane_Areadeisocrona15min_3').style.zIndex = 403;
+        map.getPane('pane_Areadeisocrona15min_3').style['mix-blend-mode'] = 'normal';
+        var layer_Areadeisocrona15min_3 = new L.geoJson(json_Areadeisocrona15min_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_15min_3',
-            layerName: 'layer_15min_3',
-            pane: 'pane_15min_3',
-            onEachFeature: pop_15min_3,
-            style: style_15min_3_0,
+            dataVar: 'json_Areadeisocrona15min_3',
+            layerName: 'layer_Areadeisocrona15min_3',
+            pane: 'pane_Areadeisocrona15min_3',
+            onEachFeature: pop_Areadeisocrona15min_3,
+            style: style_Areadeisocrona15min_3_0,
         });
-        bounds_group.addLayer(layer_15min_3);
-        map.addLayer(layer_15min_3);
-        function pop_10min_4(feature, layer) {
+        bounds_group.addLayer(layer_Areadeisocrona15min_3);
+        map.addLayer(layer_Areadeisocrona15min_3);
+        function pop_Areadeisocrona10min_4(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">tiempos</th>\
@@ -180,9 +180,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_10min_4_0() {
+        function style_Areadeisocrona10min_4_0() {
             return {
-                pane: 'pane_10min_4',
+                pane: 'pane_Areadeisocrona10min_4',
                 opacity: 1,
                 color: 'rgba(0,255,149,0.376)',
                 dashArray: '',
@@ -195,20 +195,20 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_10min_4');
-        map.getPane('pane_10min_4').style.zIndex = 404;
-        map.getPane('pane_10min_4').style['mix-blend-mode'] = 'normal';
-        var layer_10min_4 = new L.geoJson(json_10min_4, {
+        map.createPane('pane_Areadeisocrona10min_4');
+        map.getPane('pane_Areadeisocrona10min_4').style.zIndex = 404;
+        map.getPane('pane_Areadeisocrona10min_4').style['mix-blend-mode'] = 'normal';
+        var layer_Areadeisocrona10min_4 = new L.geoJson(json_Areadeisocrona10min_4, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_10min_4',
-            layerName: 'layer_10min_4',
-            pane: 'pane_10min_4',
-            onEachFeature: pop_10min_4,
-            style: style_10min_4_0,
+            dataVar: 'json_Areadeisocrona10min_4',
+            layerName: 'layer_Areadeisocrona10min_4',
+            pane: 'pane_Areadeisocrona10min_4',
+            onEachFeature: pop_Areadeisocrona10min_4,
+            style: style_Areadeisocrona10min_4_0,
         });
-        bounds_group.addLayer(layer_10min_4);
-        map.addLayer(layer_10min_4);
+        bounds_group.addLayer(layer_Areadeisocrona10min_4);
+        map.addLayer(layer_Areadeisocrona10min_4);
         function pop_Distritos_5(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
@@ -294,14 +294,15 @@
         function pop_RutasOrigenSaviaNorte_6(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2"><strong>Distancia km</strong><br />' + (feature.properties['DIST_KM'] !== null ? autolinker.link(feature.properties['DIST_KM'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Distancia km</th>\
+                        <td>' + (feature.properties['DIST_KM'] !== null ? autolinker.link(feature.properties['DIST_KM'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Destino</th>\
-                        <td>' + (feature.properties['TO_ID'] !== null ? autolinker.link(feature.properties['TO_ID'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>Destino</strong><br />' + (feature.properties['TO_ID'] !== null ? autolinker.link(feature.properties['TO_ID'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>Tiempo(m)</strong><br />' + (feature.properties['Tiempo(m)'] !== null ? autolinker.link(feature.properties['Tiempo(m)'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Tiempo(m)</th>\
+                        <td>' + (feature.properties['Tiempo(m)'] !== null ? autolinker.link(feature.properties['Tiempo(m)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -347,7 +348,7 @@
         });
         bounds_group.addLayer(layer_RutasOrigenSaviaNorte_6);
         map.addLayer(layer_RutasOrigenSaviaNorte_6);
-        function pop_Residencial_7(feature, layer) {
+        function pop_ReferenciaResidencial_7(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">id</th>\
@@ -365,9 +366,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_Residencial_7_0() {
+        function style_ReferenciaResidencial_7_0() {
             return {
-                pane: 'pane_Residencial_7',
+                pane: 'pane_ReferenciaResidencial_7',
                 radius: 4.8,
                 opacity: 1,
                 color: 'rgba(128,17,25,1.0)',
@@ -381,27 +382,27 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Residencial_7');
-        map.getPane('pane_Residencial_7').style.zIndex = 407;
-        map.getPane('pane_Residencial_7').style['mix-blend-mode'] = 'normal';
-        var layer_Residencial_7 = new L.geoJson(json_Residencial_7, {
+        map.createPane('pane_ReferenciaResidencial_7');
+        map.getPane('pane_ReferenciaResidencial_7').style.zIndex = 407;
+        map.getPane('pane_ReferenciaResidencial_7').style['mix-blend-mode'] = 'normal';
+        var layer_ReferenciaResidencial_7 = new L.geoJson(json_ReferenciaResidencial_7, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Residencial_7',
-            layerName: 'layer_Residencial_7',
-            pane: 'pane_Residencial_7',
-            onEachFeature: pop_Residencial_7,
+            dataVar: 'json_ReferenciaResidencial_7',
+            layerName: 'layer_ReferenciaResidencial_7',
+            pane: 'pane_ReferenciaResidencial_7',
+            onEachFeature: pop_ReferenciaResidencial_7,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Residencial_7_0(feature));
+                return L.circleMarker(latlng, style_ReferenciaResidencial_7_0(feature));
             },
         });
-        bounds_group.addLayer(layer_Residencial_7);
-        map.addLayer(layer_Residencial_7);
-        function pop_CorporativoOficentros_8(feature, layer) {
+        bounds_group.addLayer(layer_ReferenciaResidencial_7);
+        map.addLayer(layer_ReferenciaResidencial_7);
+        function pop_ReferenciaCorporativoOficentros_8(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">id</th>\
@@ -419,9 +420,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_CorporativoOficentros_8_0() {
+        function style_ReferenciaCorporativoOficentros_8_0() {
             return {
-                pane: 'pane_CorporativoOficentros_8',
+                pane: 'pane_ReferenciaCorporativoOficentros_8',
                 radius: 4.8,
                 opacity: 1,
                 color: 'rgba(128,17,25,1.0)',
@@ -435,27 +436,27 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_CorporativoOficentros_8');
-        map.getPane('pane_CorporativoOficentros_8').style.zIndex = 408;
-        map.getPane('pane_CorporativoOficentros_8').style['mix-blend-mode'] = 'normal';
-        var layer_CorporativoOficentros_8 = new L.geoJson(json_CorporativoOficentros_8, {
+        map.createPane('pane_ReferenciaCorporativoOficentros_8');
+        map.getPane('pane_ReferenciaCorporativoOficentros_8').style.zIndex = 408;
+        map.getPane('pane_ReferenciaCorporativoOficentros_8').style['mix-blend-mode'] = 'normal';
+        var layer_ReferenciaCorporativoOficentros_8 = new L.geoJson(json_ReferenciaCorporativoOficentros_8, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_CorporativoOficentros_8',
-            layerName: 'layer_CorporativoOficentros_8',
-            pane: 'pane_CorporativoOficentros_8',
-            onEachFeature: pop_CorporativoOficentros_8,
+            dataVar: 'json_ReferenciaCorporativoOficentros_8',
+            layerName: 'layer_ReferenciaCorporativoOficentros_8',
+            pane: 'pane_ReferenciaCorporativoOficentros_8',
+            onEachFeature: pop_ReferenciaCorporativoOficentros_8,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_CorporativoOficentros_8_0(feature));
+                return L.circleMarker(latlng, style_ReferenciaCorporativoOficentros_8_0(feature));
             },
         });
-        bounds_group.addLayer(layer_CorporativoOficentros_8);
-        map.addLayer(layer_CorporativoOficentros_8);
-        function pop_Comercial_9(feature, layer) {
+        bounds_group.addLayer(layer_ReferenciaCorporativoOficentros_8);
+        map.addLayer(layer_ReferenciaCorporativoOficentros_8);
+        function pop_ReferenciaComercial_9(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">id</th>\
@@ -473,9 +474,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_Comercial_9_0() {
+        function style_ReferenciaComercial_9_0() {
             return {
-                pane: 'pane_Comercial_9',
+                pane: 'pane_ReferenciaComercial_9',
                 radius: 4.8,
                 opacity: 1,
                 color: 'rgba(128,17,25,1.0)',
@@ -489,26 +490,26 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Comercial_9');
-        map.getPane('pane_Comercial_9').style.zIndex = 409;
-        map.getPane('pane_Comercial_9').style['mix-blend-mode'] = 'normal';
-        var layer_Comercial_9 = new L.geoJson(json_Comercial_9, {
+        map.createPane('pane_ReferenciaComercial_9');
+        map.getPane('pane_ReferenciaComercial_9').style.zIndex = 409;
+        map.getPane('pane_ReferenciaComercial_9').style['mix-blend-mode'] = 'normal';
+        var layer_ReferenciaComercial_9 = new L.geoJson(json_ReferenciaComercial_9, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Comercial_9',
-            layerName: 'layer_Comercial_9',
-            pane: 'pane_Comercial_9',
-            onEachFeature: pop_Comercial_9,
+            dataVar: 'json_ReferenciaComercial_9',
+            layerName: 'layer_ReferenciaComercial_9',
+            pane: 'pane_ReferenciaComercial_9',
+            onEachFeature: pop_ReferenciaComercial_9,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Comercial_9_0(feature));
+                return L.circleMarker(latlng, style_ReferenciaComercial_9_0(feature));
             },
         });
-        bounds_group.addLayer(layer_Comercial_9);
-        map.addLayer(layer_Comercial_9);
+        bounds_group.addLayer(layer_ReferenciaComercial_9);
+        map.addLayer(layer_ReferenciaComercial_9);
         function pop_Puntosdedestinoderuta_10(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
@@ -632,16 +633,30 @@
         ]});
         bounds_group.addLayer(layer_ProyectoSaviaNorte_11);
         map.addLayer(layer_ProyectoSaviaNorte_11);
-        var baseMaps = {"Google Hybrid": layer_GoogleHybrid_1,"OSM Standard": layer_OSMStandard_0,};
-        L.control.layers(baseMaps,{'<img src="legend/ProyectoSaviaNorte_11.png" /> Proyecto Savia Norte': layer_ProyectoSaviaNorte_11,'<img src="legend/Puntosdedestinoderuta_10.png" /> Puntos de destino de ruta': layer_Puntosdedestinoderuta_10, '<img src="legend/Comercial_9.png" /> Referencia: Comercial': layer_Comercial_9,'<img src="legend/CorporativoOficentros_8.png" /> Referencia: Corporativo/Oficentros': layer_CorporativoOficentros_8,'<img src="legend/Residencial_7.png" /> Referencia: Residencial': layer_Residencial_7,'<img src="legend/RutasOrigenSaviaNorte_6.png" /> Rutas Origen (Savia Norte)': layer_RutasOrigenSaviaNorte_6,'<img src="legend/Distritos_5.png" /> Distritos': layer_Distritos_5,'<img src="legend/10min_4.png" /> Area de isocrona: 10 min': layer_10min_4,'<img src="legend/15min_3.png" /> Area de isocrona: 15 min': layer_15min_3,'<img src="legend/20min_2.png" /> Area de isocrona: 20 min': layer_20min_2,},{collapsed:false}).addTo(map);
+        var baseMaps = {"OSM Standard": layer_OSMStandard_0,"Google Hybrid": layer_GoogleHybrid_1,};
+        L.control.layers(baseMaps,{'<img src="legend/ProyectoSaviaNorte_11.png" /> Proyecto Savia Norte': layer_ProyectoSaviaNorte_11,'<img src="legend/Puntosdedestinoderuta_10.png" /> Puntos de destino de ruta': layer_Puntosdedestinoderuta_10,'<img src="legend/ReferenciaComercial_9.png" /> Referencia: Comercial': layer_ReferenciaComercial_9,'<img src="legend/ReferenciaCorporativoOficentros_8.png" /> Referencia: Centros Corporativos': layer_ReferenciaCorporativoOficentros_8,'<img src="legend/ReferenciaResidencial_7.png" /> Referencia: Residencial': layer_ReferenciaResidencial_7,'<img src="legend/RutasOrigenSaviaNorte_6.png" /> Rutas Origen (Savia Norte)': layer_RutasOrigenSaviaNorte_6,'<img src="legend/Distritos_5.png" /> Distritos': layer_Distritos_5,'<img src="legend/Areadeisocrona10min_4.png" /> Area de isocrona: 10 min': layer_Areadeisocrona10min_4,'<img src="legend/Areadeisocrona15min_3.png" /> Area de isocrona: 15 min': layer_Areadeisocrona15min_3,'<img src="legend/Areadeisocrona20min_2.png" /> Area de isocrona: 20 min': layer_Areadeisocrona20min_2,},{collapsed:false}).addTo(map);
+        map.on("zoomend", function(){
+
+                if (map.hasLayer(layer_Puntosdedestinoderuta_10)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Puntosdedestinoderuta_10.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Puntosdedestinoderuta_10.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+        });
         setBounds();
         var i = 0;
-        layer_Residencial_7.eachLayer(function(layer) {
+        layer_ReferenciaResidencial_7.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['nombre'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['nombre']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Residencial_7'});
+            layer.bindTooltip((layer.feature.properties['nombre'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['nombre']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_ReferenciaResidencial_7'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -649,12 +664,12 @@
               i++;
         });
         var i = 0;
-        layer_CorporativoOficentros_8.eachLayer(function(layer) {
+        layer_ReferenciaCorporativoOficentros_8.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['nombre'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['nombre']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CorporativoOficentros_8'});
+            layer.bindTooltip((layer.feature.properties['nombre'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['nombre']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_ReferenciaCorporativoOficentros_8'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -662,12 +677,25 @@
               i++;
         });
         var i = 0;
-        layer_Comercial_9.eachLayer(function(layer) {
+        layer_ReferenciaComercial_9.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['nombre'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['nombre']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Comercial_9'});
+            layer.bindTooltip((layer.feature.properties['nombre'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['nombre']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_ReferenciaComercial_9'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Puntosdedestinoderuta_10.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((exp_label_Puntosdedestinoderuta_10_eval_expression(context) !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + exp_label_Puntosdedestinoderuta_10_eval_expression(context)) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Puntosdedestinoderuta_10'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -687,15 +715,26 @@
               addLabel(layer, i);
               i++;
         });
-        resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_Residencial_7,layer_CorporativoOficentros_8,layer_Comercial_9,layer_ProyectoSaviaNorte_11]);
+                if (map.hasLayer(layer_Puntosdedestinoderuta_10)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Puntosdedestinoderuta_10.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Puntosdedestinoderuta_10.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+        resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_ReferenciaResidencial_7,layer_ReferenciaCorporativoOficentros_8,layer_ReferenciaComercial_9,layer_Puntosdedestinoderuta_10,layer_ProyectoSaviaNorte_11]);
         map.on("zoomend", function(){
-            resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_Residencial_7,layer_CorporativoOficentros_8,layer_Comercial_9,layer_ProyectoSaviaNorte_11]);
+            resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_ReferenciaResidencial_7,layer_ReferenciaCorporativoOficentros_8,layer_ReferenciaComercial_9,layer_Puntosdedestinoderuta_10,layer_ProyectoSaviaNorte_11]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_Residencial_7,layer_CorporativoOficentros_8,layer_Comercial_9,layer_ProyectoSaviaNorte_11]);
+            resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_ReferenciaResidencial_7,layer_ReferenciaCorporativoOficentros_8,layer_ReferenciaComercial_9,layer_Puntosdedestinoderuta_10,layer_ProyectoSaviaNorte_11]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_Residencial_7,layer_CorporativoOficentros_8,layer_Comercial_9,layer_ProyectoSaviaNorte_11]);
+            resetLabels([layer_Distritos_5,layer_RutasOrigenSaviaNorte_6,layer_ReferenciaResidencial_7,layer_ReferenciaCorporativoOficentros_8,layer_ReferenciaComercial_9,layer_Puntosdedestinoderuta_10,layer_ProyectoSaviaNorte_11]);
         });
         </script>
     </body>
