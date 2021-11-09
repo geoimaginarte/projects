@@ -1,5 +1,5 @@
 ---
-title: "Eggs Laid and Nests Harvested of Kemp's Ridley Sea Turtles in Ostional, Costa Rica, Period 2006-2010"
+title: "Eggs Laid and Nests Harvested of Olive ridley (<em>Lepidochelys olivacea</em>) Sea Turtles in Ostional, Costa Rica, Period 2006-2010"
 author: "Jose Francisco Nuñez Obando (<https://geoimaginarte.github.io/mysite>)<br> (Professor: Wagner Quiros-Pereira UCSB-ENV S 193ST)" 
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: 
