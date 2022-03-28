@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/qgis2web.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/filter.css">
+    <link rel="stylesheet" href="css/nouislider.min.css">
+    <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+    <link rel="stylesheet" href="css/leaflet-measure.css">
+    <link rel="stylesheet" href="css/leaflet-control-credits.css" />
+    <link rel="stylesheet" href="css/Leaflet.Coordinates-0.1.5.css"/>
+    <style>
+        html,
+        body,
+        #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <title>DISTRITOS OPORTUNIDADES</title>
+</head>
+
+<body>
+    <div id="map">
+    </div>
+    <script src="js/qgis2web_expressions.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="js/leaflet.rotatedMarker.js"></script>
+    <script src="js/leaflet.pattern.js"></script>
+    <script src="js/leaflet-hash.js"></script>
+    <script src="js/Autolinker.min.js"></script>
+    <script src="js/rbush.min.js"></script>
+    <script src="js/labelgun.min.js"></script>
+    <script src="js/labels.js"></script>
+    <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+    <script src="js/leaflet-measure.js"></script>
+    <script src="js/tailDT.js"></script>
+    <script src="js/nouislider.min.js"></script>
+    <script src="js/wNumb.js"></script>
+    <script type="text/javascript" src="js/leaflet-control-credits.js"></script>
+    <script type="text/javascript" src="js/Leaflet.Coordinates-0.1.5.min.js"></script>
+    <script src="data/CanttiendaspotencialesporDist_3.js"></script>
+    <script src="data/TiendasventadeLenceria_4.js"></script>
+
+    <script>
+        var map = L.map('map', {
+            zoomControl: true, maxZoom: 28, minZoom: 1
+        }).fitBounds([[7.960760188102718, -86.8210991485287], [11.299124646186822, -81.68201364443999]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({ truncate: { length: 30, location: 'smart' } });
+        L.control.scale({
+            metric: true,
+            imperial: false,
+            position: 'topleft'
+        }).addTo(map);
+        L.control.coordinates().addTo(map);
+		L.control.coordinates({
+			position:"topleft",
+			decimals:2,
+			decimalSeperator:",",
+			labelTemplateLat:"Latitude: {y}",
+			labelTemplateLng:"Longitude: {x}"
+		}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+            .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+            .className += 'fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleSatellite_0');
+        map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
+        var layer_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleSatellite_0;
+        map.addLayer(layer_GoogleSatellite_0);
+        map.createPane('pane_GoogleRoad_1');
+        map.getPane('pane_GoogleRoad_1').style.zIndex = 401;
+        var layer_GoogleRoad_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleRoad_1',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleRoad_1;
+        map.addLayer(layer_GoogleRoad_1);
+        map.createPane('pane_DarkMatter_2');
+        map.getPane('pane_DarkMatter_2').style.zIndex = 402;
+        var layer_DarkMatter_2 = L.tileLayer('http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            pane: 'pane_DarkMatter_2',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_DarkMatter_2;
+        map.addLayer(layer_DarkMatter_2);
+        function pop_CanttiendaspotencialesporDist_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">FID</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CODIGO DTA</th>\
+                        <td>' + (feature.properties['codigo_dta'] !== null ? autolinker.link(feature.properties['codigo_dta'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PROVINCIA</th>\
+                        <td>' + (feature.properties['provincia'] !== null ? autolinker.link(feature.properties['provincia'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CANTON</th>\
+                        <td>' + (feature.properties['canton'] !== null ? autolinker.link(feature.properties['canton'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DISTRITO</th>\
+                        <td>' + (feature.properties['distrito'] !== null ? autolinker.link(feature.properties['distrito'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TIENDAS POTENCIALES</th>\
+                        <td>' + (feature.properties['tiendas_potenciales'] !== null ? autolinker.link(feature.properties['tiendas_potenciales'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">REFERENCIA DE BUSQUEDA</th>\
+                        <td>' + (feature.properties['busqueda'] !== null ? autolinker.link(feature.properties['busqueda'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CONURBANOS</th>\
+                        <td>' + (feature.properties['conurbanos'] !== null ? autolinker.link(feature.properties['conurbanos'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">REFERENCIA GAM-PAIS</th>\
+                        <td>' + (feature.properties['ref_gam'] !== null ? autolinker.link(feature.properties['ref_gam'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, { maxHeight: 400 });
+        }
+
+        function style_CanttiendaspotencialesporDist_3_0(feature) {
+            switch (String(feature.properties['tiendas_potenciales'])) {
+                case '1':
+                    return {
+                        pane: 'pane_CanttiendaspotencialesporDist_3',
+                        opacity: 1,
+                        color: 'rgba(35,35,35,0.6)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1.0,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(232,189,0,0.6)',
+                        interactive: true,
+                    }
+                    break;
+                case '2':
+                    return {
+                        pane: 'pane_CanttiendaspotencialesporDist_3',
+                        opacity: 1,
+                        color: 'rgba(35,35,35,0.6)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1.0,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(239,18,26,0.6)',
+                        interactive: true,
+                    }
+                    break;
+            }
+        }
+        map.createPane('pane_CanttiendaspotencialesporDist_3');
+        map.getPane('pane_CanttiendaspotencialesporDist_3').style.zIndex = 403;
+        map.getPane('pane_CanttiendaspotencialesporDist_3').style['mix-blend-mode'] = 'normal';
+        var layer_CanttiendaspotencialesporDist_3 = new L.geoJson(json_CanttiendaspotencialesporDist_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CanttiendaspotencialesporDist_3',
+            layerName: 'layer_CanttiendaspotencialesporDist_3',
+            pane: 'pane_CanttiendaspotencialesporDist_3',
+            onEachFeature: pop_CanttiendaspotencialesporDist_3,
+            style: style_CanttiendaspotencialesporDist_3_0,
+        });
+        bounds_group.addLayer(layer_CanttiendaspotencialesporDist_3);
+        map.addLayer(layer_CanttiendaspotencialesporDist_3);
+        function pop_TiendasventadeLenceria_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">FID</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOMBRE</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">MARCA</th>\
+                        <td>' + (feature.properties['brand'] !== null ? autolinker.link(feature.properties['brand'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PROVINCIA</th>\
+                        <td>' + (feature.properties['provincia'] !== null ? autolinker.link(feature.properties['provincia'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CANTON</th>\
+                        <td>' + (feature.properties['canton'] !== null ? autolinker.link(feature.properties['canton'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DISTRITO</th>\
+                        <td>' + (feature.properties['distrito'] !== null ? autolinker.link(feature.properties['distrito'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DIRECCION</th>\
+                        <td>' + (feature.properties['address'] !== null ? autolinker.link(feature.properties['address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TEL</th>\
+                        <td>' + (feature.properties['phone'] !== null ? autolinker.link(feature.properties['phone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TIPO</th>\
+                        <td>' + (feature.properties['kind'] !== null ? autolinker.link(feature.properties['kind'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CONURBANOS</th>\
+                        <td>' + (feature.properties['conurbanos'] !== null ? autolinker.link(feature.properties['conurbanos'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">REFERENCIA GAM-PAIS</th>\
+                        <td>' + (feature.properties['ref_gam'] !== null ? autolinker.link(feature.properties['ref_gam'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, { maxHeight: 400 });
+        }
+
+        function style_TiendasventadeLenceria_4_0(feature) {
+            switch (String(feature.properties['kind'])) {
+                case 'CATALOGO':
+                    return {
+                        pane: 'pane_TiendasventadeLenceria_4',
+                        radius: 4.0,
+                        opacity: 1,
+                        color: 'rgba(35,35,35,1.0)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(236,115,145,1.0)',
+                        interactive: true,
+                    }
+                    break;
+                case 'CATALOGO Y TIENDA DE MODA':
+                    return {
+                        pane: 'pane_TiendasventadeLenceria_4',
+                        radius: 4.0,
+                        opacity: 1,
+                        color: 'rgba(35,35,35,1.0)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(55,207,103,1.0)',
+                        interactive: true,
+                    }
+                    break;
+                case 'LENCERIA':
+                    return {
+                        pane: 'pane_TiendasventadeLenceria_4',
+                        radius: 4.0,
+                        opacity: 1,
+                        color: 'rgba(35,35,35,1.0)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(189,68,203,1.0)',
+                        interactive: true,
+                    }
+                    break;
+                case 'SUPERMERCADO':
+                    return {
+                        pane: 'pane_TiendasventadeLenceria_4',
+                        radius: 4.0,
+                        opacity: 1,
+                        color: 'rgba(35,35,35,1.0)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(119,198,216,1.0)',
+                        interactive: true,
+                    }
+                    break;
+                case 'TIENDA DE BAJO COSTO':
+                    return {
+                        pane: 'pane_TiendasventadeLenceria_4',
+                        radius: 4.0,
+                        opacity: 1,
+                        color: 'rgba(35,35,35,1.0)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(98,94,220,1.0)',
+                        interactive: true,
+                    }
+                    break;
+                case 'TIENDA DE MODA':
+                    return {
+                        pane: 'pane_TiendasventadeLenceria_4',
+                        radius: 4.0,
+                        opacity: 1,
+                        color: 'rgba(35,35,35,1.0)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(189,236,131,1.0)',
+                        interactive: true,
+                    }
+                    break;
+                case 'TIENDA POR DEPARTAMENTO':
+                    return {
+                        pane: 'pane_TiendasventadeLenceria_4',
+                        radius: 4.0,
+                        opacity: 1,
+                        color: 'rgba(35,35,35,1.0)',
+                        dashArray: '',
+                        lineCap: 'butt',
+                        lineJoin: 'miter',
+                        weight: 1,
+                        fill: true,
+                        fillOpacity: 1,
+                        fillColor: 'rgba(210,159,83,1.0)',
+                        interactive: true,
+                    }
+                    break;
+            }
+        }
+        map.createPane('pane_TiendasventadeLenceria_4');
+        map.getPane('pane_TiendasventadeLenceria_4').style.zIndex = 404;
+        map.getPane('pane_TiendasventadeLenceria_4').style['mix-blend-mode'] = 'normal';
+        var layer_TiendasventadeLenceria_4 = new L.geoJson(json_TiendasventadeLenceria_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TiendasventadeLenceria_4',
+            layerName: 'layer_TiendasventadeLenceria_4',
+            pane: 'pane_TiendasventadeLenceria_4',
+            onEachFeature: pop_TiendasventadeLenceria_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_TiendasventadeLenceria_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_TiendasventadeLenceria_4);
+        map.addLayer(layer_TiendasventadeLenceria_4);
+        var abstract = new L.Control({ 'position': 'topright' });
+        abstract.onAdd = function (map) {
+            this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+            this._div.id = 'abstract'
+
+            abstract.show();
+            return this._div;
+        };
+        abstract.show = function () {
+            this._div.classList.remove("abstract");
+            this._div.classList.add("abstractUncollapsed");
+            this._div.innerHTML = '<b>DISTRISTOS CON CANTIDAD DE TIENDAS POTENCIALES</b>';
+        };
+        abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+            .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+            .title += 'Search for a place';
+        var baseMaps = { "GOOGLE SATELLITE": layer_GoogleSatellite_0, "GOOGLE ROAD": layer_GoogleRoad_1, "DARK MATTER": layer_DarkMatter_2, };
+        L.control.layers(baseMaps, { 'TIENDAS VENTA DE LENCERIA<br /><table><tr><td style="text-align: center;"><img src="legend/TiendasventadeLenceria_4_CATALOGO0.png" /></td><td>CATALOGO</td></tr><tr><td style="text-align: center;"><img src="legend/TiendasventadeLenceria_4_CATALOGOYTIENDADEMODA1.png" /></td><td>CATALOGO Y TIENDA DE MODA</td></tr><tr><td style="text-align: center;"><img src="legend/TiendasventadeLenceria_4_LENCERIA2.png" /></td><td>LENCERIA</td></tr><tr><td style="text-align: center;"><img src="legend/TiendasventadeLenceria_4_SUPERMERCADO3.png" /></td><td>SUPERMERCADO</td></tr><tr><td style="text-align: center;"><img src="legend/TiendasventadeLenceria_4_TIENDADEBAJOCOSTO4.png" /></td><td>TIENDA DE BAJO COSTO</td></tr><tr><td style="text-align: center;"><img src="legend/TiendasventadeLenceria_4_TIENDADEMODA5.png" /></td><td>TIENDA DE MODA</td></tr><tr><td style="text-align: center;"><img src="legend/TiendasventadeLenceria_4_TIENDAPORDEPARTAMENTO6.png" /></td><td>TIENDA POR DEPARTAMENTO</td></tr></table>': layer_TiendasventadeLenceria_4, '# TIENDAS POTENCIALES POR DISTRITO<br /><table><tr><td style="text-align: center;"><img src="legend/CanttiendaspotencialesporDist_3_1TIENDAPOTENCIAL0.png" /></td><td>1 TIENDA POTENCIAL</td></tr><tr><td style="text-align: center;"><img src="legend/CanttiendaspotencialesporDist_3_2TIENDASPOTENCIALES1.png" /></td><td>2 TIENDAS POTENCIALES</td></tr></table>': layer_CanttiendaspotencialesporDist_3, }, { collapsed: false }).addTo(map);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className = "row";
+        row.id = "all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className = "col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className = "col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = { "tiendas_potenciales": "int", "conurbanos": "str", "distrito": "str", "ref_gam": "str", "kind": "str", "brand": "str" };
+        function filterFunc() {
+            map.eachLayer(function (lyr) {
+                if ("options" in lyr && "dataVar" in lyr["options"]) {
+                    features = this[lyr["options"]["dataVar"]].features.slice(0);
+                    try {
+                        for (key in Filters) {
+                            keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                            if (Filters[key] == "str" || Filters[key] == "bool") {
+                                var selection = [];
+                                var options = document.getElementById("sel_" + keyS).options
+                                for (var i = 0; i < options.length; i++) {
+                                    if (options[i].selected) selection.push(options[i].value);
+                                }
+                                try {
+                                    if (key in features[0].properties) {
+                                        for (i = features.length - 1;
+                                            i >= 0; --i) {
+                                            if (selection.indexOf(
+                                                features[i].properties[key]) < 0
+                                                && selection.length > 0) {
+                                                features.splice(i, 1);
+                                            }
+                                        }
+                                    }
+                                } catch (err) {
+                                }
+                            }
+                            if (Filters[key] == "int") {
+                                sliderVals = document.getElementById(
+                                    "div_" + keyS).noUiSlider.get();
+                                try {
+                                    if (key in features[0].properties) {
+                                        for (i = features.length - 1; i >= 0; --i) {
+                                            if (parseInt(features[i].properties[key])
+                                                < sliderVals[0]
+                                                || parseInt(features[i].properties[key])
+                                                > sliderVals[1]) {
+                                                features.splice(i, 1);
+                                            }
+                                        }
+                                    }
+                                } catch (err) {
+                                }
+                            }
+                            if (Filters[key] == "real") {
+                                sliderVals = document.getElementById(
+                                    "div_" + keyS).noUiSlider.get();
+                                try {
+                                    if (key in features[0].properties) {
+                                        for (i = features.length - 1; i >= 0; --i) {
+                                            if (features[i].properties[key]
+                                                < sliderVals[0]
+                                                || features[i].properties[key]
+                                                > sliderVals[1]) {
+                                                features.splice(i, 1);
+                                            }
+                                        }
+                                    }
+                                } catch (err) {
+                                }
+                            }
+                            if (Filters[key] == "date"
+                                || Filters[key] == "datetime"
+                                || Filters[key] == "time") {
+                                try {
+                                    if (key in features[0].properties) {
+                                        HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                                        startdate = document.getElementById("dat_" +
+                                            HTMLkey + "_date1").value.replace(" ", "T");
+                                        enddate = document.getElementById("dat_" +
+                                            HTMLkey + "_date2").value.replace(" ", "T");
+                                        for (i = features.length - 1; i >= 0; --i) {
+                                            if (features[i].properties[key] < startdate
+                                                || features[i].properties[key] > enddate) {
+                                                features.splice(i, 1);
+                                            }
+                                        }
+                                    }
+                                } catch (err) {
+                                }
+                            }
+                        }
+                    } catch (err) {
+                    }
+                    this[lyr["options"]["layerName"]].clearLayers();
+                    this[lyr["options"]["layerName"]].addData(features);
+                }
+            })
+        }
+        document.getElementById("menu").appendChild(
+            document.createElement("div"));
+        var div_tiendas_potenciales = document.createElement("div");
+        div_tiendas_potenciales.id = "div_tiendas_potenciales";
+        div_tiendas_potenciales.className = "slider";
+        document.getElementById("menu").appendChild(div_tiendas_potenciales);
+        var lab_tiendas_potenciales = document.createElement('div');
+        lab_tiendas_potenciales.innerHTML = 'TIENDAS POTENCIALES: <span id="val_tiendas_potenciales"></span>';
+        lab_tiendas_potenciales.className = 'filterlabel';
+        document.getElementById("menu").appendChild(lab_tiendas_potenciales);
+        var reset_tiendas_potenciales = document.createElement('div');
+        reset_tiendas_potenciales.innerHTML = 'LIMPIAR FILTRO';
+        reset_tiendas_potenciales.className = 'filterlabel';
+        lab_tiendas_potenciales.className = 'filterlabel';
+        reset_tiendas_potenciales.onclick = function () {
+            sel_tiendas_potenciales.noUiSlider.reset();
+        };
+        document.getElementById("menu").appendChild(reset_tiendas_potenciales);
+        var sel_tiendas_potenciales = document.getElementById('div_tiendas_potenciales');
+        noUiSlider.create(sel_tiendas_potenciales, {
+            connect: true,
+            start: [1, 2],
+            step: 1,
+            format: wNumb({
+                decimals: 0,
+            }),
+            range: {
+                min: 1,
+                max: 2
+            }
+        });
+        sel_tiendas_potenciales.noUiSlider.on('update', function (values) {
+            filterVals = [];
+            for (value in values) {
+                filterVals.push(parseInt(value))
+            }
+            val_tiendas_potenciales = document.getElementById('val_tiendas_potenciales');
+            val_tiendas_potenciales.innerHTML = values.join(' - ');
+            filterFunc()
+        });
+
+        document.getElementById("menu").appendChild(
+            document.createElement("div"));
+        var div_conurbanos = document.createElement('div');
+        div_conurbanos.id = "div_conurbanos";
+        div_conurbanos.className = "filterselect";
+        document.getElementById("menu").appendChild(div_conurbanos);
+        sel_conurbanos = document.createElement('select');
+        sel_conurbanos.multiple = true;
+        sel_conurbanos.size = 10;
+        sel_conurbanos.id = "sel_conurbanos";
+
+        sel_conurbanos.onchange = function () { filterFunc() };
+        conurbanos_options_str += '<option value="ALAJUELA">ALAJUELA</option>';
+        conurbanos_options_str += '<option value="CARTAGO">CARTAGO</option>';
+        conurbanos_options_str += '<option value="CENTRAL">CENTRAL</option>';
+        conurbanos_options_str += '<option value="CONURBANO OCCIDENTE">CONURBANO OCCIDENTE</option>';
+        conurbanos_options_str += '<option value="ESTE">ESTE</option>';
+        conurbanos_options_str += '<option value="HEREDIA">HEREDIA</option>';
+        conurbanos_options_str += '<option value="NORTE">NORTE</option>';
+        conurbanos_options_str += '<option value="OESTE">OESTE</option>';
+        conurbanos_options_str += '<option value="PACÍFICO CENTRAL">PACÍFICO CENTRAL</option>';
+        conurbanos_options_str += '<option value="RESTO DE PAÍS CENTRO">RESTO DE PAÍS CENTRO</option>';
+        conurbanos_options_str += '<option value="SECTOR 1">SECTOR 1</option>';
+        conurbanos_options_str += '<option value="SUR">SUR</option>';
+        conurbanos_options_str += '<option value="ZONA CARIBE">ZONA CARIBE</option>';
+        conurbanos_options_str += '<option value="ZONA DE PACÍFICO NORTE-GUANACASTE">ZONA DE PACÍFICO NORTE-GUANACASTE</option>';
+        conurbanos_options_str += '<option value="ZONA NORTE">ZONA NORTE</option>';
+        conurbanos_options_str += '<option value="ZONA PACÍFICO SUR">ZONA PACÍFICO SUR</option>';
+        conurbanos_options_str += '<option value="ZONA SUR">ZONA SUR</option>';
+        sel_conurbanos.innerHTML = conurbanos_options_str;
+        var conurbanos_options_str = "<option value='' unselected></option>";
+
+        div_conurbanos.appendChild(sel_conurbanos);
+        var lab_conurbanos = document.createElement('div');
+        lab_conurbanos.innerHTML = 'CONURBANOS';
+        lab_conurbanos.className = 'filterlabel';
+        div_conurbanos.appendChild(lab_conurbanos);
+        var reset_conurbanos = document.createElement('div');
+        reset_conurbanos.innerHTML = 'LIMPIAR FILTRO';
+        reset_conurbanos.className = 'filterlabel';
+        reset_conurbanos.onclick = function () {
+            var options = document.getElementById("sel_conurbanos").options;
+            for (var i = 0; i < options.length; i++) {
+                options[i].selected = false;
+            }
+            filterFunc();
+        };
+        div_conurbanos.appendChild(reset_conurbanos);
+        document.getElementById("menu").appendChild(
+            document.createElement("div"));
+        var div_distrito = document.createElement('div');
+        div_distrito.id = "div_distrito";
+        div_distrito.className = "filterselect";
+        document.getElementById("menu").appendChild(div_distrito);
+        sel_distrito = document.createElement('select');
+        sel_distrito.multiple = true;
+        sel_distrito.size = 10;
+        sel_distrito.id = "sel_distrito";
+
+        sel_distrito.onchange = function () { filterFunc() };
+        distrito_options_str += '<option value="AGUACALIENTE O SAN FRANCISCO">AGUACALIENTE O SAN FRANCISCO</option>';
+        distrito_options_str += '<option value="AGUAS ZARCAS">AGUAS ZARCAS</option>';
+        distrito_options_str += '<option value="ALAJUELA">ALAJUELA</option>';
+        distrito_options_str += '<option value="ALAJUELITA">ALAJUELITA</option>';
+        distrito_options_str += '<option value="ANSELMO LLORENTE">ANSELMO LLORENTE</option>';
+        distrito_options_str += '<option value="BARRANCA">BARRANCA</option>';
+        distrito_options_str += '<option value="BUENOS AIRES">BUENOS AIRES</option>';
+        distrito_options_str += '<option value="CACHÍ">CACHÍ</option>';
+        distrito_options_str += '<option value="CAHUITA">CAHUITA</option>';
+        distrito_options_str += '<option value="CARIARI">CARIARI</option>';
+        distrito_options_str += '<option value="CARMEN">CARMEN</option>';
+        distrito_options_str += '<option value="CATEDRAL">CATEDRAL</option>';
+        distrito_options_str += '<option value="CAÑAS">CAÑAS</option>';
+        distrito_options_str += '<option value="CURRIDABAT">CURRIDABAT</option>';
+        distrito_options_str += '<option value="DANIEL FLORES">DANIEL FLORES</option>';
+        distrito_options_str += '<option value="DESAMPARADOS">DESAMPARADOS</option>';
+        distrito_options_str += '<option value="EL ROBLE">EL ROBLE</option>';
+        distrito_options_str += '<option value="ESPÍRITU SANTO">ESPÍRITU SANTO</option>';
+        distrito_options_str += '<option value="GRECIA">GRECIA</option>';
+        distrito_options_str += '<option value="GUADALUPE">GUADALUPE</option>';
+        distrito_options_str += '<option value="GUADALUPE O ARENILLA">GUADALUPE O ARENILLA</option>';
+        distrito_options_str += '<option value="GUAYCARÁ">GUAYCARÁ</option>';
+        distrito_options_str += '<option value="GUÁCIMA">GUÁCIMA</option>';
+        distrito_options_str += '<option value="GUÁCIMO">GUÁCIMO</option>';
+        distrito_options_str += '<option value="GUÁPILES">GUÁPILES</option>';
+        distrito_options_str += '<option value="HATILLO">HATILLO</option>';
+        distrito_options_str += '<option value="HEREDIA">HEREDIA</option>';
+        distrito_options_str += '<option value="HOSPITAL">HOSPITAL</option>';
+        distrito_options_str += '<option value="JACÓ">JACÓ</option>';
+        distrito_options_str += '<option value="JESÚS">JESÚS</option>';
+        distrito_options_str += '<option value="LA FORTUNA">LA FORTUNA</option>';
+        distrito_options_str += '<option value="LIBERIA">LIBERIA</option>';
+        distrito_options_str += '<option value="LIMÓN">LIMÓN</option>';
+        distrito_options_str += '<option value="LLANOS DE SANTA LUCÍA">LLANOS DE SANTA LUCÍA</option>';
+        distrito_options_str += '<option value="MACACONA">MACACONA</option>';
+        distrito_options_str += '<option value="MATA REDONDA">MATA REDONDA</option>';
+        distrito_options_str += '<option value="MERCED">MERCED</option>';
+        distrito_options_str += '<option value="MERCEDES">MERCEDES</option>';
+        distrito_options_str += '<option value="NARANJO">NARANJO</option>';
+        distrito_options_str += '<option value="NICOYA">NICOYA</option>';
+        distrito_options_str += '<option value="OCCIDENTAL">OCCIDENTAL</option>';
+        distrito_options_str += '<option value="ORIENTAL">ORIENTAL</option>';
+        distrito_options_str += '<option value="OROTINA">OROTINA</option>';
+        distrito_options_str += '<option value="PALMARES">PALMARES</option>';
+        distrito_options_str += '<option value="PARAÍSO">PARAÍSO</option>';
+        distrito_options_str += '<option value="PARRITA">PARRITA</option>';
+        distrito_options_str += '<option value="PAVAS">PAVAS</option>';
+        distrito_options_str += '<option value="PITAL">PITAL</option>';
+        distrito_options_str += '<option value="POZOS">POZOS</option>';
+        distrito_options_str += '<option value="PUNTARENAS">PUNTARENAS</option>';
+        distrito_options_str += '<option value="QUEPOS">QUEPOS</option>';
+        distrito_options_str += '<option value="QUESADA">QUESADA</option>';
+        distrito_options_str += '<option value="RINCÓN DE SABANILLA">RINCÓN DE SABANILLA</option>';
+        distrito_options_str += '<option value="RÍO SEGUNDO">RÍO SEGUNDO</option>';
+        distrito_options_str += '<option value="SAN ANTONIO">SAN ANTONIO</option>';
+        distrito_options_str += '<option value="SAN CRISTOBAL">SAN CRISTOBAL</option>';
+        distrito_options_str += '<option value="SAN DIEGO">SAN DIEGO</option>';
+        distrito_options_str += '<option value="SAN FRANCISCO">SAN FRANCISCO</option>';
+        distrito_options_str += '<option value="SAN FRANCISCO DE DOS RÍOS">SAN FRANCISCO DE DOS RÍOS</option>';
+        distrito_options_str += '<option value="SAN ISIDRO">SAN ISIDRO</option>';
+        distrito_options_str += '<option value="SAN ISIDRO DE EL GENERAL">SAN ISIDRO DE EL GENERAL</option>';
+        distrito_options_str += '<option value="SAN JOSÉ">SAN JOSÉ</option>';
+        distrito_options_str += '<option value="SAN JUAN">SAN JUAN</option>';
+        distrito_options_str += '<option value="SAN MIGUEL">SAN MIGUEL</option>';
+        distrito_options_str += '<option value="SAN NICOLÁS">SAN NICOLÁS</option>';
+        distrito_options_str += '<option value="SAN PEDRO">SAN PEDRO</option>';
+        distrito_options_str += '<option value="SAN RAFAEL">SAN RAFAEL</option>';
+        distrito_options_str += '<option value="SAN RAFAEL ABAJO">SAN RAFAEL ABAJO</option>';
+        distrito_options_str += '<option value="SAN RAFAEL ARRIBA">SAN RAFAEL ARRIBA</option>';
+        distrito_options_str += '<option value="SAN RAMÓN">SAN RAMÓN</option>';
+        distrito_options_str += '<option value="SAN SEBASTIÁN">SAN SEBASTIÁN</option>';
+        distrito_options_str += '<option value="SAN VICENTE">SAN VICENTE</option>';
+        distrito_options_str += '<option value="SAN VITO">SAN VITO</option>';
+        distrito_options_str += '<option value="SANTA ANA">SANTA ANA</option>';
+        distrito_options_str += '<option value="SANTA CRUZ">SANTA CRUZ</option>';
+        distrito_options_str += '<option value="SANTIAGO">SANTIAGO</option>';
+        distrito_options_str += '<option value="SARCHÍ NORTE">SARCHÍ NORTE</option>';
+        distrito_options_str += '<option value="SARDINAL">SARDINAL</option>';
+        distrito_options_str += '<option value="SIQUIRRES">SIQUIRRES</option>';
+        distrito_options_str += '<option value="SÁNCHEZ">SÁNCHEZ</option>';
+        distrito_options_str += '<option value="TAMARINDO">TAMARINDO</option>';
+        distrito_options_str += '<option value="TRES RÍOS">TRES RÍOS</option>';
+        distrito_options_str += '<option value="TURRIALBA">TURRIALBA</option>';
+        distrito_options_str += '<option value="ULLOA">ULLOA</option>';
+        distrito_options_str += '<option value="UPALA">UPALA</option>';
+        distrito_options_str += '<option value="URUCA">URUCA</option>';
+        distrito_options_str += '<option value="VENECIA">VENECIA</option>';
+        distrito_options_str += '<option value="ZAPOTE">ZAPOTE</option>';
+        sel_distrito.innerHTML = distrito_options_str;
+        var distrito_options_str = "<option value='' unselected></option>";
+
+        div_distrito.appendChild(sel_distrito);
+        var lab_distrito = document.createElement('div');
+        lab_distrito.innerHTML = 'DISTRITOS';
+        lab_distrito.className = 'filterlabel';
+        div_distrito.appendChild(lab_distrito);
+        var reset_distrito = document.createElement('div');
+        reset_distrito.innerHTML = 'LIMPIAR FILTRO';
+        reset_distrito.className = 'filterlabel';
+        reset_distrito.onclick = function () {
+            var options = document.getElementById("sel_distrito").options;
+            for (var i = 0; i < options.length; i++) {
+                options[i].selected = false;
+            }
+            filterFunc();
+        };
+        div_distrito.appendChild(reset_distrito);
+        document.getElementById("menu").appendChild(
+            document.createElement("div"));
+        var div_ref_gam = document.createElement('div');
+        div_ref_gam.id = "div_ref_gam";
+        div_ref_gam.className = "filterselect";
+        document.getElementById("menu").appendChild(div_ref_gam);
+        sel_ref_gam = document.createElement('select');
+        sel_ref_gam.multiple = true;
+        sel_ref_gam.size = 3;
+        sel_ref_gam.id = "sel_ref_gam";
+
+        sel_ref_gam.onchange = function () { filterFunc() };
+        ref_gam_options_str += '<option value="GAM">GAM</option>';
+        ref_gam_options_str += '<option value="GAM AMPLIADO">GAM AMPLIADO</option>';
+        ref_gam_options_str += '<option value="RESTO PAIS">RESTO PAIS</option>';
+        sel_ref_gam.innerHTML = ref_gam_options_str;
+        var ref_gam_options_str = "<option value='' unselected></option>";
+
+        div_ref_gam.appendChild(sel_ref_gam);
+        var lab_ref_gam = document.createElement('div');
+        lab_ref_gam.innerHTML = 'REFERENCIA GAM-PAIS';
+        lab_ref_gam.className = 'filterlabel';
+        div_ref_gam.appendChild(lab_ref_gam);
+        var reset_ref_gam = document.createElement('div');
+        reset_ref_gam.innerHTML = 'LIMPIAR FILTRO';
+        reset_ref_gam.className = 'filterlabel';
+        reset_ref_gam.onclick = function () {
+            var options = document.getElementById("sel_ref_gam").options;
+            for (var i = 0; i < options.length; i++) {
+                options[i].selected = false;
+            }
+            filterFunc();
+        };
+        div_ref_gam.appendChild(reset_ref_gam);
+        document.getElementById("menu").appendChild(
+            document.createElement("div"));
+        var div_kind = document.createElement('div');
+        div_kind.id = "div_kind";
+        div_kind.className = "filterselect";
+        document.getElementById("menu").appendChild(div_kind);
+        sel_kind = document.createElement('select');
+        sel_kind.multiple = true;
+        sel_kind.size = 7;
+        sel_kind.id = "sel_kind";
+
+        sel_kind.onchange = function () { filterFunc() };
+        kind_options_str += '<option value="CATALOGO">CATALOGO</option>';
+        kind_options_str += '<option value="CATALOGO Y TIENDA DE MODA">CATALOGO Y TIENDA DE MODA</option>';
+        kind_options_str += '<option value="LENCERIA">LENCERIA</option>';
+        kind_options_str += '<option value="SUPERMERCADO">SUPERMERCADO</option>';
+        kind_options_str += '<option value="TIENDA DE BAJO COSTO">TIENDA DE BAJO COSTO</option>';
+        kind_options_str += '<option value="TIENDA DE MODA">TIENDA DE MODA</option>';
+        kind_options_str += '<option value="TIENDA POR DEPARTAMENTO">TIENDA POR DEPARTAMENTO</option>';
+        sel_kind.innerHTML = kind_options_str;
+        var kind_options_str = "<option value='' unselected></option>";
+
+        div_kind.appendChild(sel_kind);
+        var lab_kind = document.createElement('div');
+        lab_kind.innerHTML = 'TIPO';
+        lab_kind.className = 'filterlabel';
+        div_kind.appendChild(lab_kind);
+        var reset_kind = document.createElement('div');
+        reset_kind.innerHTML = 'LIMPIAR FILTRO';
+        reset_kind.className = 'filterlabel';
+        reset_kind.onclick = function () {
+            var options = document.getElementById("sel_kind").options;
+            for (var i = 0; i < options.length; i++) {
+                options[i].selected = false;
+            }
+            filterFunc();
+        };
+        div_kind.appendChild(reset_kind);
+        document.getElementById("menu").appendChild(
+            document.createElement("div"));
+        var div_brand = document.createElement('div');
+        div_brand.id = "div_brand";
+        div_brand.className = "filterselect";
+        document.getElementById("menu").appendChild(div_brand);
+        sel_brand = document.createElement('select');
+        sel_brand.multiple = true;
+        sel_brand.size = 10;
+        sel_brand.id = "sel_brand";
+
+        sel_brand.onchange = function () { filterFunc() };
+        brand_options_str += '<option value="ALISS">ALISS</option>';
+        brand_options_str += '<option value="ALLEGRO">ALLEGRO</option>';
+        brand_options_str += '<option value="AVON">AVON</option>';
+        brand_options_str += '<option value="BABY LOVE SHOP">BABY LOVE SHOP</option>';
+        brand_options_str += '<option value="BAULA BEACHWEAR">BAULA BEACHWEAR</option>';
+        brand_options_str += '<option value="BOULVARD DE WALMART">BOULVARD DE WALMART</option>';
+        brand_options_str += '<option value="BOUTIQUE CHOCOLATE">BOUTIQUE CHOCOLATE</option>';
+        brand_options_str += '<option value="BOUTIQUE DIVINA">BOUTIQUE DIVINA</option>';
+        brand_options_str += '<option value="BOUTIQUE SENSUAL">BOUTIQUE SENSUAL</option>';
+        brand_options_str += '<option value="CALVIN KLEIN">CALVIN KLEIN</option>';
+        brand_options_str += '<option value="CASINO DE AUTO MERCADO">CASINO DE AUTO MERCADO</option>';
+        brand_options_str += '<option value="CEMACO">CEMACO</option>';
+        brand_options_str += '<option value="CON SABOR A MELÓN">CON SABOR A MELÓN</option>';
+        brand_options_str += '<option value="CONFECCIONES GIRE">CONFECCIONES GIRE</option>';
+        brand_options_str += '<option value="CORSET LOVERS CR">CORSET LOVERS CR</option>';
+        brand_options_str += '<option value="CREACIONES DALILA">CREACIONES DALILA</option>';
+        brand_options_str += '<option value="CREACIONES MAR AZOFF">CREACIONES MAR AZOFF</option>';
+        brand_options_str += '<option value="CRISTEL">CRISTEL</option>';
+        brand_options_str += '<option value="CRUZ DE AMOR">CRUZ DE AMOR</option>';
+        brand_options_str += '<option value="CURVY LENCERÍA">CURVY LENCERÍA</option>';
+        brand_options_str += '<option value="DEL TORO BIKINI">DEL TORO BIKINI</option>';
+        brand_options_str += '<option value="DIANE & GEORDI">DIANE & GEORDI</option>';
+        brand_options_str += '<option value="DIFERENTES MARCAS">DIFERENTES MARCAS</option>';
+        brand_options_str += '<option value="DITAIRES">DITAIRES</option>';
+        brand_options_str += '<option value="EKONO">EKONO</option>';
+        brand_options_str += '<option value="EL EXITO BETANCUR">EL EXITO BETANCUR</option>';
+        brand_options_str += '<option value="EL REY">EL REY</option>';
+        brand_options_str += '<option value="EROTICA">EROTICA</option>';
+        brand_options_str += '<option value="FOREVER 22">FOREVER 22</option>';
+        brand_options_str += '<option value="FOREVER STORE">FOREVER STORE</option>';
+        brand_options_str += '<option value="GARPER">GARPER</option>';
+        brand_options_str += '<option value="GYG STORE">GYG STORE</option>';
+        brand_options_str += '<option value="HIJA DE TIGRE">HIJA DE TIGRE</option>';
+        brand_options_str += '<option value="ILUSION">ILUSION</option>';
+        brand_options_str += '<option value="INTIMA SECRET">INTIMA SECRET</option>';
+        brand_options_str += '<option value="ISABELLA ÍNTIMA">ISABELLA ÍNTIMA</option>';
+        brand_options_str += '<option value="JERUSALEM">JERUSALEM</option>';
+        brand_options_str += '<option value="KA FASHION">KA FASHION</option>';
+        brand_options_str += '<option value="KC BIKINIS">KC BIKINIS</option>';
+        brand_options_str += '<option value="LA FAVORITA">LA FAVORITA</option>';
+        brand_options_str += '<option value="LAURA">LAURA</option>';
+        brand_options_str += '<option value="LEONISA">LEONISA</option>';
+        brand_options_str += '<option value="LETTY">LETTY</option>';
+        brand_options_str += '<option value="LILI PINK">LILI PINK</option>';
+        brand_options_str += '<option value="LLOBET">LLOBET</option>';
+        brand_options_str += '<option value="LOVABLE">LOVABLE</option>';
+        brand_options_str += '<option value="LUX FORM">LUX FORM</option>';
+        brand_options_str += '<option value="MALKA COSTA RICA">MALKA COSTA RICA</option>';
+        brand_options_str += '<option value="MARBELLA SURF AND SKATE">MARBELLA SURF AND SKATE</option>';
+        brand_options_str += '<option value="MARISOL SOTO">MARISOL SOTO</option>';
+        brand_options_str += '<option value="MELOCOTON">MELOCOTON</option>';
+        brand_options_str += '<option value="MUNDO MAGICO">MUNDO MAGICO</option>';
+        brand_options_str += '<option value="NATURAL COLLECTION">NATURAL COLLECTION</option>';
+        brand_options_str += '<option value="OVS">OVS</option>';
+        brand_options_str += '<option value="OYSHO">OYSHO</option>';
+        brand_options_str += '<option value="PAGUE MENOS">PAGUE MENOS</option>';
+        brand_options_str += '<option value="PEQUEÑO MUNDO">PEQUEÑO MUNDO</option>';
+        brand_options_str += '<option value="PINK">PINK</option>';
+        brand_options_str += '<option value="PIÑAS INTIMA">PIÑAS INTIMA</option>';
+        brand_options_str += '<option value="PRETTY WOMAN">PRETTY WOMAN</option>';
+        brand_options_str += '<option value="PRETTY WOMAN, BOCCELLI, CHAMELA, ANN CHERY">PRETTY WOMAN, BOCCELLI, CHAMELA, ANN CHERY</option>';
+        brand_options_str += '<option value="PRICESMART">PRICESMART</option>';
+        brand_options_str += '<option value="PULL & BEAR">PULL & BEAR</option>';
+        brand_options_str += '<option value="PUNTO DE MODA">PUNTO DE MODA</option>';
+        brand_options_str += '<option value="PUNTO FAVORITO">PUNTO FAVORITO</option>';
+        brand_options_str += '<option value="PURPOSE STORE">PURPOSE STORE</option>';
+        brand_options_str += '<option value="REYCO">REYCO</option>';
+        brand_options_str += '<option value="ROPA INTIMA CYRMAN">ROPA INTIMA CYRMAN</option>';
+        brand_options_str += '<option value="ROPA ÍNTIMA ANA">ROPA ÍNTIMA ANA</option>';
+        brand_options_str += '<option value="ROSABAL">ROSABAL</option>';
+        brand_options_str += '<option value="SECRET WOMEN">SECRET WOMEN</option>';
+        brand_options_str += '<option value="SENSUAL">SENSUAL</option>';
+        brand_options_str += '<option value="SIMAN">SIMAN</option>';
+        brand_options_str += '<option value="SOFI´STORE">SOFI´STORE</option>';
+        brand_options_str += '<option value="SOLEMAR">SOLEMAR</option>';
+        brand_options_str += '<option value="SUPER INTIMA">SUPER INTIMA</option>';
+        brand_options_str += '<option value="TALLA GRANDE">TALLA GRANDE</option>';
+        brand_options_str += '<option value="TANA">TANA</option>';
+        brand_options_str += '<option value="TIENDA CASA MATA">TIENDA CASA MATA</option>';
+        brand_options_str += '<option value="TIENDA DARIÁ & SHAGIN">TIENDA DARIÁ & SHAGIN</option>';
+        brand_options_str += '<option value="TIENDA DEMODA NARANJO">TIENDA DEMODA NARANJO</option>';
+        brand_options_str += '<option value="TIENDA FEMINA">TIENDA FEMINA</option>';
+        brand_options_str += '<option value="TIENDA LA GLORIA">TIENDA LA GLORIA</option>';
+        brand_options_str += '<option value="TIENDA LA VACA">TIENDA LA VACA</option>';
+        brand_options_str += '<option value="TIENDA LETTY">TIENDA LETTY</option>';
+        brand_options_str += '<option value="TIENDAS EL ÁNGEL">TIENDAS EL ÁNGEL</option>';
+        brand_options_str += '<option value="TOMMY HILFIGER">TOMMY HILFIGER</option>';
+        brand_options_str += '<option value="TOUCHE">TOUCHE</option>';
+        brand_options_str += '<option value="TROPS SWIMWEAR">TROPS SWIMWEAR</option>';
+        brand_options_str += '<option value="VARIAS">VARIAS</option>';
+        brand_options_str += '<option value="VARIEDAD Y MODA SAMANTHA">VARIEDAD Y MODA SAMANTHA</option>';
+        brand_options_str += '<option value="VICTORIA SECRETS">VICTORIA SECRETS</option>';
+        brand_options_str += '<option value="WOMEN&apos;S SECRET">WOMEN&apos;S SECRET</option>';
+        brand_options_str += '<option value="YAMUNI">YAMUNI</option>';
+        brand_options_str += '<option value="ZARA">ZARA</option>';
+        brand_options_str += '<option value="ZERMAT">ZERMAT</option>';
+        brand_options_str += '<option value="ZONA ROSA - ROPA INTIMA">ZONA ROSA - ROPA INTIMA</option>';
+        sel_brand.innerHTML = brand_options_str;
+        var brand_options_str = "<option value='' unselected></option>";
+
+        div_brand.appendChild(sel_brand);
+        var lab_brand = document.createElement('div');
+        lab_brand.innerHTML = 'MARCA';
+        lab_brand.className = 'filterlabel';
+        div_brand.appendChild(lab_brand);
+        var reset_brand = document.createElement('div');
+        reset_brand.innerHTML = 'LIMPIAR FILTRO';
+        reset_brand.className = 'filterlabel';
+        reset_brand.onclick = function () {
+            var options = document.getElementById("sel_brand").options;
+            for (var i = 0; i < options.length; i++) {
+                options[i].selected = false;
+            }
+            filterFunc();
+        };
+        div_brand.appendChild(reset_brand);
+
+        var credctrl = L.controlCredits({
+            image: "images/info.png",
+            link: "https://geoimaginarte.github.io/mysite",
+            text: "<b>Creado por: </b>Jose Francisco Nunez O. <br/>(Geografo y Analista de datos)"
+        }).addTo(map);
+
+        L.LogoControl = L.Control.extend({
+            options: {
+                position: 'bottomleft'
+            },
+            onAdd: function (map) {
+                var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control logo-control');
+                var button = L.DomUtil.create('a', '', container);
+                button.innerHTML = '<img  height="200%" class="logo-control-img" src="images/logos.jpg">';
+                L.DomEvent.disableClickPropagation(button);
+                container.title = "Consultores";
+                return container;
+            },
+        });
+        new L.LogoControl().addTo(map)
+
+        L.Control.Watermark = L.Control.extend({
+            onAdd: function (map) {
+                var img = L.DomUtil.create('img');
+                img.src = 'images/lilipink.png';
+                img.style.width = '200 px';
+                return img;
+            },
+            onRemove: function (map) { },
+        });
+        L.control.watermark = function (opts) {
+            return new L.Control.Watermark(opts);
+        }
+        L.control.watermark().addTo(map);
+
+    </script>
+</body>
+
+</html>
