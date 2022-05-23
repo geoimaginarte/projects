@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="css/filter.css">
 <link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
+        <link rel="stylesheet" href="css/leaflet-control-credits.css" />
         <style>
         html, body, #map {
             width: 100%;
@@ -40,12 +41,13 @@
         <script src="js/tailDT.js"></script>
 <script src="js/nouislider.min.js"></script>
 <script src="js/wNumb.js"></script>
+<script type="text/javascript" src="js/leaflet-control-credits.js"></script>
         <script src="data/Distritos_2.js"></script>
         <script src="data/LubricentrosGasAgencias_3.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[8.085505367745483,-85.77558666344879],[10.975840367745533,-82.25606309202016]]);
+        }).fitBounds([[8.085505367745483,-85.77319568276168],[10.975840367745533,-82.25845407270727]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -327,8 +329,23 @@
         });
         bounds_group.addLayer(layer_LubricentrosGasAgencias_3);
         map.addLayer(layer_LubricentrosGasAgencias_3);
-        var baseMaps = {};
-        L.control.layers(baseMaps,{'Lubricentros-Gas-Agencias<br /><table><tr><td style="text-align: center;"><img src="legend/LubricentrosGasAgencias_3_AGENCIASDEAUTOS0.png" /></td><td>AGENCIAS DE AUTOS</td></tr><tr><td style="text-align: center;"><img src="legend/LubricentrosGasAgencias_3_GASOLINERAS1.png" /></td><td>GASOLINERAS</td></tr><tr><td style="text-align: center;"><img src="legend/LubricentrosGasAgencias_3_LUBRICENTROSYCENTROSDESERVICIOAUTOMOTRIZ2.png" /></td><td>LUBRICENTROS Y CENTROS DE SERVICIO AUTOMOTRIZ</td></tr></table>': layer_LubricentrosGasAgencias_3,'Distritos<br /><table><tr><td style="text-align: center;"><img src="legend/Distritos_2_GAM0.png" /></td><td>GAM</td></tr><tr><td style="text-align: center;"><img src="legend/Distritos_2_GAMAMPLIADO1.png" /></td><td>GAM AMPLIADO</td></tr><tr><td style="text-align: center;"><img src="legend/Distritos_2_RESTOPAIS2.png" /></td><td>RESTO PAIS</td></tr></table>': layer_Distritos_2,"OSM Standard": layer_OSMStandard_1,"Google Hybrid": layer_GoogleHybrid_0,},{collapsed:false}).addTo(map);
+            var abstract = new L.Control({'position':'topright'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+
+                    abstract.show();
+                    return this._div;
+                };
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = '<h1>LUBRICENTROS, GASOLINERAS Y AGENCIAS DE AUTOS</h1>';
+            };
+            abstract.addTo(map);
+        var baseMaps = {"Google Hybrid": layer_GoogleHybrid_0,"OSM Standard": layer_OSMStandard_1,};
+        L.control.layers(baseMaps,{'Lubricentros-Gas-Agencias<br /><table><tr><td style="text-align: center;"><img src="legend/LubricentrosGasAgencias_3_AGENCIASDEAUTOS0.png" /></td><td>AGENCIAS DE AUTOS</td></tr><tr><td style="text-align: center;"><img src="legend/LubricentrosGasAgencias_3_GASOLINERAS1.png" /></td><td>GASOLINERAS</td></tr><tr><td style="text-align: center;"><img src="legend/LubricentrosGasAgencias_3_LUBRICENTROSYCENTROSDESERVICIOAUTOMOTRIZ2.png" /></td><td>LUBRICENTROS Y CENTROS DE SERVICIO AUTOMOTRIZ</td></tr></table>': layer_LubricentrosGasAgencias_3,'Distritos<br /><table><tr><td style="text-align: center;"><img src="legend/Distritos_2_GAM0.png" /></td><td>GAM</td></tr><tr><td style="text-align: center;"><img src="legend/Distritos_2_GAMAMPLIADO1.png" /></td><td>GAM AMPLIADO</td></tr><tr><td style="text-align: center;"><img src="legend/Distritos_2_RESTOPAIS2.png" /></td><td>RESTO PAIS</td></tr></table>': layer_Distritos_2,},{collapsed:false}).addTo(map);
         setBounds();
         map.addControl(new L.Control.Search({
             layer: layer_LubricentrosGasAgencias_3,
@@ -356,7 +373,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"conurbano": "str","canton": "str","ref_gam": "str","provincia": "str","categories": "str","distrito": "str"};
+        var Filters = {"categories": "str","ref_gam": "str","conurbano": "str","provincia": "str","canton": "str","distrito": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -448,6 +465,70 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_categories = document.createElement('div');
+            div_categories.id = "div_categories";
+            div_categories.className= "filterselect";
+            document.getElementById("menu").appendChild(div_categories);
+            sel_categories = document.createElement('select');
+            sel_categories.multiple = true;
+            sel_categories.size = 3;
+            sel_categories.id = "sel_categories";
+            var categories_options_str = "<option value='' unselected></option>";
+            sel_categories.onchange = function(){filterFunc()};
+            categories_options_str  += '<option value="AGENCIAS DE AUTOS">AGENCIAS DE AUTOS</option>';
+            categories_options_str  += '<option value="GASOLINERAS">GASOLINERAS</option>';
+            categories_options_str  += '<option value="LUBRICENTROS Y CENTROS DE SERVICIO AUTOMOTRIZ">LUBRICENTROS Y CENTROS DE SERVICIO AUTOMOTRIZ</option>';
+            sel_categories.innerHTML = categories_options_str;
+            div_categories.appendChild(sel_categories);
+            var lab_categories = document.createElement('div');
+            lab_categories.innerHTML = 'Categorias';
+            lab_categories.className = 'filterlabel';
+            div_categories.appendChild(lab_categories);
+            var reset_categories = document.createElement('div');
+            reset_categories.innerHTML = 'Limpiar filtro';
+            reset_categories.className = 'filterlabel';
+            reset_categories.onclick = function() {
+                var options = document.getElementById("sel_categories").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_categories.appendChild(reset_categories);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_ref_gam = document.createElement('div');
+            div_ref_gam.id = "div_ref_gam";
+            div_ref_gam.className= "filterselect";
+            document.getElementById("menu").appendChild(div_ref_gam);
+            sel_ref_gam = document.createElement('select');
+            sel_ref_gam.multiple = true;
+            sel_ref_gam.size = 3;
+            sel_ref_gam.id = "sel_ref_gam";
+            var ref_gam_options_str = "<option value='' unselected></option>";
+            sel_ref_gam.onchange = function(){filterFunc()};
+            ref_gam_options_str  += '<option value="GAM">GAM</option>';
+            ref_gam_options_str  += '<option value="GAM AMPLIADO">GAM AMPLIADO</option>';
+            ref_gam_options_str  += '<option value="RESTO PAIS">RESTO PAIS</option>';
+            sel_ref_gam.innerHTML = ref_gam_options_str;
+            div_ref_gam.appendChild(sel_ref_gam);
+            var lab_ref_gam = document.createElement('div');
+            lab_ref_gam.innerHTML = 'Referencias GAM';
+            lab_ref_gam.className = 'filterlabel';
+            div_ref_gam.appendChild(lab_ref_gam);
+            var reset_ref_gam = document.createElement('div');
+            reset_ref_gam.innerHTML = 'Limpiar filtro';
+            reset_ref_gam.className = 'filterlabel';
+            reset_ref_gam.onclick = function() {
+                var options = document.getElementById("sel_ref_gam").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_ref_gam.appendChild(reset_ref_gam);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_conurbano = document.createElement('div');
             div_conurbano.id = "div_conurbano";
             div_conurbano.className= "filterselect";
@@ -483,11 +564,11 @@
             sel_conurbano.innerHTML = conurbano_options_str;
             div_conurbano.appendChild(sel_conurbano);
             var lab_conurbano = document.createElement('div');
-            lab_conurbano.innerHTML = 'conurbano';
+            lab_conurbano.innerHTML = 'Conurbanos';
             lab_conurbano.className = 'filterlabel';
             div_conurbano.appendChild(lab_conurbano);
             var reset_conurbano = document.createElement('div');
-            reset_conurbano.innerHTML = 'clear filter';
+            reset_conurbano.innerHTML = 'Limpiar filtro';
             reset_conurbano.className = 'filterlabel';
             reset_conurbano.onclick = function() {
                 var options = document.getElementById("sel_conurbano").options;
@@ -497,6 +578,42 @@
                 filterFunc();
             };
             div_conurbano.appendChild(reset_conurbano);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_provincia = document.createElement('div');
+            div_provincia.id = "div_provincia";
+            div_provincia.className= "filterselect";
+            document.getElementById("menu").appendChild(div_provincia);
+            sel_provincia = document.createElement('select');
+            sel_provincia.multiple = true;
+            sel_provincia.size = 7;
+            sel_provincia.id = "sel_provincia";
+            var provincia_options_str = "<option value='' unselected></option>";
+            sel_provincia.onchange = function(){filterFunc()};
+            provincia_options_str  += '<option value="ALAJUELA">ALAJUELA</option>';
+            provincia_options_str  += '<option value="CARTAGO">CARTAGO</option>';
+            provincia_options_str  += '<option value="GUANACASTE">GUANACASTE</option>';
+            provincia_options_str  += '<option value="HEREDIA">HEREDIA</option>';
+            provincia_options_str  += '<option value="LIMÓN">LIMÓN</option>';
+            provincia_options_str  += '<option value="PUNTARENAS">PUNTARENAS</option>';
+            provincia_options_str  += '<option value="SAN JOSÉ">SAN JOSÉ</option>';
+            sel_provincia.innerHTML = provincia_options_str;
+            div_provincia.appendChild(sel_provincia);
+            var lab_provincia = document.createElement('div');
+            lab_provincia.innerHTML = 'Provincias';
+            lab_provincia.className = 'filterlabel';
+            div_provincia.appendChild(lab_provincia);
+            var reset_provincia = document.createElement('div');
+            reset_provincia.innerHTML = 'Limpiar filtro';
+            reset_provincia.className = 'filterlabel';
+            reset_provincia.onclick = function() {
+                var options = document.getElementById("sel_provincia").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_provincia.appendChild(reset_provincia);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             var div_canton = document.createElement('div');
@@ -594,11 +711,11 @@
             sel_canton.innerHTML = canton_options_str;
             div_canton.appendChild(sel_canton);
             var lab_canton = document.createElement('div');
-            lab_canton.innerHTML = 'canton';
+            lab_canton.innerHTML = 'Cantones';
             lab_canton.className = 'filterlabel';
             div_canton.appendChild(lab_canton);
             var reset_canton = document.createElement('div');
-            reset_canton.innerHTML = 'clear filter';
+            reset_canton.innerHTML = 'Limpiar filtro';
             reset_canton.className = 'filterlabel';
             reset_canton.onclick = function() {
                 var options = document.getElementById("sel_canton").options;
@@ -608,106 +725,6 @@
                 filterFunc();
             };
             div_canton.appendChild(reset_canton);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_ref_gam = document.createElement('div');
-            div_ref_gam.id = "div_ref_gam";
-            div_ref_gam.className= "filterselect";
-            document.getElementById("menu").appendChild(div_ref_gam);
-            sel_ref_gam = document.createElement('select');
-            sel_ref_gam.multiple = true;
-            sel_ref_gam.size = 3;
-            sel_ref_gam.id = "sel_ref_gam";
-            var ref_gam_options_str = "<option value='' unselected></option>";
-            sel_ref_gam.onchange = function(){filterFunc()};
-            ref_gam_options_str  += '<option value="GAM">GAM</option>';
-            ref_gam_options_str  += '<option value="GAM AMPLIADO">GAM AMPLIADO</option>';
-            ref_gam_options_str  += '<option value="RESTO PAIS">RESTO PAIS</option>';
-            sel_ref_gam.innerHTML = ref_gam_options_str;
-            div_ref_gam.appendChild(sel_ref_gam);
-            var lab_ref_gam = document.createElement('div');
-            lab_ref_gam.innerHTML = 'ref_gam';
-            lab_ref_gam.className = 'filterlabel';
-            div_ref_gam.appendChild(lab_ref_gam);
-            var reset_ref_gam = document.createElement('div');
-            reset_ref_gam.innerHTML = 'clear filter';
-            reset_ref_gam.className = 'filterlabel';
-            reset_ref_gam.onclick = function() {
-                var options = document.getElementById("sel_ref_gam").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_ref_gam.appendChild(reset_ref_gam);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_provincia = document.createElement('div');
-            div_provincia.id = "div_provincia";
-            div_provincia.className= "filterselect";
-            document.getElementById("menu").appendChild(div_provincia);
-            sel_provincia = document.createElement('select');
-            sel_provincia.multiple = true;
-            sel_provincia.size = 7;
-            sel_provincia.id = "sel_provincia";
-            var provincia_options_str = "<option value='' unselected></option>";
-            sel_provincia.onchange = function(){filterFunc()};
-            provincia_options_str  += '<option value="ALAJUELA">ALAJUELA</option>';
-            provincia_options_str  += '<option value="CARTAGO">CARTAGO</option>';
-            provincia_options_str  += '<option value="GUANACASTE">GUANACASTE</option>';
-            provincia_options_str  += '<option value="HEREDIA">HEREDIA</option>';
-            provincia_options_str  += '<option value="LIMÓN">LIMÓN</option>';
-            provincia_options_str  += '<option value="PUNTARENAS">PUNTARENAS</option>';
-            provincia_options_str  += '<option value="SAN JOSÉ">SAN JOSÉ</option>';
-            sel_provincia.innerHTML = provincia_options_str;
-            div_provincia.appendChild(sel_provincia);
-            var lab_provincia = document.createElement('div');
-            lab_provincia.innerHTML = 'provincia';
-            lab_provincia.className = 'filterlabel';
-            div_provincia.appendChild(lab_provincia);
-            var reset_provincia = document.createElement('div');
-            reset_provincia.innerHTML = 'clear filter';
-            reset_provincia.className = 'filterlabel';
-            reset_provincia.onclick = function() {
-                var options = document.getElementById("sel_provincia").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_provincia.appendChild(reset_provincia);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_categories = document.createElement('div');
-            div_categories.id = "div_categories";
-            div_categories.className= "filterselect";
-            document.getElementById("menu").appendChild(div_categories);
-            sel_categories = document.createElement('select');
-            sel_categories.multiple = true;
-            sel_categories.size = 3;
-            sel_categories.id = "sel_categories";
-            var categories_options_str = "<option value='' unselected></option>";
-            sel_categories.onchange = function(){filterFunc()};
-            categories_options_str  += '<option value="AGENCIAS DE AUTOS">AGENCIAS DE AUTOS</option>';
-            categories_options_str  += '<option value="GASOLINERAS">GASOLINERAS</option>';
-            categories_options_str  += '<option value="LUBRICENTROS Y CENTROS DE SERVICIO AUTOMOTRIZ">LUBRICENTROS Y CENTROS DE SERVICIO AUTOMOTRIZ</option>';
-            sel_categories.innerHTML = categories_options_str;
-            div_categories.appendChild(sel_categories);
-            var lab_categories = document.createElement('div');
-            lab_categories.innerHTML = 'categories';
-            lab_categories.className = 'filterlabel';
-            div_categories.appendChild(lab_categories);
-            var reset_categories = document.createElement('div');
-            reset_categories.innerHTML = 'clear filter';
-            reset_categories.className = 'filterlabel';
-            reset_categories.onclick = function() {
-                var options = document.getElementById("sel_categories").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_categories.appendChild(reset_categories);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             var div_distrito = document.createElement('div');
@@ -1115,11 +1132,11 @@
             sel_distrito.innerHTML = distrito_options_str;
             div_distrito.appendChild(sel_distrito);
             var lab_distrito = document.createElement('div');
-            lab_distrito.innerHTML = 'distrito';
+            lab_distrito.innerHTML = 'Distritos';
             lab_distrito.className = 'filterlabel';
             div_distrito.appendChild(lab_distrito);
             var reset_distrito = document.createElement('div');
-            reset_distrito.innerHTML = 'clear filter';
+            reset_distrito.innerHTML = 'Limpiar filtro';
             reset_distrito.className = 'filterlabel';
             reset_distrito.onclick = function() {
                 var options = document.getElementById("sel_distrito").options;
@@ -1139,6 +1156,11 @@
         map.on("layerremove", function(){
             resetLabels([layer_LubricentrosGasAgencias_3]);
         });
+        var credctrl = L.controlCredits({
+        	image: "images/info.png",
+        	link: "geoimaginarte.github.io/mysite",
+        	text: "Creado por: <br/>Jose Francisco Nunez O. (Geografo y Analista de datos)"
+        }).addTo(map);
         </script>
     </body>
 </html>
