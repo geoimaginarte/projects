@@ -9,15 +9,16 @@
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
+        <link rel="stylesheet" href="css/Leaflet.BigImage.min.css">
         <style>
         html, body, #map {
             width: 100%;
             height: 100%;
             padding: 0;
             margin: 0;
-        }
+        }      
         </style>
-        <title></title>
+        <title>Sysco Panama</title>
     </head>
     <body>
         <div id="map">
@@ -33,19 +34,24 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet-measure.js"></script>
-        <script src="data/IsodistaSyscoCostadelEste_2.js"></script>
-        <script src="data/IsodistaSyscoCostaVerde_3.js"></script>
-        <script src="data/IsodistaSyscoElDorado_4.js"></script>
-        <script src="data/IsodistaSyscoLosPueblos_5.js"></script>
-        <script src="data/IsodistaSyscoPaitilla_6.js"></script>
-        <script src="data/SYSCOPANAMA_7.js"></script>
+        <!-- <script src="js/bundle.js"></script> -->
+        <script src="js/leaflet.browser.print.js"></script>
+        <script src="js/Leaflet.BigImage.min.js"></script>
+        <script src="data/Isodista_Sysco_Costa_del_Este_3.js"></script>
+        <script src="data/Isodista_Sysco_Costa_Verde_4.js"></script>
+        <script src="data/Isodista_Sysco_El_Dorado_5.js"></script>
+        <script src="data/Isodista_Sysco_Los_Pueblos_6.js"></script>
+        <script src="data/Isodista_Sysco_Paitilla_7.js"></script>
+        <script src="data/exploratorio_8.js"></script>
+        <script src="data/SYSCO_PANAMA_9.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[8.770853908892624,-79.87159075362418],[9.159866308892608,-79.26431367818795]]);
+        }).fitBounds([[8.830130018892586,-79.797763625],[9.110092981107414,-79.402433375]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+
         var measureControl = new L.Control.Measure({
             position: 'topleft',
             primaryLengthUnit: 'meters',
@@ -74,24 +80,34 @@
         });
         layer_GoogleHybrid_0;
         map.addLayer(layer_GoogleHybrid_0);
-        map.createPane('pane_CartoDB_1');
-        map.getPane('pane_CartoDB_1').style.zIndex = 401;
-        var layer_CartoDB_1 = L.tileLayer('http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
-            pane: 'pane_CartoDB_1',
+        map.createPane('pane_WazeWorld_1');
+        map.getPane('pane_WazeWorld_1').style.zIndex = 401;
+        var layer_WazeWorld_1 = L.tileLayer('https://worldtiles3.waze.com/tiles/{z}/{x}/{y}.png', {
+            pane: 'pane_WazeWorld_1',
             opacity: 1.0,
-            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            attribution: '',
             minZoom: 1,
             maxZoom: 28,
             minNativeZoom: 0,
             maxNativeZoom: 20
         });
-        layer_CartoDB_1;
-        map.addLayer(layer_CartoDB_1);
-        function pop_IsodistaSyscoCostadelEste_2(feature, layer) {
+        layer_WazeWorld_1;
+        map.addLayer(layer_WazeWorld_1);
+        map.createPane('pane_OSMStandard_2');
+        map.getPane('pane_OSMStandard_2').style.zIndex = 402;
+        var layer_OSMStandard_2 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OSMStandard_2',
+            opacity: 1.0,
+            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OSMStandard_2;
+        map.addLayer(layer_OSMStandard_2);
+        function pop_Isodista_Sysco_Costa_del_Este_3(feature, layer) {
             var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['Distancia_m'] !== null ? autolinker.link(feature.properties['Distancia_m'].toLocaleString()) : '') + '</td>\
                     </tr>\
@@ -102,40 +118,37 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_IsodistaSyscoCostadelEste_2_0() {
+        function style_Isodista_Sysco_Costa_del_Este_3_0() {
             return {
-                pane: 'pane_IsodistaSyscoCostadelEste_2',
+                pane: 'pane_Isodista_Sysco_Costa_del_Este_3',
                 opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
+                color: 'rgba(54,87,254,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 5.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.3,
                 fillColor: 'rgba(54,87,254,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_IsodistaSyscoCostadelEste_2');
-        map.getPane('pane_IsodistaSyscoCostadelEste_2').style.zIndex = 402;
-        map.getPane('pane_IsodistaSyscoCostadelEste_2').style['mix-blend-mode'] = 'multiply';
-        var layer_IsodistaSyscoCostadelEste_2 = new L.geoJson(json_IsodistaSyscoCostadelEste_2, {
+        map.createPane('pane_Isodista_Sysco_Costa_del_Este_3');
+        map.getPane('pane_Isodista_Sysco_Costa_del_Este_3').style.zIndex = 403;
+        map.getPane('pane_Isodista_Sysco_Costa_del_Este_3').style['mix-blend-mode'] = 'multiply';
+        var layer_Isodista_Sysco_Costa_del_Este_3 = new L.geoJson(json_Isodista_Sysco_Costa_del_Este_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_IsodistaSyscoCostadelEste_2',
-            layerName: 'layer_IsodistaSyscoCostadelEste_2',
-            pane: 'pane_IsodistaSyscoCostadelEste_2',
-            onEachFeature: pop_IsodistaSyscoCostadelEste_2,
-            style: style_IsodistaSyscoCostadelEste_2_0,
+            dataVar: 'json_Isodista_Sysco_Costa_del_Este_3',
+            layerName: 'layer_Isodista_Sysco_Costa_del_Este_3',
+            pane: 'pane_Isodista_Sysco_Costa_del_Este_3',
+            onEachFeature: pop_Isodista_Sysco_Costa_del_Este_3,
+            style: style_Isodista_Sysco_Costa_del_Este_3_0,
         });
-        bounds_group.addLayer(layer_IsodistaSyscoCostadelEste_2);
-        map.addLayer(layer_IsodistaSyscoCostadelEste_2);
-        function pop_IsodistaSyscoCostaVerde_3(feature, layer) {
+        bounds_group.addLayer(layer_Isodista_Sysco_Costa_del_Este_3);
+        map.addLayer(layer_Isodista_Sysco_Costa_del_Este_3);
+        function pop_Isodista_Sysco_Costa_Verde_4(feature, layer) {
             var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['distancia_m'] !== null ? autolinker.link(feature.properties['distancia_m'].toLocaleString()) : '') + '</td>\
                     </tr>\
@@ -146,40 +159,37 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_IsodistaSyscoCostaVerde_3_0() {
+        function style_Isodista_Sysco_Costa_Verde_4_0() {
             return {
-                pane: 'pane_IsodistaSyscoCostaVerde_3',
+                pane: 'pane_Isodista_Sysco_Costa_Verde_4',
                 opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
+                color: 'rgba(5,255,0,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 5.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.3,
                 fillColor: 'rgba(5,255,0,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_IsodistaSyscoCostaVerde_3');
-        map.getPane('pane_IsodistaSyscoCostaVerde_3').style.zIndex = 403;
-        map.getPane('pane_IsodistaSyscoCostaVerde_3').style['mix-blend-mode'] = 'multiply';
-        var layer_IsodistaSyscoCostaVerde_3 = new L.geoJson(json_IsodistaSyscoCostaVerde_3, {
+        map.createPane('pane_Isodista_Sysco_Costa_Verde_4');
+        map.getPane('pane_Isodista_Sysco_Costa_Verde_4').style.zIndex = 404;
+        map.getPane('pane_Isodista_Sysco_Costa_Verde_4').style['mix-blend-mode'] = 'multiply';
+        var layer_Isodista_Sysco_Costa_Verde_4 = new L.geoJson(json_Isodista_Sysco_Costa_Verde_4, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_IsodistaSyscoCostaVerde_3',
-            layerName: 'layer_IsodistaSyscoCostaVerde_3',
-            pane: 'pane_IsodistaSyscoCostaVerde_3',
-            onEachFeature: pop_IsodistaSyscoCostaVerde_3,
-            style: style_IsodistaSyscoCostaVerde_3_0,
+            dataVar: 'json_Isodista_Sysco_Costa_Verde_4',
+            layerName: 'layer_Isodista_Sysco_Costa_Verde_4',
+            pane: 'pane_Isodista_Sysco_Costa_Verde_4',
+            onEachFeature: pop_Isodista_Sysco_Costa_Verde_4,
+            style: style_Isodista_Sysco_Costa_Verde_4_0,
         });
-        bounds_group.addLayer(layer_IsodistaSyscoCostaVerde_3);
-        map.addLayer(layer_IsodistaSyscoCostaVerde_3);
-        function pop_IsodistaSyscoElDorado_4(feature, layer) {
+        bounds_group.addLayer(layer_Isodista_Sysco_Costa_Verde_4);
+        map.addLayer(layer_Isodista_Sysco_Costa_Verde_4);
+        function pop_Isodista_Sysco_El_Dorado_5(feature, layer) {
             var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['distancia_m'] !== null ? autolinker.link(feature.properties['distancia_m'].toLocaleString()) : '') + '</td>\
                     </tr>\
@@ -190,40 +200,37 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_IsodistaSyscoElDorado_4_0() {
+        function style_Isodista_Sysco_El_Dorado_5_0() {
             return {
-                pane: 'pane_IsodistaSyscoElDorado_4',
+                pane: 'pane_Isodista_Sysco_El_Dorado_5',
                 opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
+                color: 'rgba(255,227,11,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 5.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.3,
                 fillColor: 'rgba(255,227,11,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_IsodistaSyscoElDorado_4');
-        map.getPane('pane_IsodistaSyscoElDorado_4').style.zIndex = 404;
-        map.getPane('pane_IsodistaSyscoElDorado_4').style['mix-blend-mode'] = 'multiply';
-        var layer_IsodistaSyscoElDorado_4 = new L.geoJson(json_IsodistaSyscoElDorado_4, {
+        map.createPane('pane_Isodista_Sysco_El_Dorado_5');
+        map.getPane('pane_Isodista_Sysco_El_Dorado_5').style.zIndex = 405;
+        map.getPane('pane_Isodista_Sysco_El_Dorado_5').style['mix-blend-mode'] = 'multiply';
+        var layer_Isodista_Sysco_El_Dorado_5 = new L.geoJson(json_Isodista_Sysco_El_Dorado_5, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_IsodistaSyscoElDorado_4',
-            layerName: 'layer_IsodistaSyscoElDorado_4',
-            pane: 'pane_IsodistaSyscoElDorado_4',
-            onEachFeature: pop_IsodistaSyscoElDorado_4,
-            style: style_IsodistaSyscoElDorado_4_0,
+            dataVar: 'json_Isodista_Sysco_El_Dorado_5',
+            layerName: 'layer_Isodista_Sysco_El_Dorado_5',
+            pane: 'pane_Isodista_Sysco_El_Dorado_5',
+            onEachFeature: pop_Isodista_Sysco_El_Dorado_5,
+            style: style_Isodista_Sysco_El_Dorado_5_0,
         });
-        bounds_group.addLayer(layer_IsodistaSyscoElDorado_4);
-        map.addLayer(layer_IsodistaSyscoElDorado_4);
-        function pop_IsodistaSyscoLosPueblos_5(feature, layer) {
+        bounds_group.addLayer(layer_Isodista_Sysco_El_Dorado_5);
+        map.addLayer(layer_Isodista_Sysco_El_Dorado_5);
+        function pop_Isodista_Sysco_Los_Pueblos_6(feature, layer) {
             var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['distancia_m'] !== null ? autolinker.link(feature.properties['distancia_m'].toLocaleString()) : '') + '</td>\
                     </tr>\
@@ -234,40 +241,37 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_IsodistaSyscoLosPueblos_5_0() {
+        function style_Isodista_Sysco_Los_Pueblos_6_0() {
             return {
-                pane: 'pane_IsodistaSyscoLosPueblos_5',
+                pane: 'pane_Isodista_Sysco_Los_Pueblos_6',
                 opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
+                color: 'rgba(220,0,70,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 5.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.3,
                 fillColor: 'rgba(220,0,70,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_IsodistaSyscoLosPueblos_5');
-        map.getPane('pane_IsodistaSyscoLosPueblos_5').style.zIndex = 405;
-        map.getPane('pane_IsodistaSyscoLosPueblos_5').style['mix-blend-mode'] = 'multiply';
-        var layer_IsodistaSyscoLosPueblos_5 = new L.geoJson(json_IsodistaSyscoLosPueblos_5, {
+        map.createPane('pane_Isodista_Sysco_Los_Pueblos_6');
+        map.getPane('pane_Isodista_Sysco_Los_Pueblos_6').style.zIndex = 406;
+        map.getPane('pane_Isodista_Sysco_Los_Pueblos_6').style['mix-blend-mode'] = 'multiply';
+        var layer_Isodista_Sysco_Los_Pueblos_6 = new L.geoJson(json_Isodista_Sysco_Los_Pueblos_6, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_IsodistaSyscoLosPueblos_5',
-            layerName: 'layer_IsodistaSyscoLosPueblos_5',
-            pane: 'pane_IsodistaSyscoLosPueblos_5',
-            onEachFeature: pop_IsodistaSyscoLosPueblos_5,
-            style: style_IsodistaSyscoLosPueblos_5_0,
+            dataVar: 'json_Isodista_Sysco_Los_Pueblos_6',
+            layerName: 'layer_Isodista_Sysco_Los_Pueblos_6',
+            pane: 'pane_Isodista_Sysco_Los_Pueblos_6',
+            onEachFeature: pop_Isodista_Sysco_Los_Pueblos_6,
+            style: style_Isodista_Sysco_Los_Pueblos_6_0,
         });
-        bounds_group.addLayer(layer_IsodistaSyscoLosPueblos_5);
-        map.addLayer(layer_IsodistaSyscoLosPueblos_5);
-        function pop_IsodistaSyscoPaitilla_6(feature, layer) {
+        bounds_group.addLayer(layer_Isodista_Sysco_Los_Pueblos_6);
+        map.addLayer(layer_Isodista_Sysco_Los_Pueblos_6);
+        function pop_Isodista_Sysco_Paitilla_7(feature, layer) {
             var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['distancia_m'] !== null ? autolinker.link(feature.properties['distancia_m'].toLocaleString()) : '') + '</td>\
                     </tr>\
@@ -278,48 +282,100 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_IsodistaSyscoPaitilla_6_0() {
+        function style_Isodista_Sysco_Paitilla_7_0() {
             return {
-                pane: 'pane_IsodistaSyscoPaitilla_6',
+                pane: 'pane_Isodista_Sysco_Paitilla_7',
                 opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
+                color: 'rgba(227,11,255,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 5.0, 
                 fill: true,
-                fillOpacity: 1,
+                fillOpacity: 0.3,
                 fillColor: 'rgba(227,11,255,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_IsodistaSyscoPaitilla_6');
-        map.getPane('pane_IsodistaSyscoPaitilla_6').style.zIndex = 406;
-        map.getPane('pane_IsodistaSyscoPaitilla_6').style['mix-blend-mode'] = 'multiply';
-        var layer_IsodistaSyscoPaitilla_6 = new L.geoJson(json_IsodistaSyscoPaitilla_6, {
+        map.createPane('pane_Isodista_Sysco_Paitilla_7');
+        map.getPane('pane_Isodista_Sysco_Paitilla_7').style.zIndex = 407;
+        map.getPane('pane_Isodista_Sysco_Paitilla_7').style['mix-blend-mode'] = 'multiply';
+        var layer_Isodista_Sysco_Paitilla_7 = new L.geoJson(json_Isodista_Sysco_Paitilla_7, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_IsodistaSyscoPaitilla_6',
-            layerName: 'layer_IsodistaSyscoPaitilla_6',
-            pane: 'pane_IsodistaSyscoPaitilla_6',
-            onEachFeature: pop_IsodistaSyscoPaitilla_6,
-            style: style_IsodistaSyscoPaitilla_6_0,
+            dataVar: 'json_Isodista_Sysco_Paitilla_7',
+            layerName: 'layer_Isodista_Sysco_Paitilla_7',
+            pane: 'pane_Isodista_Sysco_Paitilla_7',
+            onEachFeature: pop_Isodista_Sysco_Paitilla_7,
+            style: style_Isodista_Sysco_Paitilla_7_0,
         });
-        bounds_group.addLayer(layer_IsodistaSyscoPaitilla_6);
-        map.addLayer(layer_IsodistaSyscoPaitilla_6);
-        function pop_SYSCOPANAMA_7(feature, layer) {
+        bounds_group.addLayer(layer_Isodista_Sysco_Paitilla_7);
+        map.addLayer(layer_Isodista_Sysco_Paitilla_7);
+        function pop_exploratorio_8(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['nombre'] !== null ? autolinker.link(feature.properties['nombre'].toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['direccion'] !== null ? autolinker.link(feature.properties['direccion'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['telefono'] !== null ? autolinker.link(feature.properties['telefono'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['categoria'] !== null ? autolinker.link(feature.properties['categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['revisado'] !== null ? autolinker.link(feature.properties['revisado'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nota'] !== null ? autolinker.link(feature.properties['nota'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_exploratorio_8_0() {
+            return {
+                pane: 'pane_exploratorio_8',
+                shape: 'square',
+                radius: 4.8,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,127,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_exploratorio_8');
+        map.getPane('pane_exploratorio_8').style.zIndex = 408;
+        map.getPane('pane_exploratorio_8').style['mix-blend-mode'] = 'normal';
+        var layer_exploratorio_8 = new L.geoJson(json_exploratorio_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_exploratorio_8',
+            layerName: 'layer_exploratorio_8',
+            pane: 'pane_exploratorio_8',
+            onEachFeature: pop_exploratorio_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_exploratorio_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_exploratorio_8);
+        map.addLayer(layer_exploratorio_8);
+        function pop_SYSCO_PANAMA_9(feature, layer) {
+            var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['lng'] !== null ? autolinker.link(feature.properties['lng'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['lat'] !== null ? autolinker.link(feature.properties['lat'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['provincia'] !== null ? autolinker.link(feature.properties['provincia'].toLocaleString()) : '') + '</td>\
@@ -334,18 +390,15 @@
                         <td colspan="2">' + (feature.properties['codigo_dta'] !== null ? autolinker.link(feature.properties['codigo_dta'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['conurbanos'] !== null ? autolinker.link(feature.properties['conurbanos'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
                         <td colspan="2">' + (feature.properties['address'] !== null ? autolinker.link(feature.properties['address'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_SYSCOPANAMA_7_0() {
+        function style_SYSCO_PANAMA_9_0() {
             return {
-                pane: 'pane_SYSCOPANAMA_7',
+                pane: 'pane_SYSCO_PANAMA_9',
                 shape: 'triangle',
                 radius: 5.6,
                 opacity: 1,
@@ -360,52 +413,67 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_SYSCOPANAMA_7');
-        map.getPane('pane_SYSCOPANAMA_7').style.zIndex = 407;
-        map.getPane('pane_SYSCOPANAMA_7').style['mix-blend-mode'] = 'normal';
-        var layer_SYSCOPANAMA_7 = new L.geoJson(json_SYSCOPANAMA_7, {
+        map.createPane('pane_SYSCO_PANAMA_9');
+        map.getPane('pane_SYSCO_PANAMA_9').style.zIndex = 409;
+        map.getPane('pane_SYSCO_PANAMA_9').style['mix-blend-mode'] = 'normal';
+        var layer_SYSCO_PANAMA_9 = new L.geoJson(json_SYSCO_PANAMA_9, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_SYSCOPANAMA_7',
-            layerName: 'layer_SYSCOPANAMA_7',
-            pane: 'pane_SYSCOPANAMA_7',
-            onEachFeature: pop_SYSCOPANAMA_7,
+            dataVar: 'json_SYSCO_PANAMA_9',
+            layerName: 'layer_SYSCO_PANAMA_9',
+            pane: 'pane_SYSCO_PANAMA_9',
+            onEachFeature: pop_SYSCO_PANAMA_9,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.shapeMarker(latlng, style_SYSCOPANAMA_7_0(feature));
+                return L.shapeMarker(latlng, style_SYSCO_PANAMA_9_0(feature));
             },
         });
-        bounds_group.addLayer(layer_SYSCOPANAMA_7);
-        map.addLayer(layer_SYSCOPANAMA_7);
-        var baseMaps = {"Google Hybrid": layer_GoogleHybrid_0,"CartoDB": layer_CartoDB_1,};
-        L.control.layers(baseMaps,{'<img src="legend/SYSCOPANAMA_7.png" /> SYSCO PANAMA': layer_SYSCOPANAMA_7,'<img src="legend/IsodistaSyscoPaitilla_6.png" /> Isodista Sysco Paitilla': layer_IsodistaSyscoPaitilla_6,'<img src="legend/IsodistaSyscoLosPueblos_5.png" /> Isodista Sysco Los Pueblos': layer_IsodistaSyscoLosPueblos_5,'<img src="legend/IsodistaSyscoElDorado_4.png" /> Isodista Sysco El Dorado': layer_IsodistaSyscoElDorado_4,'<img src="legend/IsodistaSyscoCostaVerde_3.png" /> Isodista Sysco Costa Verde': layer_IsodistaSyscoCostaVerde_3,'<img src="legend/IsodistaSyscoCostadelEste_2.png" /> Isodista Sysco Costa del Este': layer_IsodistaSyscoCostadelEste_2,},{collapsed:false}).addTo(map);
+        bounds_group.addLayer(layer_SYSCO_PANAMA_9);
+        map.addLayer(layer_SYSCO_PANAMA_9);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Sysco Panama</h2>';
+            };
+            title.addTo(map);
+        var baseMaps = {"Waze (World)": layer_WazeWorld_1,"Google Hybrid": layer_GoogleHybrid_0,"OSM Standard": layer_OSMStandard_2,};
+        L.control.layers(baseMaps,{'<img src="legend/SYSCO_PANAMA_9.png" /> SYSCO_PANAMA': layer_SYSCO_PANAMA_9,'<img src="legend/exploratorio_8.png" /> exploratorio': layer_exploratorio_8,'<img src="legend/Isodista_Sysco_Paitilla_7.png" /> Isodista_Sysco_Paitilla': layer_Isodista_Sysco_Paitilla_7,'<img src="legend/Isodista_Sysco_Los_Pueblos_6.png" /> Isodista_Sysco_Los_Pueblos': layer_Isodista_Sysco_Los_Pueblos_6,'<img src="legend/Isodista_Sysco_El_Dorado_5.png" /> Isodista_Sysco_El_Dorado': layer_Isodista_Sysco_El_Dorado_5,'<img src="legend/Isodista_Sysco_Costa_Verde_4.png" /> Isodista_Sysco_Costa_Verde': layer_Isodista_Sysco_Costa_Verde_4,'<img src="legend/Isodista_Sysco_Costa_del_Este_3.png" /> Isodista_Sysco_Costa_del_Este': layer_Isodista_Sysco_Costa_del_Este_3,},{collapsed:false}).addTo(map);
         setBounds();
         var i = 0;
-        layer_SYSCOPANAMA_7.eachLayer(function(layer) {
+        layer_SYSCO_PANAMA_9.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_SYSCOPANAMA_7'});
+            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_SYSCO_PANAMA_9'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
               addLabel(layer, i);
               i++;
         });
-        resetLabels([layer_SYSCOPANAMA_7]);
+        resetLabels([layer_SYSCO_PANAMA_9]);
         map.on("zoomend", function(){
-            resetLabels([layer_SYSCOPANAMA_7]);
+            resetLabels([layer_SYSCO_PANAMA_9]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_SYSCOPANAMA_7]);
+            resetLabels([layer_SYSCO_PANAMA_9]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_SYSCOPANAMA_7]);
+            resetLabels([layer_SYSCO_PANAMA_9]);
         });
+
+        new L.control.bigImage({position: 'topleft', downloadTitle:'Descargar imagen', inputTitle:'Escoger escala'}).addTo(map);
+
+        L.control.browserPrint({position: 'topleft', title: 'Imprimir ...'}).addTo(map);
+
         </script>
     </body>
 </html>
