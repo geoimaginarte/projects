@@ -194,7 +194,7 @@ var lyr_CentrosComerciales_11 = new ol.layer.Vector({
                 source:jsonSource_CentrosComerciales_11, 
                 style: style_CentrosComerciales_11,
                 interactive: true,
-                title: 'Centros Comerciales'
+                title: '<img src="styles/legend/CentrosComerciales_11.png" /> Centros Comerciales'
             });
 
 lyr_GoogleSatelliteHybrid_0.setVisible(true);lyr_isoc_city_distritos_1.setVisible(false);lyr_isoc_lincohn_distritos_2.setVisible(false);lyr_isoc_oxigeno_distritos_3.setVisible(false);lyr_isoc_multiplaza_distritos_4.setVisible(false);lyr_isoc_paseo_distritos_5.setVisible(false);lyr_isod_multiplaza_distritos_6.setVisible(false);lyr_isod_city_distritos_7.setVisible(false);lyr_isod_lincohn_distritos_8.setVisible(false);lyr_isod_oxigeno_distritos_9.setVisible(false);lyr_isod_paseo_distritos_10.setVisible(true);lyr_CentrosComerciales_11.setVisible(true);
