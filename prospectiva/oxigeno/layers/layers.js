@@ -24,7 +24,7 @@ var lyr_isoc_city_distritos_1 = new ol.layer.Vector({
                 source:jsonSource_isoc_city_distritos_1, 
                 style: style_isoc_city_distritos_1,
                 interactive: true,
-    title: 'isocrona_city_distritos<br />\
+    title: 'isoc_city_distritos<br />\
     <img src="styles/legend/isoc_city_distritos_1_0.png" /> 12<br />\
     <img src="styles/legend/isoc_city_distritos_1_1.png" /> 38<br />\
     <img src="styles/legend/isoc_city_distritos_1_2.png" /> 52<br />'
@@ -41,7 +41,7 @@ var lyr_isoc_lincohn_distritos_2 = new ol.layer.Vector({
                 source:jsonSource_isoc_lincohn_distritos_2, 
                 style: style_isoc_lincohn_distritos_2,
                 interactive: true,
-    title: 'isocrona_lincohn_distritos<br />\
+    title: 'isoc_lincohn_distritos<br />\
     <img src="styles/legend/isoc_lincohn_distritos_2_0.png" /> 7<br />\
     <img src="styles/legend/isoc_lincohn_distritos_2_1.png" /> 24<br />\
     <img src="styles/legend/isoc_lincohn_distritos_2_2.png" /> 32<br />'
@@ -58,7 +58,7 @@ var lyr_isoc_oxigeno_distritos_3 = new ol.layer.Vector({
                 source:jsonSource_isoc_oxigeno_distritos_3, 
                 style: style_isoc_oxigeno_distritos_3,
                 interactive: true,
-    title: 'isocrona_oxigeno_distritos<br />\
+    title: 'isoc_oxigeno_distritos<br />\
     <img src="styles/legend/isoc_oxigeno_distritos_3_0.png" /> 8<br />\
     <img src="styles/legend/isoc_oxigeno_distritos_3_1.png" /> 26<br />\
     <img src="styles/legend/isoc_oxigeno_distritos_3_2.png" /> 36<br />'
@@ -75,7 +75,7 @@ var lyr_isoc_multiplaza_distritos_4 = new ol.layer.Vector({
                 source:jsonSource_isoc_multiplaza_distritos_4, 
                 style: style_isoc_multiplaza_distritos_4,
                 interactive: true,
-    title: 'isocrona_multiplaza_distritos<br />\
+    title: 'isoc_multiplaza_distritos<br />\
     <img src="styles/legend/isoc_multiplaza_distritos_4_0.png" /> 15<br />\
     <img src="styles/legend/isoc_multiplaza_distritos_4_1.png" /> 49<br />\
     <img src="styles/legend/isoc_multiplaza_distritos_4_2.png" /> 60<br />'
@@ -92,7 +92,7 @@ var lyr_isoc_paseo_distritos_5 = new ol.layer.Vector({
                 source:jsonSource_isoc_paseo_distritos_5, 
                 style: style_isoc_paseo_distritos_5,
                 interactive: true,
-    title: 'isocrona_paseo_distritos<br />\
+    title: 'isoc_paseo_distritos<br />\
     <img src="styles/legend/isoc_paseo_distritos_5_0.png" /> 12<br />\
     <img src="styles/legend/isoc_paseo_distritos_5_1.png" /> 40<br />\
     <img src="styles/legend/isoc_paseo_distritos_5_2.png" /> 55<br />'
@@ -109,7 +109,7 @@ var lyr_isod_multiplaza_distritos_6 = new ol.layer.Vector({
                 source:jsonSource_isod_multiplaza_distritos_6, 
                 style: style_isod_multiplaza_distritos_6,
                 interactive: true,
-    title: 'isodista_multiplaza_distritos<br />\
+    title: 'isod_multiplaza_distritos<br />\
     <img src="styles/legend/isod_multiplaza_distritos_6_0.png" /> 10000<br />\
     <img src="styles/legend/isod_multiplaza_distritos_6_1.png" /> 18000<br />\
     <img src="styles/legend/isod_multiplaza_distritos_6_2.png" /> 24000<br />'
@@ -126,7 +126,7 @@ var lyr_isod_city_distritos_7 = new ol.layer.Vector({
                 source:jsonSource_isod_city_distritos_7, 
                 style: style_isod_city_distritos_7,
                 interactive: true,
-    title: 'isodista_city_distritos<br />\
+    title: 'isod_city_distritos<br />\
     <img src="styles/legend/isod_city_distritos_7_0.png" /> 10000<br />\
     <img src="styles/legend/isod_city_distritos_7_1.png" /> 18000<br />\
     <img src="styles/legend/isod_city_distritos_7_2.png" /> 24000<br />'
@@ -143,7 +143,7 @@ var lyr_isod_lincohn_distritos_8 = new ol.layer.Vector({
                 source:jsonSource_isod_lincohn_distritos_8, 
                 style: style_isod_lincohn_distritos_8,
                 interactive: true,
-    title: 'isodista_lincohn_distritos<br />\
+    title: 'isod_lincohn_distritos<br />\
     <img src="styles/legend/isod_lincohn_distritos_8_0.png" /> 10000<br />\
     <img src="styles/legend/isod_lincohn_distritos_8_1.png" /> 18000<br />\
     <img src="styles/legend/isod_lincohn_distritos_8_2.png" /> 24000<br />'
@@ -160,7 +160,7 @@ var lyr_isod_oxigeno_distritos_9 = new ol.layer.Vector({
                 source:jsonSource_isod_oxigeno_distritos_9, 
                 style: style_isod_oxigeno_distritos_9,
                 interactive: true,
-    title: 'isodista_oxigeno_distritos<br />\
+    title: 'isod_oxigeno_distritos<br />\
     <img src="styles/legend/isod_oxigeno_distritos_9_0.png" /> 10000<br />\
     <img src="styles/legend/isod_oxigeno_distritos_9_1.png" /> 18000<br />\
     <img src="styles/legend/isod_oxigeno_distritos_9_2.png" /> 24000<br />'
@@ -177,7 +177,7 @@ var lyr_isod_paseo_distritos_10 = new ol.layer.Vector({
                 source:jsonSource_isod_paseo_distritos_10, 
                 style: style_isod_paseo_distritos_10,
                 interactive: true,
-    title: 'isodista_paseo_distritos<br />\
+    title: 'isod_paseo_distritos<br />\
     <img src="styles/legend/isod_paseo_distritos_10_0.png" /> 10000<br />\
     <img src="styles/legend/isod_paseo_distritos_10_1.png" /> 18000<br />\
     <img src="styles/legend/isod_paseo_distritos_10_2.png" /> 24000<br />'
@@ -221,17 +221,17 @@ lyr_isod_lincohn_distritos_8.set('fieldImages', {'fid': '', 'contorno_m': '', 'i
 lyr_isod_oxigeno_distritos_9.set('fieldImages', {'fid': '', 'contorno_m': '', 'input_feat_id': '', 'area_distrito': '', 'codigo_dta': '', 'provincia': '', 'canton': '', 'distrito': '', 'weighted_area_distrito': '', 'area_crs_units': '', 'area_prcnt': '', 'isodista_desde': '', 'area': '', });
 lyr_isod_paseo_distritos_10.set('fieldImages', {'fid': 'TextEdit', 'contorno_m': 'Range', 'input_feat_id': 'TextEdit', 'area_distrito': 'TextEdit', 'codigo_dta': 'TextEdit', 'provincia': 'TextEdit', 'canton': 'TextEdit', 'distrito': 'TextEdit', 'weighted_area_distrito': 'TextEdit', 'area_crs_units': 'TextEdit', 'area_prcnt': 'TextEdit', 'isodista_desde': 'TextEdit', 'area': '', });
 lyr_CentrosComerciales_11.set('fieldImages', {'punto': '', });
-lyr_isoc_city_distritos_1.set('fieldLabels', {'fid': 'no label', 'contorno_min': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isocrona_desde': 'no label', 'area': 'no label', });
-lyr_isoc_lincohn_distritos_2.set('fieldLabels', {'fid': 'no label', 'contorno_min': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isocrona_desde': 'no label', 'area': 'no label', });
-lyr_isoc_oxigeno_distritos_3.set('fieldLabels', {'fid': 'no label', 'contorno_min': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isocrona_desde': 'no label', 'area': 'no label', });
-lyr_isoc_multiplaza_distritos_4.set('fieldLabels', {'fid': 'no label', 'contorno_min': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isocrona_desde': 'no label', 'area': 'no label', });
-lyr_isoc_paseo_distritos_5.set('fieldLabels', {'fid': 'no label', 'contorno_min': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isocrona_desde': 'no label', 'area': 'no label', });
-lyr_isod_multiplaza_distritos_6.set('fieldLabels', {'fid': 'no label', 'contorno_m': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isodista_desde': 'no label', 'area': 'no label', });
-lyr_isod_city_distritos_7.set('fieldLabels', {'fid': 'no label', 'contorno_m': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isodista_desde': 'no label', 'area': 'no label', });
-lyr_isod_lincohn_distritos_8.set('fieldLabels', {'fid': 'no label', 'contorno_m': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isodista_desde': 'no label', 'area': 'no label', });
-lyr_isod_oxigeno_distritos_9.set('fieldLabels', {'fid': 'no label', 'contorno_m': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isodista_desde': 'no label', 'area': 'no label', });
-lyr_isod_paseo_distritos_10.set('fieldLabels', {'fid': 'no label', 'contorno_m': 'no label', 'input_feat_id': 'no label', 'area_distrito': 'no label', 'codigo_dta': 'no label', 'provincia': 'no label', 'canton': 'no label', 'distrito': 'no label', 'weighted_area_distrito': 'no label', 'area_crs_units': 'no label', 'area_prcnt': 'no label', 'isodista_desde': 'no label', 'area': 'no label', });
-lyr_CentrosComerciales_11.set('fieldLabels', {'punto': 'no label', });
+lyr_isoc_city_distritos_1.set('fieldLabels', {'fid': 'inline label', 'contorno_min': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isocrona_desde': 'inline label', 'area': 'inline label', });
+lyr_isoc_lincohn_distritos_2.set('fieldLabels', {'fid': 'inline label', 'contorno_min': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isocrona_desde': 'inline label', 'area': 'inline label', });
+lyr_isoc_oxigeno_distritos_3.set('fieldLabels', {'fid': 'inline label', 'contorno_min': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isocrona_desde': 'inline label', 'area': 'inline label', });
+lyr_isoc_multiplaza_distritos_4.set('fieldLabels', {'fid': 'inline label', 'contorno_min': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isocrona_desde': 'inline label', 'area': 'inline label', });
+lyr_isoc_paseo_distritos_5.set('fieldLabels', {'fid': 'inline label', 'contorno_min': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isocrona_desde': 'inline label', 'area': 'inline label', });
+lyr_isod_multiplaza_distritos_6.set('fieldLabels', {'fid': 'inline label', 'contorno_m': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isodista_desde': 'inline label', 'area': 'inline label', });
+lyr_isod_city_distritos_7.set('fieldLabels', {'fid': 'inline label', 'contorno_m': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isodista_desde': 'inline label', 'area': 'inline label', });
+lyr_isod_lincohn_distritos_8.set('fieldLabels', {'fid': 'inline label', 'contorno_m': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isodista_desde': 'inline label', 'area': 'inline label', });
+lyr_isod_oxigeno_distritos_9.set('fieldLabels', {'fid': 'inline label', 'contorno_m': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isodista_desde': 'inline label', 'area': 'inline label', });
+lyr_isod_paseo_distritos_10.set('fieldLabels', {'fid': 'inline label', 'contorno_m': 'inline label', 'input_feat_id': 'inline label', 'area_distrito': 'inline label', 'codigo_dta': 'inline label', 'provincia': 'inline label', 'canton': 'inline label', 'distrito': 'inline label', 'weighted_area_distrito': 'inline label', 'area_crs_units': 'inline label', 'area_prcnt': 'inline label', 'isodista_desde': 'inline label', 'area': 'inline label', });
+lyr_CentrosComerciales_11.set('fieldLabels', {'punto': 'inline label', });
 lyr_CentrosComerciales_11.on('precompose', function(evt) {
     evt.context.globalCompositeOperation = 'normal';
 });
