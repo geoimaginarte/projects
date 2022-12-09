@@ -754,17 +754,3 @@ function fnc__specialcol_(values, context) {
 function fnc_project_color(values, context) {
     return false;
 };
-
-
-
-function exp_label_sysco_pana_3_eval_expression(context) {
-    // "name" || ' Correg: ' || "corregimientos"
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return ((feature.properties['name']  + ' Correg: ') + feature.properties['corregimientos'] );
-    } else {
-        return ((feature['name']  + ' Correg: ') + feature['corregimientos'] );
-    }
-}
