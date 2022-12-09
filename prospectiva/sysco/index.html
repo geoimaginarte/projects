@@ -8,6 +8,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         html, body, #map {
@@ -32,6 +34,9 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet-measure.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
         <script src="data/correg_pana_1.js"></script>
         <script src="data/zona_busqueda_2.js"></script>
         <script src="data/sysco_pana_3.js"></script>
@@ -723,6 +728,295 @@
                         });
                     }
                 }
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"zona_busqueda": "str","opcion": "str","propuesta": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+        var i = 0;
+        layer_correg_pana_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['corregimientos'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['corregimientos']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_correg_pana_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_zona_busqueda_2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['zona_busqueda'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['zona_busqueda']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_zona_busqueda_2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_sysco_pana_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((exp_label_sysco_pana_3_eval_expression(context) !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + exp_label_sysco_pana_3_eval_expression(context)) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_sysco_pana_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_zona_busqueda = document.createElement('div');
+            div_zona_busqueda.id = "div_zona_busqueda";
+            div_zona_busqueda.className= "filterselect";
+            document.getElementById("menu").appendChild(div_zona_busqueda);
+            sel_zona_busqueda = document.createElement('select');
+            sel_zona_busqueda.multiple = true;
+            sel_zona_busqueda.size = 10;
+            sel_zona_busqueda.id = "sel_zona_busqueda";
+            var zona_busqueda_options_str = "<option value='' unselected></option>";
+            sel_zona_busqueda.onchange = function(){filterFunc()};
+            zona_busqueda_options_str  += '<option value="AMP CENTRAL 1">AMP CENTRAL 1</option>';
+            zona_busqueda_options_str  += '<option value="AMP CENTRAL 2">AMP CENTRAL 2</option>';
+            zona_busqueda_options_str  += '<option value="AMP COLON 1">AMP COLON 1</option>';
+            zona_busqueda_options_str  += '<option value="AMP COLON 2">AMP COLON 2</option>';
+            zona_busqueda_options_str  += '<option value="AMP OCCIDENTAL 2">AMP OCCIDENTAL 2</option>';
+            zona_busqueda_options_str  += '<option value="AMP PANAMA OESTE CHAME 3">AMP PANAMA OESTE CHAME 3</option>';
+            zona_busqueda_options_str  += '<option value="AMP PANAMA OESTE LA CHORRERA 1">AMP PANAMA OESTE LA CHORRERA 1</option>';
+            zona_busqueda_options_str  += '<option value="AMP PANAMA OESTE LA CHORRERA 2">AMP PANAMA OESTE LA CHORRERA 2</option>';
+            zona_busqueda_options_str  += '<option value="AMP SAN MIGUELITO 1">AMP SAN MIGUELITO 1</option>';
+            zona_busqueda_options_str  += '<option value="AMP SAN MIGUELITO 2">AMP SAN MIGUELITO 2</option>';
+            zona_busqueda_options_str  += '<option value="AMP TOCUMEN 1">AMP TOCUMEN 1</option>';
+            zona_busqueda_options_str  += '<option value="AMP TOCUMEN 3">AMP TOCUMEN 3</option>';
+            zona_busqueda_options_str  += '<option value="ZONA CENTRAL ANTON 1">ZONA CENTRAL ANTON 1</option>';
+            zona_busqueda_options_str  += '<option value="ZONA CENTRAL COCLE 1">ZONA CENTRAL COCLE 1</option>';
+            zona_busqueda_options_str  += '<option value="ZONA CENTRAL HERRERA 4">ZONA CENTRAL HERRERA 4</option>';
+            zona_busqueda_options_str  += '<option value="ZONA CENTRAL LAS TABLAS 5">ZONA CENTRAL LAS TABLAS 5</option>';
+            zona_busqueda_options_str  += '<option value="ZONA CENTRAL PENONOME 3">ZONA CENTRAL PENONOME 3</option>';
+            zona_busqueda_options_str  += '<option value="ZONA CENTRAL SANTIAGO 6">ZONA CENTRAL SANTIAGO 6</option>';
+            zona_busqueda_options_str  += '<option value="ZONA OCCIDENTAL BOCAS DEL TORO 5">ZONA OCCIDENTAL BOCAS DEL TORO 5</option>';
+            zona_busqueda_options_str  += '<option value="ZONA OCCIDENTAL CHIRIQUI CONCEPCION 1">ZONA OCCIDENTAL CHIRIQUI CONCEPCION 1</option>';
+            zona_busqueda_options_str  += '<option value="ZONA OCCIDENTAL CHIRIQUI DAVID 2">ZONA OCCIDENTAL CHIRIQUI DAVID 2</option>';
+            zona_busqueda_options_str  += '<option value="ZONA OCCIDENTAL CHIRIQUI DAVID 4">ZONA OCCIDENTAL CHIRIQUI DAVID 4</option>';
+            zona_busqueda_options_str  += '<option value="ZONA OCCIDENTAL CHRIQUI DAVID 3">ZONA OCCIDENTAL CHRIQUI DAVID 3</option>';
+            sel_zona_busqueda.innerHTML = zona_busqueda_options_str;
+            div_zona_busqueda.appendChild(sel_zona_busqueda);
+            var lab_zona_busqueda = document.createElement('div');
+            lab_zona_busqueda.innerHTML = 'zona_busqueda';
+            lab_zona_busqueda.className = 'filterlabel';
+            div_zona_busqueda.appendChild(lab_zona_busqueda);
+            var reset_zona_busqueda = document.createElement('div');
+            reset_zona_busqueda.innerHTML = 'clear filter';
+            reset_zona_busqueda.className = 'filterlabel';
+            reset_zona_busqueda.onclick = function() {
+                var options = document.getElementById("sel_zona_busqueda").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_zona_busqueda.appendChild(reset_zona_busqueda);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_opcion = document.createElement('div');
+            div_opcion.id = "div_opcion";
+            div_opcion.className= "filterselect";
+            document.getElementById("menu").appendChild(div_opcion);
+            sel_opcion = document.createElement('select');
+            sel_opcion.multiple = true;
+            sel_opcion.size = 4;
+            sel_opcion.id = "sel_opcion";
+            var opcion_options_str = "<option value='' unselected></option>";
+            sel_opcion.onchange = function(){filterFunc()};
+            opcion_options_str  += '<option value="NULL">NULL</option>';
+            opcion_options_str  += '<option value=""></option>';
+            opcion_options_str  += '<option value="A">A</option>';
+            opcion_options_str  += '<option value="B">B</option>';
+            sel_opcion.innerHTML = opcion_options_str;
+            div_opcion.appendChild(sel_opcion);
+            var lab_opcion = document.createElement('div');
+            lab_opcion.innerHTML = 'opcion';
+            lab_opcion.className = 'filterlabel';
+            div_opcion.appendChild(lab_opcion);
+            var reset_opcion = document.createElement('div');
+            reset_opcion.innerHTML = 'clear filter';
+            reset_opcion.className = 'filterlabel';
+            reset_opcion.onclick = function() {
+                var options = document.getElementById("sel_opcion").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_opcion.appendChild(reset_opcion);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_propuesta = document.createElement('div');
+            div_propuesta.id = "div_propuesta";
+            div_propuesta.className= "filterselect";
+            document.getElementById("menu").appendChild(div_propuesta);
+            sel_propuesta = document.createElement('select');
+            sel_propuesta.multiple = true;
+            sel_propuesta.size = 10;
+            sel_propuesta.id = "sel_propuesta";
+            var propuesta_options_str = "<option value='' unselected></option>";
+            sel_propuesta.onchange = function(){filterFunc()};
+            propuesta_options_str  += '<option value="AMP CENTRAL 1">AMP CENTRAL 1</option>';
+            propuesta_options_str  += '<option value="AMP CENTRAL 2">AMP CENTRAL 2</option>';
+            propuesta_options_str  += '<option value="AMP COLON 1">AMP COLON 1</option>';
+            propuesta_options_str  += '<option value="AMP COLON 2">AMP COLON 2</option>';
+            propuesta_options_str  += '<option value="AMP LAS CUMBRES 1">AMP LAS CUMBRES 1</option>';
+            propuesta_options_str  += '<option value="AMP OCCIDENTAL 1">AMP OCCIDENTAL 1</option>';
+            propuesta_options_str  += '<option value="AMP OCCIDENTAL 2">AMP OCCIDENTAL 2</option>';
+            propuesta_options_str  += '<option value="AMP OCCIDENTAL 3">AMP OCCIDENTAL 3</option>';
+            propuesta_options_str  += '<option value="AMP PANAMA OESTE CHAME 3">AMP PANAMA OESTE CHAME 3</option>';
+            propuesta_options_str  += '<option value="AMP PANAMA OESTE LA CHERRERA 1">AMP PANAMA OESTE LA CHERRERA 1</option>';
+            propuesta_options_str  += '<option value="AMP PANAMA OESTE LA CHORRERA 2">AMP PANAMA OESTE LA CHORRERA 2</option>';
+            propuesta_options_str  += '<option value="AMP SAN MIGUELITO 1">AMP SAN MIGUELITO 1</option>';
+            propuesta_options_str  += '<option value="AMP SAN MIGUELITO 2">AMP SAN MIGUELITO 2</option>';
+            propuesta_options_str  += '<option value="AMP TOCUMEN 1">AMP TOCUMEN 1</option>';
+            propuesta_options_str  += '<option value="AMP TOCUMEN 3">AMP TOCUMEN 3</option>';
+            propuesta_options_str  += '<option value="BOCAS DEL TORO 1">BOCAS DEL TORO 1</option>';
+            propuesta_options_str  += '<option value="ZONA CENTRAL ANTON 1">ZONA CENTRAL ANTON 1</option>';
+            propuesta_options_str  += '<option value="ZONA CENTRAL COCLE 1">ZONA CENTRAL COCLE 1</option>';
+            propuesta_options_str  += '<option value="ZONA CENTRAL HERRERA 4">ZONA CENTRAL HERRERA 4</option>';
+            propuesta_options_str  += '<option value="ZONA CENTRAL LAS TABLAS 5">ZONA CENTRAL LAS TABLAS 5</option>';
+            propuesta_options_str  += '<option value="ZONA CENTRAL PENONOME 3">ZONA CENTRAL PENONOME 3</option>';
+            propuesta_options_str  += '<option value="ZONA CENTRAL SANTIAGO 6">ZONA CENTRAL SANTIAGO 6</option>';
+            propuesta_options_str  += '<option value="ZONA OCCIDENTAL BOCAS DEL TORO 5">ZONA OCCIDENTAL BOCAS DEL TORO 5</option>';
+            propuesta_options_str  += '<option value="ZONA OCCIDENTAL CHIRIQUI CONCEPCION 1">ZONA OCCIDENTAL CHIRIQUI CONCEPCION 1</option>';
+            propuesta_options_str  += '<option value="ZONA OCCIDENTAL CHIRIQUI DAVID 2">ZONA OCCIDENTAL CHIRIQUI DAVID 2</option>';
+            propuesta_options_str  += '<option value="ZONA OCCIDENTAL CHIRIQUI DAVID 3">ZONA OCCIDENTAL CHIRIQUI DAVID 3</option>';
+            propuesta_options_str  += '<option value="ZONA OCCIDENTAL CHIRIQUI DAVID 4">ZONA OCCIDENTAL CHIRIQUI DAVID 4</option>';
+            sel_propuesta.innerHTML = propuesta_options_str;
+            div_propuesta.appendChild(sel_propuesta);
+            var lab_propuesta = document.createElement('div');
+            lab_propuesta.innerHTML = 'propuesta';
+            lab_propuesta.className = 'filterlabel';
+            div_propuesta.appendChild(lab_propuesta);
+            var reset_propuesta = document.createElement('div');
+            reset_propuesta.innerHTML = 'clear filter';
+            reset_propuesta.className = 'filterlabel';
+            reset_propuesta.onclick = function() {
+                var options = document.getElementById("sel_propuesta").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_propuesta.appendChild(reset_propuesta);
         resetLabels([layer_correg_pana_1,layer_zona_busqueda_2,layer_sysco_pana_3]);
         map.on("zoomend", function(){
             resetLabels([layer_correg_pana_1,layer_zona_busqueda_2,layer_sysco_pana_3]);
