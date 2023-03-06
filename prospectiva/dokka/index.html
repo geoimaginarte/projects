@@ -59,7 +59,7 @@
         <script src="data/Puntosdeventa_4.js"></script>
         <script>
         var map = L.map('map', {
-            zoomControl:true, maxZoom:28, minZoom:1
+            zoomControl:false, maxZoom:28, minZoom:1
         }).fitBounds([[9.361611161713036,-85.83352756500244],[10.700925077910988,-83.99803829193115]]);
         var zoomHome = L.Control.zoomHome();
         zoomHome.addTo(map);
@@ -77,7 +77,7 @@
         document.getElementsByClassName('leaflet-control-measure-toggle')[0]
         .innerHTML = '';
         document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .className += ' fas fa-ruler';
+        .className += 'fas fa-pencil-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
@@ -795,7 +795,6 @@
         map.on("layerremove", function(){
             resetLabels([layer_Puntosdeventa_4]);
         });
-
 
         L.control.browserPrint({documentTitle: 'Mapa de puntos de venta y farmacias en zona de influencia a 1.5 km', position: 'topleft', title: 'Imprimir ...'}).addTo(map);
 
