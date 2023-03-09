@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="css/leaflet.zoomhome.css"/>
         <link rel="stylesheet" href="css/Control.MiniMap.min.css" />
         <link rel="stylesheet" type="text/css" href="css/L.switchBasemap.css">
+        <link rel="stylesheet" href="css/styles.css"/>
 
         <style>
         html, body, #map {
@@ -27,11 +28,19 @@
             margin: 0;
         }
         </style>
-        <title></title>
+        <title>Mapa de punto de venta y farmacias</title>
     </head>
     <body>
-        <div id="map">
-        </div>
+        <div id="map"></div>
+        <div class="border b1"></div>
+        <div class="border b2"></div>
+        <div class="border b3"></div>
+        <div class="border b4"></div>
+        <div class="explanation">
+            <p>
+                <a href="#" class="zona">Vista General</a><br><strong>Isodistas:</strong> <a href="#" class="avenida">Avenida Escazú en Torre Lexus</a>, <a href="#" class="calle">Calle Blancos en Plaza San Gabriel</a>, <a href="#" class="curridabat">Curridabat en Plaza del Sol</a>, <a href="#" class="huacas">Huacas Cabo Velas</a>, <a href="#" class="millenium">Liberia en Centro Comercial Plaza Millenium</a>, <a href="#" class="julio">Liberia en Clínica 25 de Julio</a>, <a href="#" class="lindora">Lindora en Antiguo Lindora Medical Center</a>, <a href="#" class="quepos">Quepos en Marina Pez Vela</a>, <a href="#" class="lincoln">San Vicente de Moravia en Plaza Lincoln</a>, <a href="#" class="torre">Torre Médica de San José</a>, <a href="#" class="urgencias">Urgencias Hospital Metropolitano San José</a>.
+            </p>
+    </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/leaflet-svg-shape-markers.min.js"></script>
@@ -54,15 +63,35 @@
 <script src="js/leaflet.zoomhome.min.js"></script>
 <script src="js/Control.MiniMap.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="js/L.switchBasemap.js"></script>
+<script src="js/leaflet.activearea.js"></script>
+
         <script src="data/Isodistas15km_2.js"></script>
         <script src="data/Farmaciasenisodistas_3.js"></script>
         <script src="data/Puntosdeventa_4.js"></script>
         <script>
-        var map = L.map('map', {
-            zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[9.361611161713036,-85.83352756500244],[10.700925077910988,-83.99803829193115]]);
-        var zoomHome = L.Control.zoomHome();
-        zoomHome.addTo(map);
+
+        var Zona = [10.4631,-83.4164],
+            Avenida = [9.9538,-84.1290],
+            Calle = [9.9605,-84.0589],
+            Curridabat = [9.9398,-84.0299],
+            Huacas = [10.3979,-85.7778],
+            Millenium = [10.6431,-85.4222],
+            Julio = [10.6483,-85.4205],
+            Lindora = [9.9657,-84.1754],
+            Quepos = [9.4408,-84.1521],
+            Lincoln = [9.9732,-84.0428],
+            Torre = [9.9432,-84.0722],
+            Urgencias = [9.9432,-84.0722],
+            popupOptions = {
+                autoPan: true,
+                keepInView: true
+            };
+
+        var map = L.map('map', {zoomControl:true, inertia: false}).setView(Zona, 9).setActiveArea('viewport', true);
+        // map.scrollWheelZoom.disable();
+        // .fitBounds([[9.361611161713036,-85.83352756500244],[10.700925077910988,-83.99803829193115]]);
+        // var zoomHome = L.Control.zoomHome();
+        // zoomHome.addTo(map);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -77,7 +106,7 @@
         document.getElementsByClassName('leaflet-control-measure-toggle')[0]
         .innerHTML = '';
         document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .className += 'fas fa-pencil-ruler';
+        .className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
@@ -496,6 +525,38 @@
                 fillColor: 'rgba(25,91,233,1.0)',
                 interactive: true,
             }
+            break;
+                case 'SUCRE':
+                    return {
+                pane: 'pane_Farmaciasenisodistas_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,223,0,1.0)',
+                interactive: true,
+            }
+            break;
+                case 'SABA':
+                    return {
+                pane: 'pane_Farmaciasenisodistas_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(10,20,100,1.0)',
+                interactive: true,
+            }
                     break;
                 case 'LA BOMBA':
                     return {
@@ -634,7 +695,7 @@
             };
             abstract.addTo(map);
         var baseMaps = {"Google Hybrid": layer_GoogleHybrid_0,"OSM Standard": layer_OSMStandard_1,};
-        L.control.layers(baseMaps,{'<img src="legend/Puntosdeventa_4.png" /> Puntos de venta': layer_Puntosdeventa_4,'Farmacias en isodistas<br /><table><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_ASEMBIS0.png" /></td><td>ASEMBIS</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_ELIMAR1.png" /></td><td>ELIMAR</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FARMACIADONGERARDO2.png" /></td><td>FARMACIA DON GERARDO</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FARMACIASANTALUCIA3.png" /></td><td>FARMACIA SANTA LUCIA</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FARMAVALUE4.png" /></td><td>FARMAVALUE</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FISCHEL5.png" /></td><td>FISCHEL</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_INDEPENDIENTE6.png" /></td><td>INDEPENDIENTE</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_LABOMBA7.png" /></td><td>LA BOMBA</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_PRICESMART8.png" /></td><td>PRICESMART</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_WALMART9.png" /></td><td>WALMART</td></tr></table>': layer_Farmaciasenisodistas_3,'Isodistas 1,5 km<br /><table><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_AvenidaEscazúenTorreLexus0.png" /></td><td>Avenida Escazú en Torre Lexus</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_CalleBlancosenPlazaSanGabriel1.png" /></td><td>Calle Blancos en Plaza San Gabriel</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_CurridabatenPlazadelSol2.png" /></td><td>Curridabat en Plaza del Sol</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_HuacasCaboVelas3.png" /></td><td>Huacas Cabo Velas</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_LiberiaenCentroComercialPlazaMillenium4.png" /></td><td>Liberia en Centro Comercial Plaza Millenium</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_LiberiaenClínica25deJulio5.png" /></td><td>Liberia en Clínica 25 de Julio</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_LindoraenAntiguoLindoraMedicalCenter6.png" /></td><td>Lindora en Antiguo Lindora Medical Center</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_QueposenMarinaPezVela7.png" /></td><td>Quepos en Marina Pez Vela</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_SanVicentedeMoraviaenPlazaLincoln8.png" /></td><td>San Vicente de Moravia en Plaza Lincoln</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_TorreMédicadeSanJosé9.png" /></td><td>Torre Médica de San José</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_UrgenciasHospitalMetropolitanoSanJosé10.png" /></td><td>Urgencias Hospital Metropolitano San José</td></tr></table>': layer_Isodistas15km_2,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Puntosdeventa_4.png" /> Puntos de venta': layer_Puntosdeventa_4,'Farmacias en isodistas<br /><table><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_ASEMBIS0.png" /></td><td>ASEMBIS</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_ELIMAR1.png" /></td><td>ELIMAR</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FARMACIADONGERARDO2.png" /></td><td>FARMACIA DON GERARDO</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FARMACIASANTALUCIA3.png" /></td><td>FARMACIA SANTA LUCIA</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FARMAVALUE4.png" /></td><td>FARMAVALUE</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_FISCHEL5.png" /></td><td>FISCHEL</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_INDEPENDIENTE6.png" /></td><td>INDEPENDIENTE</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_LABOMBA7.png" /></td><td>LA BOMBA</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_PRICESMART8.png" /></td><td>PRICESMART</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_WALMART9.png" /></td><td>WALMART</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_SUCRE.png" /></td><td>SUCRE</td></tr><tr><td style="text-align: center;"><img src="legend/Farmaciasenisodistas_3_SABA.png" /></td><td>SABA</td></tr></table>': layer_Farmaciasenisodistas_3,'Isodistas 1,5 km<br /><table><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_AvenidaEscazúenTorreLexus0.png" /></td><td>Avenida Escazú en Torre Lexus</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_CalleBlancosenPlazaSanGabriel1.png" /></td><td>Calle Blancos en Plaza San Gabriel</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_CurridabatenPlazadelSol2.png" /></td><td>Curridabat en Plaza del Sol</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_HuacasCaboVelas3.png" /></td><td>Huacas Cabo Velas</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_LiberiaenCentroComercialPlazaMillenium4.png" /></td><td>Liberia en Centro Comercial Plaza Millenium</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_LiberiaenClínica25deJulio5.png" /></td><td>Liberia en Clínica 25 de Julio</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_LindoraenAntiguoLindoraMedicalCenter6.png" /></td><td>Lindora en Antiguo Lindora Medical Center</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_QueposenMarinaPezVela7.png" /></td><td>Quepos en Marina Pez Vela</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_SanVicentedeMoraviaenPlazaLincoln8.png" /></td><td>San Vicente de Moravia en Plaza Lincoln</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_TorreMédicadeSanJosé9.png" /></td><td>Torre Médica de San José</td></tr><tr><td style="text-align: center;"><img src="legend/Isodistas15km_2_UrgenciasHospitalMetropolitanoSanJosé10.png" /></td><td>Urgencias Hospital Metropolitano San José</td></tr></table>': layer_Isodistas15km_2,}).addTo(map);
         setBounds();
         var mapDiv = document.getElementById('map');
         var row = document.createElement('div');
@@ -794,15 +855,39 @@
         });
         map.on("layerremove", function(){
             resetLabels([layer_Puntosdeventa_4]);
-        });
+        });    
 
-        L.control.browserPrint({documentTitle: 'Mapa de puntos de venta y farmacias en zona de influencia a 1.5 km', position: 'topleft', title: 'Imprimir ...'}).addTo(map);
+        function register(event, fn) {
+            [].forEach.call(document.querySelectorAll(event), function(element) {
+                element.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    fn();
+                }, false);
+            });
+        }
+
+        register('.zona', () => map.flyTo(Zona, 9));
+        register('.avenida', () => map.flyTo(Avenida, 15));
+        register('.calle', () => map.flyTo(Calle, 15));
+        register('.curridabat', () => map.flyTo(Curridabat, 15));
+        register('.huacas', () => map.flyTo(Huacas, 15));
+        register('.millenium', () => map.flyTo(Millenium, 15));
+        register('.julio', () => map.flyTo(Julio, 15));
+        register('.lindora', () => map.flyTo(Lindora, 15));
+        register('.quepos', () => map.flyTo(Quepos, 15));
+        register('.lincoln', () => map.flyTo(Lincoln, 15));
+        register('.torre', () => map.flyTo(Torre, 15));
+        register('.urgencias', () => map.flyTo(Urgencias, 15));
+
+        L.control.browserPrint({documentTitle: 'Mapa de puntos de venta y farmacias en zona de influencia a 1.5 km', 
+        position: 'topleft', title: 'Imprimir ...'}).addTo(map);
 
         L.control.bigImage({position: 'topleft'}).addTo(map);
 
     var credctrl = L.controlCredits({
         	image: "images/icon.png",
-        	link: "geoimaginarte.github.io/mysite",
+        	link: "https://geoimaginarte.github.io/mysite",
         	text: "Creado por: <br/>Jose Francisco Nunez O. (Geografo y Analista de datos)"
         }).addTo(map);
 

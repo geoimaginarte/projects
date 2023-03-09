@@ -1,6 +1,9 @@
 
         #map {
-            background-color: #ffffff
+            background-color: #ffffff;
+            top: 0;
+            bottom: 0;
+            z-index: 1;
         }
         th {
             text-align: left;
@@ -127,3 +130,5 @@
         .leaflet-control-layers-toggle {
             background-color: #f8f8f8 !important;
         }
+
+        .activeArea { position: absolute; top: 50px; left: 50px; right: 50px; height: 200px; }

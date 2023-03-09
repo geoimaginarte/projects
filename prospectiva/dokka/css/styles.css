@@ -1,0 +1,44 @@
+.viewport {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  left: 50%;
+  height: 200px;
+}
+
+.b1 {
+  top: 50px;
+  right: 50px;
+  left: 50%;
+  height: 0;
+}
+
+.b2 {
+  top: 450px;
+  right: 50px;
+  left: 50%;
+  height: 0;
+}
+
+.b3 {
+  top: 50px;
+  left: 50%;
+  height: 400px;
+}
+
+.b4 {
+  top: 50px;
+  right: 50px;
+  height: 400px;
+}
+
+.explanation{
+  position: absolute;
+  top: 750px;
+  left: 200px;
+  right: 400px;
+  padding: 0 1em;
+  background-color: rgba(255, 255, 255, 0.9);
+  overflow: auto;
+  z-index: 2;
+}
