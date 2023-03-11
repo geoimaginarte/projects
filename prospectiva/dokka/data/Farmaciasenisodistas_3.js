@@ -178,27 +178,6 @@ var json_Farmaciasenisodistas_3 = {
         }, {
             "type": "Feature",
             "properties": {
-                "fid": "91",
-                "nombre": "FISCHEL TREJOS MONTEALEGRE",
-                "marca": "FISCHEL",
-                "categoria": "FARMACIA",
-                "provincia": "SAN JOSÉ",
-                "canton": "ESCAZÚ",
-                "distrito": "SAN RAFAEL",
-                "codigo_dta": "10203",
-                "conurbano": "OESTE",
-                "direccion": "100 METROS OESTE TONY ROMA'S TREJOS MONTEALEGRE.",
-                "tel": "2288-9050",
-                "fuente": "SITIO WEB",
-                "punto de venta": "Avenida Escazú en Torre Lexus"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-84.13116038, 9.93414722]
-            }
-        }, {
-            "type": "Feature",
-            "properties": {
                 "fid": "92",
                 "nombre": "FARMACIA CV PM",
                 "marca": "INDEPENDIENTE",
@@ -3139,27 +3118,6 @@ var json_Farmaciasenisodistas_3 = {
         }, {
             "type": "Feature",
             "properties": {
-                "fid": "87",
-                "nombre": "FISCHEL CENTRAL",
-                "marca": "FISCHEL",
-                "categoria": "FARMACIA",
-                "provincia": "SAN JOSÉ",
-                "canton": "SAN JOSÉ",
-                "distrito": "MERCED",
-                "codigo_dta": "10102",
-                "conurbano": "CENTRAL",
-                "direccion": "BAJOS DEL CLUB UNIÓN, SAN JOSÉ",
-                "tel": "2248-1682",
-                "fuente": "SITIO WEB",
-                "punto de venta": "Urgencias Hospital Metropolitano San José"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-84.0795064, 9.93565844]
-            }
-        }, {
-            "type": "Feature",
-            "properties": {
                 "fid": "93",
                 "nombre": "FARMACIA SANTA LUCIA SAN JOSÉ AVENIDA 14",
                 "marca": "FARMACIA SANTA LUCIA",
@@ -3450,7 +3408,490 @@ var json_Farmaciasenisodistas_3 = {
             "geometry": {
                 "type": "Point",
                 "coordinates": [-84.1436722, 9.93978333]
-            }            
+            }
+        // }, {  
+        // "type": "Feature",
+        //     "properties": {
+        //         "fid": "1000",
+        //         "nombre": "FARMACIA LA ECONÓMICA PLAZA QUEPOS",
+        //         "marca": "INDEPENDIENTE",
+        //         "categoria": "FARMACIA",
+        //         "provincia": "Puntarenas",
+        //         "canton": "Quepos",
+        //         "distrito": "Quepos",
+        //         "codigo_dta": "60601",
+        //         "conurbano": null,
+        //         "direccion": "CONTIGUO  A PALI QUEPOS CENTRO",
+        //         "tel": null,
+        //         "fuente": null,
+        //         "punto de venta": "Quepos en Marina Pez Vela"
+        //     },
+        //     "geometry": {
+        //         "type": "Point",
+        //         "coordinates": [-84.1598889, 9.43161111]
+        //     }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1001",
+                "nombre": "KANGU FARMACIA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Curridabat",
+                "distrito": "Curridabat",
+                "codigo_dta": "11801",
+                "conurbano": "Este",
+                "direccion": "CENTRO COMERCIAL CENTRAL MARKET",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Curridabat en Plaza del Sol"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0354444, 9.91916667]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1002",
+                "nombre": "FARMACIA SABA SAN PEDRO",
+                "marca": "SABA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Montes de Oca",
+                "distrito": "San Pedro",
+                "codigo_dta": "11501",
+                "conurbano": "Este",
+                "direccion": "CENTRO COMERICAL BACARA  150 ESTE DE LA IGLESIA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Curridabat en Plaza del Sol"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0515278, 9.93186111]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1003",
+                "nombre": "FARMACIA EL BUEN PRECIO",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Moravia",
+                "distrito": "San Vicente",
+                "codigo_dta": "11401",
+                "conurbano": "Norte",
+                "direccion": "DENTRO DE LAS INSTALACIONES DEL MEGASUPER DE MORAVIA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "San Vicente de Moravia en Plaza Lincoln"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0470278, 9.95813889]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1004",
+                "nombre": "FARMACIA MULTIPLAZA OESTE 2",
+                "marca": "SUCRE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Escazú",
+                "distrito": "San Rafael",
+                "codigo_dta": "10203",
+                "conurbano": "Oeste",
+                "direccion": "MULTIPLAZA ESCAZU. SON DOS SUCRES",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Avenida Escazú en Torre Lexus"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.149854646360453, 9.94383635620815]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1005",
+                "nombre": "ICECARE FARMACIA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Goicoechea",
+                "distrito": "San Francisco",
+                "codigo_dta": "10802",
+                "conurbano": "Norte",
+                "direccion": "EN PLAZA TEMPO",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Avenida Escazú en Torre Lexus"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0784444, 9.94038889]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1006",
+                "nombre": "MI FARMACIA EN LINEA PUNTO COM",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Escazú",
+                "distrito": "San Rafael",
+                "codigo_dta": "10203",
+                "conurbano": "Oeste",
+                "direccion": "FRENTE A EDIFICIO BMI LATERAL RUTA 27",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Avenida Escazú en Torre Lexus"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.1423889, 9.94036111]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1007",
+                "nombre": "TABUSH DERMASHOP",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Escazú",
+                "distrito": "San Rafael",
+                "codigo_dta": "10203",
+                "conurbano": "Oeste",
+                "direccion": "EN AVENIDA ESCAZU",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Avenida Escazú en Torre Lexus"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.14275, 9.93891667]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1008",
+                "nombre": "FARMACIA CENTRO DE CÁNCER HOSPITAL METROPOLITANO",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "Santa Ana",
+                "distrito": "Pozos",
+                "codigo_dta": "10903",
+                "conurbano": "Oeste",
+                "direccion": "300 NORTE DE IGLESIA DE POZOS, EDIFICIO PEKIN, HOSPITAL METROPOLITANO 3 ER PISO.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Lindora en Antiguo Lindora Medical Center"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.190234406278947, 9.953357051937983]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1009",
+                "nombre": "FARMACIA BALANCE",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "Guanacaste",
+                "canton": "Liberia",
+                "distrito": "Liberia",
+                "codigo_dta": "50101",
+                "conurbano": null,
+                "direccion": "25 SUR PARQUE CENTRAL",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Liberia en Clínica 25 de Julio"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-85.4383611, 10.6288333]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1010",
+                "nombre": "FARMACIA LA BOTICA LIBERIA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "Guanacaste",
+                "canton": "Liberia",
+                "distrito": "Liberia",
+                "codigo_dta": "50101",
+                "conurbano": null,
+                "direccion": "PLAZA MILENIUM",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Liberia en Clínica 25 de Julio"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-85.4364167, 10.6305833]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1011",
+                "nombre": "FARMACIA LA INMACULADA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "Guanacaste",
+                "canton": "Liberia",
+                "distrito": "Liberia",
+                "codigo_dta": "50101",
+                "conurbano": null,
+                "direccion": "75 NORTE DE LA AGONIA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Liberia en Clínica 25 de Julio"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-85.434, 10.6320833]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1012",
+                "nombre": "FARMACIA BALANCE",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "Guanacaste",
+                "canton": "Liberia",
+                "distrito": "Liberia",
+                "codigo_dta": "50101",
+                "conurbano": null,
+                "direccion": "25 SUR PARQUE CENTRAL",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Liberia en Centro Comercial Plaza Millenium"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-85.4383611, 10.6288333]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1013",
+                "nombre": "FARMACIA LA BOTICA LIBERIA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "Guanacaste",
+                "canton": "Liberia",
+                "distrito": "Liberia",
+                "codigo_dta": "50101",
+                "conurbano": null,
+                "direccion": "PLAZA MILENIUM",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Liberia en Centro Comercial Plaza Millenium"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-85.4364167, 10.6305833]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1014",
+                "nombre": "FARMACIA LA INMACULADA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "Guanacaste",
+                "canton": "Liberia",
+                "distrito": "Liberia",
+                "codigo_dta": "50101",
+                "conurbano": null,
+                "direccion": "75 NORTE DE LA AGONIA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Liberia en Centro Comercial Plaza Millenium"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-85.434, 10.6320833]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1015",
+                "nombre": "CIMCA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "DE LA JUNTA DE PROTECCIÓN SOCIAL 300 METROS OESTE.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0909167, 9.93325]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1016",
+                "nombre": "FARMACIA LA BOMBA SAN JOSÉ BÍBLICA",
+                "marca": "LA BOMBA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "25 METROS SUR DE LA ENTRADA DE EMERGENCIAS DEL HOSPITAL CLÍNICA BÍBLICA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0796667, 9.92736111]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1017",
+                "nombre": "FARMACIA LA BOMBA SAN JOSÉ PARQUE CENTRAL",
+                "marca": "LA BOMBA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "ENTRE AVENIDAS 2 Y 4, CALLE 2, FRENTE AL COSTADO OESTE DEL PARQUE CENTRAL",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0800833, 9.93280556]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1018",
+                "nombre": "FARMACIA LA BOMBA BOULEVARD",
+                "marca": "LA BOMBA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Carmen",
+                "codigo_dta": "10101",
+                "conurbano": "Central",
+                "direccion": "DIAGONAL A TIENDA LEVI´S,  AVENIDA CENTRAL.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0781389, 9.93397222]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1019",
+                "nombre": "CIMCA",
+                "marca": "INDEPENDIENTE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "DE LA JUNTA DE PROTECCIÓN SOCIAL 300 METROS OESTE.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0909167, 9.93325]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1020",
+                "nombre": "FARMACIA LA BOMBA SAN JOSÉ BÍBLICA",
+                "marca": "LA BOMBA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "25 METROS SUR DE LA ENTRADA DE EMERGENCIAS DEL HOSPITAL CLÍNICA BÍBLICA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0796667, 9.92736111]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1021",
+                "nombre": "FARMACIA LA BOMBA SAN JOSÉ PARQUE CENTRAL",
+                "marca": "LA BOMBA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "ENTRE AVENIDAS 2 Y 4, CALLE 2, FRENTE AL COSTADO OESTE DEL PARQUE CENTRAL",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0800833, 9.93280556]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1022",
+                "nombre": "FARMACIA LA BOMBA BOULEVARD",
+                "marca": "LA BOMBA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Carmen",
+                "codigo_dta": "10101",
+                "conurbano": "Central",
+                "direccion": "DIAGONAL A TIENDA LEVI´S,  AVENIDA CENTRAL.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0781389, 9.93397222]
+            }    
         }
     ]
 }
