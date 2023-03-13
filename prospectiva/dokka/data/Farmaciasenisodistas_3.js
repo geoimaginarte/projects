@@ -3178,7 +3178,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.1939861, 9.95415]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "501",
@@ -3199,7 +3199,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.1946361, 9.95361111]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "502",
@@ -3220,7 +3220,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.1940278, 9.95303056]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "503",
@@ -3241,7 +3241,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.0409222, 9.92702778]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "504",
@@ -3262,7 +3262,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.0778472, 9.93216111]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "505",
@@ -3283,7 +3283,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.0855944, 9.93476111]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "506",
@@ -3304,7 +3304,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.0819167, 9.934375]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "507",
@@ -3325,7 +3325,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-85.4481306, 10.6262083]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "508",
@@ -3346,7 +3346,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-85.4440111, 10.6256861]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "509",
@@ -3367,7 +3367,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.16455, 9.429975]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "510",
@@ -3388,7 +3388,7 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.15984663, 9.42855811]
             }
-		}, {
+        }, {
             "type": "Feature",
             "properties": {
                 "fid": "511",
@@ -3409,27 +3409,27 @@ var json_Farmaciasenisodistas_3 = {
                 "type": "Point",
                 "coordinates": [-84.1436722, 9.93978333]
             }
-        // }, {  
-        // "type": "Feature",
-        //     "properties": {
-        //         "fid": "1000",
-        //         "nombre": "FARMACIA LA ECONÓMICA PLAZA QUEPOS",
-        //         "marca": "INDEPENDIENTE",
-        //         "categoria": "FARMACIA",
-        //         "provincia": "Puntarenas",
-        //         "canton": "Quepos",
-        //         "distrito": "Quepos",
-        //         "codigo_dta": "60601",
-        //         "conurbano": null,
-        //         "direccion": "CONTIGUO  A PALI QUEPOS CENTRO",
-        //         "tel": null,
-        //         "fuente": null,
-        //         "punto de venta": "Quepos en Marina Pez Vela"
-        //     },
-        //     "geometry": {
-        //         "type": "Point",
-        //         "coordinates": [-84.1598889, 9.43161111]
-        //     }
+            // }, {
+            // "type": "Feature",
+            //     "properties": {
+            //         "fid": "1000",
+            //         "nombre": "FARMACIA LA ECONÓMICA PLAZA QUEPOS",
+            //         "marca": "INDEPENDIENTE",
+            //         "categoria": "FARMACIA",
+            //         "provincia": "Puntarenas",
+            //         "canton": "Quepos",
+            //         "distrito": "Quepos",
+            //         "codigo_dta": "60601",
+            //         "conurbano": null,
+            //         "direccion": "CONTIGUO  A PALI QUEPOS CENTRO",
+            //         "tel": null,
+            //         "fuente": null,
+            //         "punto de venta": "Quepos en Marina Pez Vela"
+            //     },
+            //     "geometry": {
+            //         "type": "Point",
+            //         "coordinates": [-84.1598889, 9.43161111]
+            //     }
         }, {
             "type": "Feature",
             "properties": {
@@ -3891,7 +3891,259 @@ var json_Farmaciasenisodistas_3 = {
             "geometry": {
                 "type": "Point",
                 "coordinates": [-84.0781389, 9.93397222]
-            }    
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1023",
+                "nombre": "FARMACIA SABA SAN JOSÉ 2",
+                "marca": "SABA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Merced",
+                "codigo_dta": "10102",
+                "conurbano": "Central",
+                "direccion": "AVENIDA PRIMERA 50 OESTE DEL BANCO CENTRAL ENTRE CALLE 4 Y 6",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0810552733595, 9.93510510892885]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1024",
+                "nombre": "FARMAESPECIALIZADA BARRIO MÉXICO",
+                "marca": null,
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Merced",
+                "codigo_dta": "10102",
+                "conurbano": "Central",
+                "direccion": "CALLE 20, AVENIDA 7, AL COSTADO DE INFOCOOP LOCAL # 3.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0870327345294, 9.93916102964564]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1025",
+                "nombre": "CLÍNICA SAGRADO CORAZÓN DE JESÚS",
+                "marca": null,
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Catedral",
+                "codigo_dta": "10104",
+                "conurbano": "Central",
+                "direccion": "125 MTS NORTE DE LA CLÍNICA BIBLÍCA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.078512198379, 9.92898601053981]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1026",
+                "nombre": "DRUGSTORE HOLDING PHARMACY HARD S.A. # 1",
+                "marca": null,
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Catedral",
+                "codigo_dta": "10104",
+                "conurbano": "Central",
+                "direccion": "DEL EDIFICIO DE LA CCSS EN SAN JOSÉ 400 METROS SUR, 100 ESTE Y 25 SUR, CALLE 3, ENTRE AVENIDA 10 Y 12.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0752957020093, 9.92914910518754]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1027",
+                "nombre": "FARMACIA AVENIDA 14",
+                "marca": "SUCRE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "AVENIDA 14, DIAGONAL A LA CLÍNICA BÍBLICA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0805370999063, 9.928212428842]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1028",
+                "nombre": "FARMACIA AVENIDA SEGUNDA",
+                "marca": "SUCRE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Catedral",
+                "codigo_dta": "10104",
+                "conurbano": "Central",
+                "direccion": "AVENIDA 2, CALLE 1, DIAGONAL AL BANCO POPULAR.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Torre Médica de San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.078408322667, 9.93317246508291]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1029",
+                "nombre": "FARMACIA SABA SAN JOSÉ 2",
+                "marca": "SABA",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Merced",
+                "codigo_dta": "10102",
+                "conurbano": "Central",
+                "direccion": "AVENIDA PRIMERA 50 OESTE DEL BANCO CENTRAL ENTRE CALLE 4 Y 6",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0810552733595, 9.93510510892885]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1030",
+                "nombre": "FARMAESPECIALIZADA BARRIO MÉXICO",
+                "marca": null,
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Merced",
+                "codigo_dta": "10102",
+                "conurbano": "Central",
+                "direccion": "CALLE 20, AVENIDA 7, AL COSTADO DE INFOCOOP LOCAL # 3.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0870327345294, 9.93916102964564]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1031",
+                "nombre": "CLÍNICA SAGRADO CORAZÓN DE JESÚS",
+                "marca": null,
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Catedral",
+                "codigo_dta": "10104",
+                "conurbano": "Central",
+                "direccion": "125 MTS NORTE DE LA CLÍNICA BIBLÍCA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.078512198379, 9.92898601053981]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1032",
+                "nombre": "DRUGSTORE HOLDING PHARMACY HARD S.A. # 1",
+                "marca": null,
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Catedral",
+                "codigo_dta": "10104",
+                "conurbano": "Central",
+                "direccion": "DEL EDIFICIO DE LA CCSS EN SAN JOSÉ 400 METROS SUR, 100 ESTE Y 25 SUR, CALLE 3, ENTRE AVENIDA 10 Y 12.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0752957020093, 9.92914910518754]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1033",
+                "nombre": "FARMACIA AVENIDA 14",
+                "marca": "SUCRE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Hospital",
+                "codigo_dta": "10103",
+                "conurbano": "Central",
+                "direccion": "AVENIDA 14, DIAGONAL A LA CLÍNICA BÍBLICA",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.0805370999063, 9.928212428842]
+            }
+        }, {
+            "type": "Feature",
+            "properties": {
+                "fid": "1034",
+                "nombre": "FARMACIA AVENIDA SEGUNDA",
+                "marca": "SUCRE",
+                "categoria": "FARMACIA",
+                "provincia": "San José",
+                "canton": "San José",
+                "distrito": "Catedral",
+                "codigo_dta": "10104",
+                "conurbano": "Central",
+                "direccion": "AVENIDA 2, CALLE 1, DIAGONAL AL BANCO POPULAR.",
+                "tel": null,
+                "fuente": null,
+                "punto de venta": "Urgencias Hospital Metropolitano San José"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-84.078408322667, 9.93317246508291]
+            }
         }
     ]
 }
