@@ -766,27 +766,6 @@ var json_Farmaciasenisodistas_3 = {
         }, {
             "type": "Feature",
             "properties": {
-                "fid": "109",
-                "nombre": "LA BOMBA CURRIDABAT MILLA DE ORO",
-                "marca": "LA BOMBA",
-                "categoria": "FARMACIA",
-                "provincia": "SAN JOSÉ",
-                "canton": "CURRIDABAT",
-                "distrito": "CURRIDABAT",
-                "codigo_dta": "11801",
-                "conurbano": "ESTE",
-                "direccion": "CURRIDABAT CALLE ANCHA, PLAZA MILLA DE ORO, 50 ESTE EPA",
-                "tel": "4000-2960",
-                "fuente": "SITIO WEB",
-                "punto de venta": "Curridabat en Plaza del Sol"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-84.036758, 9.922112]
-            }
-        }, {
-            "type": "Feature",
-            "properties": {
                 "fid": "112",
                 "nombre": "LA BOMBA PLAZA DEL SOL",
                 "marca": "LA BOMBA",
@@ -3162,7 +3141,7 @@ var json_Farmaciasenisodistas_3 = {
             "properties": {
                 "fid": "500",
                 "nombre": "FISCHEL POZOS SANTA ANA",
-                "marca": "FARMAVALUE",
+                "marca": "FISCHEL",
                 "categoria": "FARMACIA",
                 "provincia": "SAN JOSÉ",
                 "canton": "SANTA ANA",
