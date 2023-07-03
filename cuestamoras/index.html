@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/Distritosporconurbano_2.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[9.783579446936209,-84.339232588327],[10.055670030655357,-84.06217684797063]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleHybrid_0');
+        map.getPane('pane_GoogleHybrid_0').style.zIndex = 400;
+        var layer_GoogleHybrid_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleHybrid_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleHybrid_0;
+        map.addLayer(layer_GoogleHybrid_0);
+        map.createPane('pane_DarkMatter_1');
+        map.getPane('pane_DarkMatter_1').style.zIndex = 401;
+        var layer_DarkMatter_1 = L.tileLayer('http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            pane: 'pane_DarkMatter_1',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_DarkMatter_1;
+        map.addLayer(layer_DarkMatter_1);
+        function pop_Distritosporconurbano_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Código Distrito</th>\
+                        <td>' + (feature.properties['codigo_dta'] !== null ? autolinker.link(feature.properties['codigo_dta'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Provincia</th>\
+                        <td>' + (feature.properties['provincia'] !== null ? autolinker.link(feature.properties['provincia'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Cantón</th>\
+                        <td>' + (feature.properties['canton'] !== null ? autolinker.link(feature.properties['canton'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Distrito</th>\
+                        <td>' + (feature.properties['distrito'] !== null ? autolinker.link(feature.properties['distrito'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área del distrito</th>\
+                        <td>' + (feature.properties['area_distrito'] !== null ? autolinker.link(feature.properties['area_distrito'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Zona por conurbano</th>\
+                        <td>' + (feature.properties['Zona_Conurbano'] !== null ? autolinker.link(feature.properties['Zona_Conurbano'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoría por zona</th>\
+                        <td>' + (feature.properties['Categoria_Zona'] !== null ? autolinker.link(feature.properties['Categoria_Zona'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área de la zona</th>\
+                        <td>' + (feature.properties['area'] !== null ? autolinker.link(feature.properties['area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_Distritosporconurbano_2_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Distritosporconurbano_2rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Distritosporconurbano_2',
+                opacity: 1,
+                color: 'rgba(205,227,119,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            };
+                }
+                else if (exp_Distritosporconurbano_2rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Distritosporconurbano_2',
+                opacity: 1,
+                color: 'rgba(221,122,29,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            };
+                }
+                else if (exp_Distritosporconurbano_2rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Distritosporconurbano_2',
+                opacity: 1,
+                color: 'rgba(215,34,37,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            };
+                }
+                else if (exp_Distritosporconurbano_2rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Distritosporconurbano_2',
+                opacity: 1,
+                color: 'rgba(14,104,231,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Distritosporconurbano_2');
+        map.getPane('pane_Distritosporconurbano_2').style.zIndex = 402;
+        map.getPane('pane_Distritosporconurbano_2').style['mix-blend-mode'] = 'normal';
+        var layer_Distritosporconurbano_2 = new L.geoJson(json_Distritosporconurbano_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Distritosporconurbano_2',
+            layerName: 'layer_Distritosporconurbano_2',
+            pane: 'pane_Distritosporconurbano_2',
+            onEachFeature: pop_Distritosporconurbano_2,
+            style: style_Distritosporconurbano_2_0,
+        });
+        bounds_group.addLayer(layer_Distritosporconurbano_2);
+        map.addLayer(layer_Distritosporconurbano_2);
+            var abstract = new L.Control({'position':'topright'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+
+                    abstract.show();
+                    return this._div;
+                };
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'Anillo de oportunidad';
+            };
+            abstract.addTo(map);
+        var baseMaps = {"Google Hybrid": layer_GoogleHybrid_0,"Dark Matter": layer_DarkMatter_1,};
+        L.control.layers(baseMaps,{'Distritos por conurbano<br /><table><tr><td style="text-align: center;"><img src="legend/Distritosporconurbano_2_Alajuela0.png" /></td><td>Alajuela</td></tr><tr><td style="text-align: center;"><img src="legend/Distritosporconurbano_2_Central1.png" /></td><td>Central </td></tr><tr><td style="text-align: center;"><img src="legend/Distritosporconurbano_2_Heredia2.png" /></td><td>Heredia</td></tr><tr><td style="text-align: center;"><img src="legend/Distritosporconurbano_2_Oeste3.png" /></td><td>Oeste</td></tr></table>': layer_Distritosporconurbano_2,},{collapsed:false}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_Distritosporconurbano_2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['distrito'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['distrito']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Distritosporconurbano_2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Categoria_Zona": "str","Zona_Conurbano": "str","provincia": "str","canton": "str","distrito": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+        var i = 0;
+        layer_Distritosporconurbano_2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['distrito'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['distrito']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Distritosporconurbano_2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Categoria_Zona = document.createElement('div');
+            div_Categoria_Zona.id = "div_Categoria_Zona";
+            div_Categoria_Zona.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Categoria_Zona);
+            sel_Categoria_Zona = document.createElement('select');
+            sel_Categoria_Zona.multiple = true;
+            sel_Categoria_Zona.size = 2;
+            sel_Categoria_Zona.id = "sel_Categoria_Zona";
+            var Categoria_Zona_options_str = "<option value='' unselected></option>";
+            sel_Categoria_Zona.onchange = function(){filterFunc()};
+            Categoria_Zona_options_str  += '<option value="Zona de crecimiento Futuro">Zona de crecimiento Futuro</option>';
+            Categoria_Zona_options_str  += '<option value="Zona de oportunidad actual">Zona de oportunidad actual</option>';
+            sel_Categoria_Zona.innerHTML = Categoria_Zona_options_str;
+            div_Categoria_Zona.appendChild(sel_Categoria_Zona);
+            var lab_Categoria_Zona = document.createElement('div');
+            lab_Categoria_Zona.innerHTML = 'Categorias por Zona';
+            lab_Categoria_Zona.className = 'filterlabel';
+            div_Categoria_Zona.appendChild(lab_Categoria_Zona);
+            var reset_Categoria_Zona = document.createElement('div');
+            reset_Categoria_Zona.innerHTML = 'clear filter';
+            reset_Categoria_Zona.className = 'filterlabel';
+            reset_Categoria_Zona.onclick = function() {
+                var options = document.getElementById("sel_Categoria_Zona").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Categoria_Zona.appendChild(reset_Categoria_Zona);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Zona_Conurbano = document.createElement('div');
+            div_Zona_Conurbano.id = "div_Zona_Conurbano";
+            div_Zona_Conurbano.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Zona_Conurbano);
+            sel_Zona_Conurbano = document.createElement('select');
+            sel_Zona_Conurbano.multiple = true;
+            sel_Zona_Conurbano.size = 4;
+            sel_Zona_Conurbano.id = "sel_Zona_Conurbano";
+            var Zona_Conurbano_options_str = "<option value='' unselected></option>";
+            sel_Zona_Conurbano.onchange = function(){filterFunc()};
+            Zona_Conurbano_options_str  += '<option value="Alajuela">Alajuela</option>';
+            Zona_Conurbano_options_str  += '<option value="Central ">Central </option>';
+            Zona_Conurbano_options_str  += '<option value="Heredia">Heredia</option>';
+            Zona_Conurbano_options_str  += '<option value="Oeste">Oeste</option>';
+            sel_Zona_Conurbano.innerHTML = Zona_Conurbano_options_str;
+            div_Zona_Conurbano.appendChild(sel_Zona_Conurbano);
+            var lab_Zona_Conurbano = document.createElement('div');
+            lab_Zona_Conurbano.innerHTML = 'Zonas por Conurbanos';
+            lab_Zona_Conurbano.className = 'filterlabel';
+            div_Zona_Conurbano.appendChild(lab_Zona_Conurbano);
+            var reset_Zona_Conurbano = document.createElement('div');
+            reset_Zona_Conurbano.innerHTML = 'clear filter';
+            reset_Zona_Conurbano.className = 'filterlabel';
+            reset_Zona_Conurbano.onclick = function() {
+                var options = document.getElementById("sel_Zona_Conurbano").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Zona_Conurbano.appendChild(reset_Zona_Conurbano);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_provincia = document.createElement('div');
+            div_provincia.id = "div_provincia";
+            div_provincia.className= "filterselect";
+            document.getElementById("menu").appendChild(div_provincia);
+            sel_provincia = document.createElement('select');
+            sel_provincia.multiple = true;
+            sel_provincia.size = 3;
+            sel_provincia.id = "sel_provincia";
+            var provincia_options_str = "<option value='' unselected></option>";
+            sel_provincia.onchange = function(){filterFunc()};
+            provincia_options_str  += '<option value="Alajuela">Alajuela</option>';
+            provincia_options_str  += '<option value="Heredia">Heredia</option>';
+            provincia_options_str  += '<option value="San José">San José</option>';
+            sel_provincia.innerHTML = provincia_options_str;
+            div_provincia.appendChild(sel_provincia);
+            var lab_provincia = document.createElement('div');
+            lab_provincia.innerHTML = 'Provincias';
+            lab_provincia.className = 'filterlabel';
+            div_provincia.appendChild(lab_provincia);
+            var reset_provincia = document.createElement('div');
+            reset_provincia.innerHTML = 'clear filter';
+            reset_provincia.className = 'filterlabel';
+            reset_provincia.onclick = function() {
+                var options = document.getElementById("sel_provincia").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_provincia.appendChild(reset_provincia);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_canton = document.createElement('div');
+            div_canton.id = "div_canton";
+            div_canton.className= "filterselect";
+            document.getElementById("menu").appendChild(div_canton);
+            sel_canton = document.createElement('select');
+            sel_canton.multiple = true;
+            sel_canton.size = 10;
+            sel_canton.id = "sel_canton";
+            var canton_options_str = "<option value='' unselected></option>";
+            sel_canton.onchange = function(){filterFunc()};
+            canton_options_str  += '<option value="Alajuela">Alajuela</option>';
+            canton_options_str  += '<option value="Barva">Barva</option>';
+            canton_options_str  += '<option value="Belén">Belén</option>';
+            canton_options_str  += '<option value="Escazú">Escazú</option>';
+            canton_options_str  += '<option value="Flores">Flores</option>';
+            canton_options_str  += '<option value="Heredia">Heredia</option>';
+            canton_options_str  += '<option value="Mora">Mora</option>';
+            canton_options_str  += '<option value="San José">San José</option>';
+            canton_options_str  += '<option value="San Pablo">San Pablo</option>';
+            canton_options_str  += '<option value="San Rafael">San Rafael</option>';
+            canton_options_str  += '<option value="Santa Ana">Santa Ana</option>';
+            canton_options_str  += '<option value="Santa Bárbara">Santa Bárbara</option>';
+            canton_options_str  += '<option value="Santo Domingo">Santo Domingo</option>';
+            sel_canton.innerHTML = canton_options_str;
+            div_canton.appendChild(sel_canton);
+            var lab_canton = document.createElement('div');
+            lab_canton.innerHTML = 'Cantones';
+            lab_canton.className = 'filterlabel';
+            div_canton.appendChild(lab_canton);
+            var reset_canton = document.createElement('div');
+            reset_canton.innerHTML = 'clear filter';
+            reset_canton.className = 'filterlabel';
+            reset_canton.onclick = function() {
+                var options = document.getElementById("sel_canton").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_canton.appendChild(reset_canton);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_distrito = document.createElement('div');
+            div_distrito.id = "div_distrito";
+            div_distrito.className= "filterselect";
+            document.getElementById("menu").appendChild(div_distrito);
+            sel_distrito = document.createElement('select');
+            sel_distrito.multiple = true;
+            sel_distrito.size = 10;
+            sel_distrito.id = "sel_distrito";
+            var distrito_options_str = "<option value='' unselected></option>";
+            sel_distrito.onchange = function(){filterFunc()};
+            distrito_options_str  += '<option value="Alajuela">Alajuela</option>';
+            distrito_options_str  += '<option value="Barrantes">Barrantes</option>';
+            distrito_options_str  += '<option value="Barva">Barva</option>';
+            distrito_options_str  += '<option value="Brasil">Brasil</option>';
+            distrito_options_str  += '<option value="Carmen">Carmen</option>';
+            distrito_options_str  += '<option value="Catedral">Catedral</option>';
+            distrito_options_str  += '<option value="Colón">Colón</option>';
+            distrito_options_str  += '<option value="Escazú">Escazú</option>';
+            distrito_options_str  += '<option value="Garita">Garita</option>';
+            distrito_options_str  += '<option value="Guácima">Guácima</option>';
+            distrito_options_str  += '<option value="Heredia">Heredia</option>';
+            distrito_options_str  += '<option value="Hospital">Hospital</option>';
+            distrito_options_str  += '<option value="La Asunción">La Asunción</option>';
+            distrito_options_str  += '<option value="La Ribera">La Ribera</option>';
+            distrito_options_str  += '<option value="Llorente">Llorente</option>';
+            distrito_options_str  += '<option value="Mata Redonda">Mata Redonda</option>';
+            distrito_options_str  += '<option value="Merced">Merced</option>';
+            distrito_options_str  += '<option value="Mercedes">Mercedes</option>';
+            distrito_options_str  += '<option value="Pavas">Pavas</option>';
+            distrito_options_str  += '<option value="Piedades">Piedades</option>';
+            distrito_options_str  += '<option value="Pozos">Pozos</option>';
+            distrito_options_str  += '<option value="Rincón de Sabanilla">Rincón de Sabanilla</option>';
+            distrito_options_str  += '<option value="Río Segundo">Río Segundo</option>';
+            distrito_options_str  += '<option value="San Antonio">San Antonio</option>';
+            distrito_options_str  += '<option value="San Francisco">San Francisco</option>';
+            distrito_options_str  += '<option value="San Joaquín">San Joaquín</option>';
+            distrito_options_str  += '<option value="San Josecito">San Josecito</option>';
+            distrito_options_str  += '<option value="San José">San José</option>';
+            distrito_options_str  += '<option value="San Juan">San Juan</option>';
+            distrito_options_str  += '<option value="San Pablo">San Pablo</option>';
+            distrito_options_str  += '<option value="San Rafael">San Rafael</option>';
+            distrito_options_str  += '<option value="San Roque">San Roque</option>';
+            distrito_options_str  += '<option value="San Vicente">San Vicente</option>';
+            distrito_options_str  += '<option value="Santa Ana">Santa Ana</option>';
+            distrito_options_str  += '<option value="Santa Lucía">Santa Lucía</option>';
+            distrito_options_str  += '<option value="Santa Rosa">Santa Rosa</option>';
+            distrito_options_str  += '<option value="Santiago">Santiago</option>';
+            distrito_options_str  += '<option value="Santo Domingo">Santo Domingo</option>';
+            distrito_options_str  += '<option value="Santo Tomás">Santo Tomás</option>';
+            distrito_options_str  += '<option value="Ulloa">Ulloa</option>';
+            distrito_options_str  += '<option value="Uruca">Uruca</option>';
+            sel_distrito.innerHTML = distrito_options_str;
+            div_distrito.appendChild(sel_distrito);
+            var lab_distrito = document.createElement('div');
+            lab_distrito.innerHTML = 'Distritos';
+            lab_distrito.className = 'filterlabel';
+            div_distrito.appendChild(lab_distrito);
+            var reset_distrito = document.createElement('div');
+            reset_distrito.innerHTML = 'clear filter';
+            reset_distrito.className = 'filterlabel';
+            reset_distrito.onclick = function() {
+                var options = document.getElementById("sel_distrito").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_distrito.appendChild(reset_distrito);
+        resetLabels([layer_Distritosporconurbano_2]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Distritosporconurbano_2]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Distritosporconurbano_2]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Distritosporconurbano_2]);
+        });
+        </script>
+    </body>
+</html>
