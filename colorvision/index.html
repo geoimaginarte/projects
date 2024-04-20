@@ -16795,6 +16795,18 @@ nominatim_osm(query, expected_position=0)
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Lo que se logra con esta función es descargar elementos mapeados en el servicio Open Street Maps. A continuación, un ejemplo:</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16803,7 +16815,7 @@ nominatim_osm(query, expected_position=0)
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gdf_nom</span> <span class="o">=</span> <span class="n">up</span><span class="o">.</span><span class="n">download</span><span class="o">.</span><span class="n">nominatim_osm</span><span class="p">(</span><span class="s1">'Sabana, Costa Rica'</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gdf_nom</span> <span class="o">=</span> <span class="n">up</span><span class="o">.</span><span class="n">download</span><span class="o">.</span><span class="n">nominatim_osm</span><span class="p">(</span><span class="s1">'La Sabana, Mata Redonda, Costa Rica'</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -16891,22 +16903,539 @@ nominatim_osm(query, expected_position=0)
   </thead>
   <tbody>
     <tr>
-      <th>2</th>
-      <td>POLYGON ((-84.23128 10.11319, -84.23099 10.112...</td>
-      <td>299129006</td>
-      <td>relation</td>
-      <td>5659375</td>
-      <td>16</td>
-      <td>boundary</td>
-      <td>administrative</td>
-      <td>0.289702</td>
-      <td>village</td>
-      <td>Sabana Redonda</td>
-      <td>Sabana Redonda, Cantón Poás, Provincia Alajuel...</td>
+      <th>0</th>
+      <td>POLYGON ((-84.11010 9.93386, -84.10226 9.93311...</td>
+      <td>298957930</td>
+      <td>way</td>
+      <td>12657481</td>
+      <td>24</td>
+      <td>leisure</td>
+      <td>park</td>
+      <td>0.278015</td>
+      <td>park</td>
+      <td>Parque Metropolitano La Sabana</td>
+      <td>Parque Metropolitano La Sabana, 0003, San José...</td>
     </tr>
   </tbody>
 </table>
 </div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">folium</span><span class="o">.</span><span class="n">GeoJson</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">gdf_nom</span><span class="p">,</span>
+    <span class="n">style_function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feature</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"fillColor"</span><span class="p">:</span> <span class="s2">"#ff0000"</span><span class="p">,</span>
+        <span class="s2">"color"</span><span class="p">:</span> <span class="s2">"black"</span><span class="p">,</span>
+        <span class="s2">"weight"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">"dashArray"</span><span class="p">:</span> <span class="s2">"5, 5"</span><span class="p">,</span>
+    <span class="p">},)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
+<span class="nb">map</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    
+        &lt;script&gt;
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        &lt;/script&gt;
+    
+    &lt;style&gt;html, body {width: 100%;height: 100%;margin: 0;padding: 0;}&lt;/style&gt;
+    &lt;style&gt;#map {position:absolute;top:0;bottom:0;right:0;left:0;}&lt;/style&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-1.12.4.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+    
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_2be0297087758b67fb0a3f42cd2671f8 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+        
+&lt;/head&gt;
+&lt;body&gt;
+    
+    
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_2be0297087758b67fb0a3f42cd2671f8&quot; &gt;&lt;/div&gt;
+        
+&lt;/body&gt;
+&lt;script&gt;
+    
+    
+            var map_2be0297087758b67fb0a3f42cd2671f8 = L.map(
+                &quot;map_2be0297087758b67fb0a3f42cd2671f8&quot;,
+                {
+                    center: [9.932107049837713, -84.09842192936465],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 15,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_39e1b3a67fa85a2420c462660ced4cbc = L.tileLayer(
+                &quot;https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png&quot;,
+                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://cartodb.com/attributions\&quot;\u003eCartoDB\u003c/a\u003e, CartoDB \u003ca target=\&quot;_blank\&quot; href =\&quot;http://cartodb.com/attributions\&quot;\u003eattributions\u003c/a\u003e&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+
+        function geo_json_eda92eaa292ad03815d8353ce685fb13_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_eda92eaa292ad03815d8353ce685fb13 = L.geoJson(null, {
+                onEachFeature: geo_json_eda92eaa292ad03815d8353ce685fb13_onEachFeature,
+            
+        });
+
+        function geo_json_eda92eaa292ad03815d8353ce685fb13_add (data) {
+            geo_json_eda92eaa292ad03815d8353ce685fb13
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_eda92eaa292ad03815d8353ce685fb13_add({&quot;bbox&quot;: [-84.10749124023575, 9.931414069232048, -84.10749124023575, 9.931414069232048], &quot;features&quot;: [{&quot;bbox&quot;: [-84.10749124023575, 9.931414069232048, -84.10749124023575, 9.931414069232048], &quot;geometry&quot;: {&quot;coordinates&quot;: [-84.10749124023575, 9.931414069232048], &quot;type&quot;: &quot;Point&quot;}, &quot;id&quot;: &quot;36&quot;, &quot;properties&quot;: {&quot;Canton&quot;: &quot;San Jos\u00e9&quot;, &quot;Coddist&quot;: 10108.0, &quot;Densidad (pob/km2)&quot;: 2618.891912749615, &quot;Densidad por categoria&quot;: &quot;Alto&quot;, &quot;Direccion&quot;: &quot;Calle 62A, La Salle, Mata Redonda, Cant\u00f3n San Jos\u00e9, Provincia San Jos\u00e9, 10108, Costa Rica&quot;, &quot;Distrito&quot;: &quot;Mata Redonda&quot;, &quot;Poblacion por distrito (pob)&quot;: 10139.0, &quot;Provincia&quot;: &quot;San Jos\u00e9&quot;, &quot;Referencia&quot;: &quot;Avenida 14 Calle 62A&quot;, &quot;lat&quot;: 9.931414069232048, &quot;lon&quot;: -84.10749124023575}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+
+        function geo_json_d9e290383b4973cac5fecb8f96365795_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_d9e290383b4973cac5fecb8f96365795 = L.geoJson(null, {
+                onEachFeature: geo_json_d9e290383b4973cac5fecb8f96365795_onEachFeature,
+            
+        });
+
+        function geo_json_d9e290383b4973cac5fecb8f96365795_add (data) {
+            geo_json_d9e290383b4973cac5fecb8f96365795
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_d9e290383b4973cac5fecb8f96365795_add({&quot;bbox&quot;: [-84.1166110406113, 9.92237218500172, -84.09837143703858, 9.940455948592197], &quot;features&quot;: [{&quot;bbox&quot;: [-84.1166110406113, 9.92237218500172, -84.09837143703858, 9.940455948592197], &quot;geometry&quot;: {&quot;coordinates&quot;: [[[-84.09837143703858, 9.931416870766297], [-84.09841508658911, 9.93053059819694], [-84.09854614379444, 9.929652835052627], [-84.0987633458238, 9.928792034579322], [-84.09906460027653, 9.927956486600527], [-84.09944700535696, 9.927154237687732], [-84.09990687784155, 9.926393013675748], [-84.10043978856758, 9.925680145268661], [-84.10104060510155, 9.925022497452709], [-84.10170354117528, 9.924426403395188], [-84.1024222124139, 9.923897603465697], [-84.10318969781831, 9.923441189966338], [-84.1039986064107, 9.923061558102729], [-84.10484114840108, 9.922762363667518], [-84.10570921019026, 9.922546487843405], [-84.10659443248751, 9.922416009464355], [-84.10748829079138, 9.92237218500172], [-84.10838217745939, 9.922415436467839], [-84.10926748457747, 9.922545347353388], [-84.11013568683188, 9.922760666637616], [-84.11097842358666, 9.923059320832825], [-84.11178757937704, 9.923438433947265], [-84.11255536204472, 9.923894355174406], [-84.11327437776306, 9.924422694042253], [-84.11393770223073, 9.92501836268452], [-84.11453894734822, 9.925675624827102], [-84.11507232273577, 9.926388151018433], [-84.11553269150012, 9.927149079572462], [-84.11591561971318, 9.92795108263774], [-84.11621741912566, 9.928786436756837], [-84.11643518270375, 9.929647097237083], [-84.11656681264625, 9.930524775616702], [-84.1166110406113, 9.93141101948073], [-84.11656743995702, 9.932297293858221], [-84.11643642987735, 9.933175063417021], [-84.116219271392, 9.934035874664668], [-84.11591805522828, 9.934871437363604], [-84.1155356817104, 9.935673704376645], [-84.11507583284902, 9.93643494917342], [-84.114542936899, 9.93714784025107], [-84.11394212572604, 9.937805511752156], [-84.11327918539224, 9.938401629599163], [-84.11256050043625, 9.938930452508286], [-84.11179299238425, 9.939386887294331], [-84.11098405308445, 9.939766537933634], [-84.11014147350689, 9.940065747912014], [-84.10927336869518, 9.940281635449452], [-84.10838809959341, 9.940412121261852], [-84.10749419250169, 9.940455948592197], [-84.10660025693743, 9.940412695317947], [-84.1057149026937, 9.940282778017906], [-84.10484665689529, 9.940067447959338], [-84.10400388185151, 9.939768779043991], [-84.10319469449854, 9.939389647829298], [-84.10242688820767, 9.938933705817373], [-84.10170785771331, 9.938405344278962], [-84.10104452788465, 9.937809651951559], [-84.10044328702722, 9.937152366019493], [-84.09990992535707, 9.936439816848523], [-84.09944957924029, 9.93567886700781], [-84.09906668173463, 9.934876845166839], [-84.09876491990934, 9.934041475504575], [-84.09854719935377, 9.933180803311005], [-84.09841561621577, 9.93230311749804], [-84.09837143703858, 9.931416870766297]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;36&quot;, &quot;properties&quot;: {}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+
+        function geo_json_b69af0cee509eee4482c47aba3696a8d_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_b69af0cee509eee4482c47aba3696a8d = L.geoJson(null, {
+                onEachFeature: geo_json_b69af0cee509eee4482c47aba3696a8d_onEachFeature,
+            
+        });
+
+        function geo_json_b69af0cee509eee4482c47aba3696a8d_add (data) {
+            geo_json_b69af0cee509eee4482c47aba3696a8d
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_b69af0cee509eee4482c47aba3696a8d_add({&quot;bbox&quot;: [-84.2312799, 10.100959, -84.1955832, 10.1977581], &quot;features&quot;: [{&quot;bbox&quot;: [-84.2312799, 10.100959, -84.1955832, 10.1977581], &quot;geometry&quot;: {&quot;coordinates&quot;: [[[-84.2312799, 10.1131905], [-84.2309868, 10.1123788], [-84.2308242, 10.1113862], [-84.2302387, 10.1108739], [-84.2291655, 10.110938], [-84.2277182, 10.1101695], [-84.2273279, 10.1101375], [-84.2245308, 10.1109059], [-84.2238478, 10.1114823], [-84.2237503, 10.1124749], [-84.2232136, 10.112731], [-84.2223192, 10.1138036], [-84.2213465, 10.1144454], [-84.2209725, 10.1146135], [-84.2206229, 10.1145895], [-84.2206472, 10.1132367], [-84.2204602, 10.1120441], [-84.2202326, 10.1111555], [-84.220135, 10.1107313], [-84.2194601, 10.1100829], [-84.2188747, 10.1095386], [-84.2186796, 10.1092664], [-84.2186552, 10.1087942], [-84.2189154, 10.1081858], [-84.2192406, 10.1076015], [-84.2191186, 10.1072172], [-84.2189804, 10.106897], [-84.2189479, 10.1065128], [-84.2190292, 10.1060165], [-84.2192162, 10.1057363], [-84.2194683, 10.1056323], [-84.2197772, 10.1054081], [-84.2199399, 10.105192], [-84.2198748, 10.1049519], [-84.219387, 10.1045516], [-84.2191674, 10.1041994], [-84.2191755, 10.1037912], [-84.21933, 10.1033829], [-84.2193544, 10.1030948], [-84.2190698, 10.1028946], [-84.218891, 10.1026065], [-84.2189154, 10.1024544], [-84.2193056, 10.1024544], [-84.2196553, 10.1023823], [-84.2202814, 10.1020941], [-84.2211026, 10.1017099], [-84.2212426, 10.1013024], [-84.2211061, 10.100959], [-84.220738, 10.1012172], [-84.2197891, 10.1012718], [-84.2189695, 10.1010777], [-84.2183533, 10.1013203], [-84.2175987, 10.1022825], [-84.2166331, 10.1029373], [-84.215925, 10.1037823], [-84.2139724, 10.1052188], [-84.2139509, 10.10524], [-84.2131999, 10.1059159], [-84.2129424, 10.1063384], [-84.2128566, 10.1072679], [-84.2125991, 10.1078172], [-84.2118481, 10.1081763], [-84.2109469, 10.108472], [-84.2101315, 10.1082608], [-84.2095092, 10.1082608], [-84.2089513, 10.1085777], [-84.2088225, 10.1090582], [-84.2081788, 10.1114717], [-84.2081722, 10.1118953], [-84.2084757, 10.1126954], [-84.2082465, 10.1136724], [-84.2083403, 10.1138715], [-84.2085487, 10.1140013], [-84.2086069, 10.1141621], [-84.2085132, 10.1143396], [-84.2083484, 10.1145285], [-84.2080188, 10.1146515], [-84.2074721, 10.1147092], [-84.2072673, 10.1151236], [-84.2068914, 10.1154431], [-84.2058185, 10.1166049], [-84.2047027, 10.11764], [-84.2039517, 10.1183371], [-84.2031577, 10.1196467], [-84.2029002, 10.121231], [-84.2027565, 10.1217492], [-84.2026857, 10.1222661], [-84.2025784, 10.123111], [-84.2019776, 10.1235758], [-84.2019671, 10.1240607], [-84.2019561, 10.1245686], [-84.2019776, 10.1251811], [-84.2014626, 10.1254346], [-84.201012, 10.1248643], [-84.2006043, 10.1244629], [-84.2003929, 10.1245957], [-84.2001107, 10.1248009], [-84.199703, 10.1257092], [-84.1991666, 10.1274414], [-84.199231, 10.1284341], [-84.1993812, 10.1293213], [-84.1989735, 10.1303564], [-84.1987374, 10.1311802], [-84.1979006, 10.1315604], [-84.1973212, 10.1323631], [-84.1970852, 10.1333558], [-84.1972998, 10.1347922], [-84.1972783, 10.1352358], [-84.1975144, 10.1358483], [-84.1977933, 10.1361863], [-84.197965, 10.1367355], [-84.1978362, 10.1372002], [-84.1974285, 10.1376015], [-84.1965058, 10.1383831], [-84.195905, 10.139059], [-84.1957119, 10.139587], [-84.1958407, 10.140094], [-84.1961625, 10.1406432], [-84.1961411, 10.1416148], [-84.1957977, 10.1418471], [-84.1955832, 10.1422907], [-84.1956261, 10.1426287], [-84.1960123, 10.1428821], [-84.1963127, 10.1433891], [-84.1964844, 10.144762], [-84.1969135, 10.145966], [-84.1969779, 10.1465997], [-84.1971496, 10.1480782], [-84.1971067, 10.1494722], [-84.1974929, 10.1499158], [-84.1977933, 10.150296], [-84.1975787, 10.1506762], [-84.1973856, 10.151162], [-84.1979435, 10.1516478], [-84.198437, 10.1524504], [-84.1986087, 10.1533375], [-84.1982868, 10.154119], [-84.1980293, 10.1547315], [-84.1982654, 10.1549005], [-84.1985872, 10.1551117], [-84.1986516, 10.1557031], [-84.1988662, 10.1567803], [-84.1995314, 10.1576674], [-84.2001537, 10.1582588], [-84.201012, 10.1585545], [-84.2017201, 10.1595472], [-84.2028144, 10.1607511], [-84.2040268, 10.1619835], [-84.2044667, 10.1622079], [-84.2045874, 10.1623108], [-84.204633, 10.1624296], [-84.2047135, 10.162691], [-84.2048422, 10.1628019], [-84.2049871, 10.1628336], [-84.205258, 10.1628309], [-84.2054538, 10.1627121], [-84.206591, 10.1634546], [-84.2067412, 10.1640038], [-84.2074063, 10.1651443], [-84.2082217, 10.1660947], [-84.2088011, 10.1670874], [-84.2100027, 10.1681646], [-84.2123416, 10.1690728], [-84.2136076, 10.1700232], [-84.2138222, 10.171037], [-84.2136291, 10.1721352], [-84.2137467, 10.1722712], [-84.2144874, 10.1731279], [-84.2167619, 10.1749653], [-84.2187575, 10.1770774], [-84.2197874, 10.1778588], [-84.2198733, 10.1790838], [-84.2203239, 10.1797596], [-84.2219546, 10.1806678], [-84.2235425, 10.1821039], [-84.2241004, 10.1833288], [-84.2242077, 10.1844059], [-84.2244208, 10.1852804], [-84.2280472, 10.1925815], [-84.2308031, 10.1977581], [-84.2291972, 10.1736284], [-84.2281708, 10.1723135], [-84.2278325, 10.1705661], [-84.2276505, 10.1689682], [-84.2273252, 10.1678157], [-84.2265772, 10.1670314], [-84.2250811, 10.1662151], [-84.2241867, 10.1656549], [-84.223211, 10.1645344], [-84.2229208, 10.1635634], [-84.2227882, 10.1629177], [-84.2231784, 10.1620053], [-84.2234386, 10.1614291], [-84.2232272, 10.1607728], [-84.2226743, 10.1600845], [-84.2225605, 10.1593642], [-84.2223653, 10.1581477], [-84.2221052, 10.1573793], [-84.2220401, 10.1568191], [-84.2222353, 10.1557466], [-84.2222353, 10.1540178], [-84.2220401, 10.1528813], [-84.2213246, 10.1516168], [-84.2208205, 10.1511686], [-84.2205765, 10.1509124], [-84.2205765, 10.1504002], [-84.220918, 10.1495198], [-84.2218904, 10.147676], [-84.2232422, 10.1448034], [-84.2239289, 10.1431136], [-84.2239289, 10.141973], [-84.2242078, 10.140938], [-84.2250232, 10.1397129], [-84.2260961, 10.1379175], [-84.2262677, 10.1369881], [-84.2259244, 10.1350026], [-84.2260532, 10.1341999], [-84.2257528, 10.1333972], [-84.2252378, 10.1324256], [-84.2248086, 10.1310526], [-84.2245297, 10.130102], [-84.2247013, 10.1292149], [-84.2251519, 10.128391], [-84.2259888, 10.1262998], [-84.2267654, 10.123288], [-84.2269558, 10.1229587], [-84.2281081, 10.1217018], [-84.2290134, 10.1197864], [-84.229988, 10.1178058], [-84.2299486, 10.1165382], [-84.2300527, 10.1148725], [-84.2306871, 10.1143159], [-84.2312799, 10.1131905]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;2&quot;, &quot;properties&quot;: {&quot;addresstype&quot;: &quot;village&quot;, &quot;category&quot;: &quot;boundary&quot;, &quot;display_name&quot;: &quot;Sabana Redonda, Cant\u00f3n Po\u00e1s, Provincia Alajuela, 20805, Costa Rica&quot;, &quot;importance&quot;: 0.2897018831470392, &quot;name&quot;: &quot;Sabana Redonda&quot;, &quot;osm_id&quot;: 5659375, &quot;osm_type&quot;: &quot;relation&quot;, &quot;place_id&quot;: 299129006, &quot;place_rank&quot;: 16, &quot;type&quot;: &quot;administrative&quot;}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+            var marker_d32ebe0dbc2e27d0dd1b1b1001d3838f = L.marker(
+                [9.9250535, -84.1062856],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_d188ee180ac159d77946e064a95b5646 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_d32ebe0dbc2e27d0dd1b1b1001d3838f.setIcon(icon_d188ee180ac159d77946e064a95b5646);
+        
+    
+        var popup_68a18d4587bced94fd8b646b81616109 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_4bb6e4d2762ef6fcece86b0b879fd4f5 = $(`&lt;div id=&quot;html_4bb6e4d2762ef6fcece86b0b879fd4f5&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Super Hatillo 8&lt;/div&gt;`)[0];
+                popup_68a18d4587bced94fd8b646b81616109.setContent(html_4bb6e4d2762ef6fcece86b0b879fd4f5);
+            
+        
+
+        marker_d32ebe0dbc2e27d0dd1b1b1001d3838f.bindPopup(popup_68a18d4587bced94fd8b646b81616109)
+        ;
+
+        
+    
+    
+            var marker_1e94653955a6b49a1ae3398bb6df8ff7 = L.marker(
+                [9.9237733, -84.1068233],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_570616c7e4c3e6cd76c4900f551dc117 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_1e94653955a6b49a1ae3398bb6df8ff7.setIcon(icon_570616c7e4c3e6cd76c4900f551dc117);
+        
+    
+        var popup_19d4002a4507cafcacb3a266db3575b4 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_7e3ca26773e5563edb39e808fea5f89c = $(`&lt;div id=&quot;html_7e3ca26773e5563edb39e808fea5f89c&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;El guadalupano&lt;/div&gt;`)[0];
+                popup_19d4002a4507cafcacb3a266db3575b4.setContent(html_7e3ca26773e5563edb39e808fea5f89c);
+            
+        
+
+        marker_1e94653955a6b49a1ae3398bb6df8ff7.bindPopup(popup_19d4002a4507cafcacb3a266db3575b4)
+        ;
+
+        
+    
+    
+            var marker_427423dff87e7f6745334a187033b8ef = L.marker(
+                [9.9301885, -84.1036826],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_d7c57a8f797043b259b66bf20af042b1 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_427423dff87e7f6745334a187033b8ef.setIcon(icon_d7c57a8f797043b259b66bf20af042b1);
+        
+    
+        var popup_f0f6344d15c206d1f8e9dc181696df0d = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_ee540f1ebf858fd1c135982ffb165dad = $(`&lt;div id=&quot;html_ee540f1ebf858fd1c135982ffb165dad&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Almacén Mauro&lt;/div&gt;`)[0];
+                popup_f0f6344d15c206d1f8e9dc181696df0d.setContent(html_ee540f1ebf858fd1c135982ffb165dad);
+            
+        
+
+        marker_427423dff87e7f6745334a187033b8ef.bindPopup(popup_f0f6344d15c206d1f8e9dc181696df0d)
+        ;
+
+        
+    
+    
+            var marker_8f97e8555f043b414eff5d5f73003a13 = L.marker(
+                [9.9356338, -84.1102991],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_793b38e9341ee632ea74a748f68c3c3a = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_8f97e8555f043b414eff5d5f73003a13.setIcon(icon_793b38e9341ee632ea74a748f68c3c3a);
+        
+    
+        var popup_4d267edd19cbf40d543c14c59a536d7a = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_27c6b6f0dd5b21cbf702bb5db964a442 = $(`&lt;div id=&quot;html_27c6b6f0dd5b21cbf702bb5db964a442&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Musi&lt;/div&gt;`)[0];
+                popup_4d267edd19cbf40d543c14c59a536d7a.setContent(html_27c6b6f0dd5b21cbf702bb5db964a442);
+            
+        
+
+        marker_8f97e8555f043b414eff5d5f73003a13.bindPopup(popup_4d267edd19cbf40d543c14c59a536d7a)
+        ;
+
+        
+    
+    
+            var marker_ba29670fde5d46f486aee778a1e6a0d8 = L.marker(
+                [9.9245702, -84.1132335],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_697ccec397f6beeeab8f58301e6278f5 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_ba29670fde5d46f486aee778a1e6a0d8.setIcon(icon_697ccec397f6beeeab8f58301e6278f5);
+        
+    
+        var popup_0ef4907e1862c12e906f56b6def63618 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_f1bd097dd501987041718d4f1901c802 = $(`&lt;div id=&quot;html_f1bd097dd501987041718d4f1901c802&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Supermercado Recuerdo #2&lt;/div&gt;`)[0];
+                popup_0ef4907e1862c12e906f56b6def63618.setContent(html_f1bd097dd501987041718d4f1901c802);
+            
+        
+
+        marker_ba29670fde5d46f486aee778a1e6a0d8.bindPopup(popup_0ef4907e1862c12e906f56b6def63618)
+        ;
+
+        
+    
+    
+            var marker_1c4baa32a3c13a202b14c44e83495d5a = L.marker(
+                [9.9289099, -84.114849],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_f37a246cc4dc801c5abb48d44a6566a7 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_1c4baa32a3c13a202b14c44e83495d5a.setIcon(icon_f37a246cc4dc801c5abb48d44a6566a7);
+        
+    
+        var popup_ca046f66fb968b9c5406e38169fd793a = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_98d528e63da1233b64faf72970267c5a = $(`&lt;div id=&quot;html_98d528e63da1233b64faf72970267c5a&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Pulpería Los Tucanes&lt;/div&gt;`)[0];
+                popup_ca046f66fb968b9c5406e38169fd793a.setContent(html_98d528e63da1233b64faf72970267c5a);
+            
+        
+
+        marker_1c4baa32a3c13a202b14c44e83495d5a.bindPopup(popup_ca046f66fb968b9c5406e38169fd793a)
+        ;
+
+        
+    
+    
+            var marker_3e3df137796bd9444fedb8787b862c5c = L.marker(
+                [9.9390739, -84.1092236],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_c45e22319bfa45f65af466e921a30134 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_3e3df137796bd9444fedb8787b862c5c.setIcon(icon_c45e22319bfa45f65af466e921a30134);
+        
+    
+        var popup_a116c0c628e9b680f7589f00a221bbd8 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_ba7808603775706e4d8a451e55c40c2a = $(`&lt;div id=&quot;html_ba7808603775706e4d8a451e55c40c2a&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Musi&lt;/div&gt;`)[0];
+                popup_a116c0c628e9b680f7589f00a221bbd8.setContent(html_ba7808603775706e4d8a451e55c40c2a);
+            
+        
+
+        marker_3e3df137796bd9444fedb8787b862c5c.bindPopup(popup_a116c0c628e9b680f7589f00a221bbd8)
+        ;
+
+        
+    
+    
+            var marker_50e653dcfded96098534030d782343cd = L.marker(
+                [9.9399778, -84.1117058],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_65f1429ea89f50d4297bf647fec788e8 = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_50e653dcfded96098534030d782343cd.setIcon(icon_65f1429ea89f50d4297bf647fec788e8);
+        
+    
+        var popup_b1df52661c4cc0ee23e1b0a89b956159 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_9d398bf54d19321aab491f6e5c19f496 = $(`&lt;div id=&quot;html_9d398bf54d19321aab491f6e5c19f496&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Dimarkít&lt;/div&gt;`)[0];
+                popup_b1df52661c4cc0ee23e1b0a89b956159.setContent(html_9d398bf54d19321aab491f6e5c19f496);
+            
+        
+
+        marker_50e653dcfded96098534030d782343cd.bindPopup(popup_b1df52661c4cc0ee23e1b0a89b956159)
+        ;
+
+        
+    
+    
+            var marker_404372165ed8b848f0c01f5dab31c67c = L.marker(
+                [9.9384669, -84.1049237],
+                {}
+            ).addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        
+    
+            var icon_698df4d9c0cbd604200cc596140415bf = L.AwesomeMarkers.icon(
+                {&quot;extraClasses&quot;: &quot;fa-rotate-0&quot;, &quot;icon&quot;: &quot;store&quot;, &quot;iconColor&quot;: &quot;white&quot;, &quot;markerColor&quot;: &quot;lightgray&quot;, &quot;prefix&quot;: &quot;fa&quot;}
+            );
+            marker_404372165ed8b848f0c01f5dab31c67c.setIcon(icon_698df4d9c0cbd604200cc596140415bf);
+        
+    
+        var popup_d867fead612967cca7cc585dafe8a46d = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+
+        
+            
+                var html_06621560e5681ee2e42b4fbe2792b6ac = $(`&lt;div id=&quot;html_06621560e5681ee2e42b4fbe2792b6ac&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;ampm&lt;/div&gt;`)[0];
+                popup_d867fead612967cca7cc585dafe8a46d.setContent(html_06621560e5681ee2e42b4fbe2792b6ac);
+            
+        
+
+        marker_404372165ed8b848f0c01f5dab31c67c.bindPopup(popup_d867fead612967cca7cc585dafe8a46d)
+        ;
+
+        
+    
+    
+
+        function geo_json_5f6945a909b5ec06f95f8dba1293e047_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_5f6945a909b5ec06f95f8dba1293e047 = L.geoJson(null, {
+                onEachFeature: geo_json_5f6945a909b5ec06f95f8dba1293e047_onEachFeature,
+            
+        });
+
+        function geo_json_5f6945a909b5ec06f95f8dba1293e047_add (data) {
+            geo_json_5f6945a909b5ec06f95f8dba1293e047
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_5f6945a909b5ec06f95f8dba1293e047_add({&quot;bbox&quot;: [-84.2312799, 10.100959, -84.1955832, 10.1977581], &quot;features&quot;: [{&quot;bbox&quot;: [-84.2312799, 10.100959, -84.1955832, 10.1977581], &quot;geometry&quot;: {&quot;coordinates&quot;: [[[-84.2312799, 10.1131905], [-84.2309868, 10.1123788], [-84.2308242, 10.1113862], [-84.2302387, 10.1108739], [-84.2291655, 10.110938], [-84.2277182, 10.1101695], [-84.2273279, 10.1101375], [-84.2245308, 10.1109059], [-84.2238478, 10.1114823], [-84.2237503, 10.1124749], [-84.2232136, 10.112731], [-84.2223192, 10.1138036], [-84.2213465, 10.1144454], [-84.2209725, 10.1146135], [-84.2206229, 10.1145895], [-84.2206472, 10.1132367], [-84.2204602, 10.1120441], [-84.2202326, 10.1111555], [-84.220135, 10.1107313], [-84.2194601, 10.1100829], [-84.2188747, 10.1095386], [-84.2186796, 10.1092664], [-84.2186552, 10.1087942], [-84.2189154, 10.1081858], [-84.2192406, 10.1076015], [-84.2191186, 10.1072172], [-84.2189804, 10.106897], [-84.2189479, 10.1065128], [-84.2190292, 10.1060165], [-84.2192162, 10.1057363], [-84.2194683, 10.1056323], [-84.2197772, 10.1054081], [-84.2199399, 10.105192], [-84.2198748, 10.1049519], [-84.219387, 10.1045516], [-84.2191674, 10.1041994], [-84.2191755, 10.1037912], [-84.21933, 10.1033829], [-84.2193544, 10.1030948], [-84.2190698, 10.1028946], [-84.218891, 10.1026065], [-84.2189154, 10.1024544], [-84.2193056, 10.1024544], [-84.2196553, 10.1023823], [-84.2202814, 10.1020941], [-84.2211026, 10.1017099], [-84.2212426, 10.1013024], [-84.2211061, 10.100959], [-84.220738, 10.1012172], [-84.2197891, 10.1012718], [-84.2189695, 10.1010777], [-84.2183533, 10.1013203], [-84.2175987, 10.1022825], [-84.2166331, 10.1029373], [-84.215925, 10.1037823], [-84.2139724, 10.1052188], [-84.2139509, 10.10524], [-84.2131999, 10.1059159], [-84.2129424, 10.1063384], [-84.2128566, 10.1072679], [-84.2125991, 10.1078172], [-84.2118481, 10.1081763], [-84.2109469, 10.108472], [-84.2101315, 10.1082608], [-84.2095092, 10.1082608], [-84.2089513, 10.1085777], [-84.2088225, 10.1090582], [-84.2081788, 10.1114717], [-84.2081722, 10.1118953], [-84.2084757, 10.1126954], [-84.2082465, 10.1136724], [-84.2083403, 10.1138715], [-84.2085487, 10.1140013], [-84.2086069, 10.1141621], [-84.2085132, 10.1143396], [-84.2083484, 10.1145285], [-84.2080188, 10.1146515], [-84.2074721, 10.1147092], [-84.2072673, 10.1151236], [-84.2068914, 10.1154431], [-84.2058185, 10.1166049], [-84.2047027, 10.11764], [-84.2039517, 10.1183371], [-84.2031577, 10.1196467], [-84.2029002, 10.121231], [-84.2027565, 10.1217492], [-84.2026857, 10.1222661], [-84.2025784, 10.123111], [-84.2019776, 10.1235758], [-84.2019671, 10.1240607], [-84.2019561, 10.1245686], [-84.2019776, 10.1251811], [-84.2014626, 10.1254346], [-84.201012, 10.1248643], [-84.2006043, 10.1244629], [-84.2003929, 10.1245957], [-84.2001107, 10.1248009], [-84.199703, 10.1257092], [-84.1991666, 10.1274414], [-84.199231, 10.1284341], [-84.1993812, 10.1293213], [-84.1989735, 10.1303564], [-84.1987374, 10.1311802], [-84.1979006, 10.1315604], [-84.1973212, 10.1323631], [-84.1970852, 10.1333558], [-84.1972998, 10.1347922], [-84.1972783, 10.1352358], [-84.1975144, 10.1358483], [-84.1977933, 10.1361863], [-84.197965, 10.1367355], [-84.1978362, 10.1372002], [-84.1974285, 10.1376015], [-84.1965058, 10.1383831], [-84.195905, 10.139059], [-84.1957119, 10.139587], [-84.1958407, 10.140094], [-84.1961625, 10.1406432], [-84.1961411, 10.1416148], [-84.1957977, 10.1418471], [-84.1955832, 10.1422907], [-84.1956261, 10.1426287], [-84.1960123, 10.1428821], [-84.1963127, 10.1433891], [-84.1964844, 10.144762], [-84.1969135, 10.145966], [-84.1969779, 10.1465997], [-84.1971496, 10.1480782], [-84.1971067, 10.1494722], [-84.1974929, 10.1499158], [-84.1977933, 10.150296], [-84.1975787, 10.1506762], [-84.1973856, 10.151162], [-84.1979435, 10.1516478], [-84.198437, 10.1524504], [-84.1986087, 10.1533375], [-84.1982868, 10.154119], [-84.1980293, 10.1547315], [-84.1982654, 10.1549005], [-84.1985872, 10.1551117], [-84.1986516, 10.1557031], [-84.1988662, 10.1567803], [-84.1995314, 10.1576674], [-84.2001537, 10.1582588], [-84.201012, 10.1585545], [-84.2017201, 10.1595472], [-84.2028144, 10.1607511], [-84.2040268, 10.1619835], [-84.2044667, 10.1622079], [-84.2045874, 10.1623108], [-84.204633, 10.1624296], [-84.2047135, 10.162691], [-84.2048422, 10.1628019], [-84.2049871, 10.1628336], [-84.205258, 10.1628309], [-84.2054538, 10.1627121], [-84.206591, 10.1634546], [-84.2067412, 10.1640038], [-84.2074063, 10.1651443], [-84.2082217, 10.1660947], [-84.2088011, 10.1670874], [-84.2100027, 10.1681646], [-84.2123416, 10.1690728], [-84.2136076, 10.1700232], [-84.2138222, 10.171037], [-84.2136291, 10.1721352], [-84.2137467, 10.1722712], [-84.2144874, 10.1731279], [-84.2167619, 10.1749653], [-84.2187575, 10.1770774], [-84.2197874, 10.1778588], [-84.2198733, 10.1790838], [-84.2203239, 10.1797596], [-84.2219546, 10.1806678], [-84.2235425, 10.1821039], [-84.2241004, 10.1833288], [-84.2242077, 10.1844059], [-84.2244208, 10.1852804], [-84.2280472, 10.1925815], [-84.2308031, 10.1977581], [-84.2291972, 10.1736284], [-84.2281708, 10.1723135], [-84.2278325, 10.1705661], [-84.2276505, 10.1689682], [-84.2273252, 10.1678157], [-84.2265772, 10.1670314], [-84.2250811, 10.1662151], [-84.2241867, 10.1656549], [-84.223211, 10.1645344], [-84.2229208, 10.1635634], [-84.2227882, 10.1629177], [-84.2231784, 10.1620053], [-84.2234386, 10.1614291], [-84.2232272, 10.1607728], [-84.2226743, 10.1600845], [-84.2225605, 10.1593642], [-84.2223653, 10.1581477], [-84.2221052, 10.1573793], [-84.2220401, 10.1568191], [-84.2222353, 10.1557466], [-84.2222353, 10.1540178], [-84.2220401, 10.1528813], [-84.2213246, 10.1516168], [-84.2208205, 10.1511686], [-84.2205765, 10.1509124], [-84.2205765, 10.1504002], [-84.220918, 10.1495198], [-84.2218904, 10.147676], [-84.2232422, 10.1448034], [-84.2239289, 10.1431136], [-84.2239289, 10.141973], [-84.2242078, 10.140938], [-84.2250232, 10.1397129], [-84.2260961, 10.1379175], [-84.2262677, 10.1369881], [-84.2259244, 10.1350026], [-84.2260532, 10.1341999], [-84.2257528, 10.1333972], [-84.2252378, 10.1324256], [-84.2248086, 10.1310526], [-84.2245297, 10.130102], [-84.2247013, 10.1292149], [-84.2251519, 10.128391], [-84.2259888, 10.1262998], [-84.2267654, 10.123288], [-84.2269558, 10.1229587], [-84.2281081, 10.1217018], [-84.2290134, 10.1197864], [-84.229988, 10.1178058], [-84.2299486, 10.1165382], [-84.2300527, 10.1148725], [-84.2306871, 10.1143159], [-84.2312799, 10.1131905]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;2&quot;, &quot;properties&quot;: {&quot;addresstype&quot;: &quot;village&quot;, &quot;category&quot;: &quot;boundary&quot;, &quot;display_name&quot;: &quot;Sabana Redonda, Cant\u00f3n Po\u00e1s, Provincia Alajuela, 20805, Costa Rica&quot;, &quot;importance&quot;: 0.2897018831470392, &quot;name&quot;: &quot;Sabana Redonda&quot;, &quot;osm_id&quot;: 5659375, &quot;osm_type&quot;: &quot;relation&quot;, &quot;place_id&quot;: 299129006, &quot;place_rank&quot;: 16, &quot;type&quot;: &quot;administrative&quot;}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+
+        function geo_json_b8644d4b75e086fb1ceadd91f5f997de_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_b8644d4b75e086fb1ceadd91f5f997de = L.geoJson(null, {
+                onEachFeature: geo_json_b8644d4b75e086fb1ceadd91f5f997de_onEachFeature,
+            
+        });
+
+        function geo_json_b8644d4b75e086fb1ceadd91f5f997de_add (data) {
+            geo_json_b8644d4b75e086fb1ceadd91f5f997de
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_b8644d4b75e086fb1ceadd91f5f997de_add({&quot;bbox&quot;: [-84.2312799, 10.100959, -84.1955832, 10.1977581], &quot;features&quot;: [{&quot;bbox&quot;: [-84.2312799, 10.100959, -84.1955832, 10.1977581], &quot;geometry&quot;: {&quot;coordinates&quot;: [[[-84.2312799, 10.1131905], [-84.2309868, 10.1123788], [-84.2308242, 10.1113862], [-84.2302387, 10.1108739], [-84.2291655, 10.110938], [-84.2277182, 10.1101695], [-84.2273279, 10.1101375], [-84.2245308, 10.1109059], [-84.2238478, 10.1114823], [-84.2237503, 10.1124749], [-84.2232136, 10.112731], [-84.2223192, 10.1138036], [-84.2213465, 10.1144454], [-84.2209725, 10.1146135], [-84.2206229, 10.1145895], [-84.2206472, 10.1132367], [-84.2204602, 10.1120441], [-84.2202326, 10.1111555], [-84.220135, 10.1107313], [-84.2194601, 10.1100829], [-84.2188747, 10.1095386], [-84.2186796, 10.1092664], [-84.2186552, 10.1087942], [-84.2189154, 10.1081858], [-84.2192406, 10.1076015], [-84.2191186, 10.1072172], [-84.2189804, 10.106897], [-84.2189479, 10.1065128], [-84.2190292, 10.1060165], [-84.2192162, 10.1057363], [-84.2194683, 10.1056323], [-84.2197772, 10.1054081], [-84.2199399, 10.105192], [-84.2198748, 10.1049519], [-84.219387, 10.1045516], [-84.2191674, 10.1041994], [-84.2191755, 10.1037912], [-84.21933, 10.1033829], [-84.2193544, 10.1030948], [-84.2190698, 10.1028946], [-84.218891, 10.1026065], [-84.2189154, 10.1024544], [-84.2193056, 10.1024544], [-84.2196553, 10.1023823], [-84.2202814, 10.1020941], [-84.2211026, 10.1017099], [-84.2212426, 10.1013024], [-84.2211061, 10.100959], [-84.220738, 10.1012172], [-84.2197891, 10.1012718], [-84.2189695, 10.1010777], [-84.2183533, 10.1013203], [-84.2175987, 10.1022825], [-84.2166331, 10.1029373], [-84.215925, 10.1037823], [-84.2139724, 10.1052188], [-84.2139509, 10.10524], [-84.2131999, 10.1059159], [-84.2129424, 10.1063384], [-84.2128566, 10.1072679], [-84.2125991, 10.1078172], [-84.2118481, 10.1081763], [-84.2109469, 10.108472], [-84.2101315, 10.1082608], [-84.2095092, 10.1082608], [-84.2089513, 10.1085777], [-84.2088225, 10.1090582], [-84.2081788, 10.1114717], [-84.2081722, 10.1118953], [-84.2084757, 10.1126954], [-84.2082465, 10.1136724], [-84.2083403, 10.1138715], [-84.2085487, 10.1140013], [-84.2086069, 10.1141621], [-84.2085132, 10.1143396], [-84.2083484, 10.1145285], [-84.2080188, 10.1146515], [-84.2074721, 10.1147092], [-84.2072673, 10.1151236], [-84.2068914, 10.1154431], [-84.2058185, 10.1166049], [-84.2047027, 10.11764], [-84.2039517, 10.1183371], [-84.2031577, 10.1196467], [-84.2029002, 10.121231], [-84.2027565, 10.1217492], [-84.2026857, 10.1222661], [-84.2025784, 10.123111], [-84.2019776, 10.1235758], [-84.2019671, 10.1240607], [-84.2019561, 10.1245686], [-84.2019776, 10.1251811], [-84.2014626, 10.1254346], [-84.201012, 10.1248643], [-84.2006043, 10.1244629], [-84.2003929, 10.1245957], [-84.2001107, 10.1248009], [-84.199703, 10.1257092], [-84.1991666, 10.1274414], [-84.199231, 10.1284341], [-84.1993812, 10.1293213], [-84.1989735, 10.1303564], [-84.1987374, 10.1311802], [-84.1979006, 10.1315604], [-84.1973212, 10.1323631], [-84.1970852, 10.1333558], [-84.1972998, 10.1347922], [-84.1972783, 10.1352358], [-84.1975144, 10.1358483], [-84.1977933, 10.1361863], [-84.197965, 10.1367355], [-84.1978362, 10.1372002], [-84.1974285, 10.1376015], [-84.1965058, 10.1383831], [-84.195905, 10.139059], [-84.1957119, 10.139587], [-84.1958407, 10.140094], [-84.1961625, 10.1406432], [-84.1961411, 10.1416148], [-84.1957977, 10.1418471], [-84.1955832, 10.1422907], [-84.1956261, 10.1426287], [-84.1960123, 10.1428821], [-84.1963127, 10.1433891], [-84.1964844, 10.144762], [-84.1969135, 10.145966], [-84.1969779, 10.1465997], [-84.1971496, 10.1480782], [-84.1971067, 10.1494722], [-84.1974929, 10.1499158], [-84.1977933, 10.150296], [-84.1975787, 10.1506762], [-84.1973856, 10.151162], [-84.1979435, 10.1516478], [-84.198437, 10.1524504], [-84.1986087, 10.1533375], [-84.1982868, 10.154119], [-84.1980293, 10.1547315], [-84.1982654, 10.1549005], [-84.1985872, 10.1551117], [-84.1986516, 10.1557031], [-84.1988662, 10.1567803], [-84.1995314, 10.1576674], [-84.2001537, 10.1582588], [-84.201012, 10.1585545], [-84.2017201, 10.1595472], [-84.2028144, 10.1607511], [-84.2040268, 10.1619835], [-84.2044667, 10.1622079], [-84.2045874, 10.1623108], [-84.204633, 10.1624296], [-84.2047135, 10.162691], [-84.2048422, 10.1628019], [-84.2049871, 10.1628336], [-84.205258, 10.1628309], [-84.2054538, 10.1627121], [-84.206591, 10.1634546], [-84.2067412, 10.1640038], [-84.2074063, 10.1651443], [-84.2082217, 10.1660947], [-84.2088011, 10.1670874], [-84.2100027, 10.1681646], [-84.2123416, 10.1690728], [-84.2136076, 10.1700232], [-84.2138222, 10.171037], [-84.2136291, 10.1721352], [-84.2137467, 10.1722712], [-84.2144874, 10.1731279], [-84.2167619, 10.1749653], [-84.2187575, 10.1770774], [-84.2197874, 10.1778588], [-84.2198733, 10.1790838], [-84.2203239, 10.1797596], [-84.2219546, 10.1806678], [-84.2235425, 10.1821039], [-84.2241004, 10.1833288], [-84.2242077, 10.1844059], [-84.2244208, 10.1852804], [-84.2280472, 10.1925815], [-84.2308031, 10.1977581], [-84.2291972, 10.1736284], [-84.2281708, 10.1723135], [-84.2278325, 10.1705661], [-84.2276505, 10.1689682], [-84.2273252, 10.1678157], [-84.2265772, 10.1670314], [-84.2250811, 10.1662151], [-84.2241867, 10.1656549], [-84.223211, 10.1645344], [-84.2229208, 10.1635634], [-84.2227882, 10.1629177], [-84.2231784, 10.1620053], [-84.2234386, 10.1614291], [-84.2232272, 10.1607728], [-84.2226743, 10.1600845], [-84.2225605, 10.1593642], [-84.2223653, 10.1581477], [-84.2221052, 10.1573793], [-84.2220401, 10.1568191], [-84.2222353, 10.1557466], [-84.2222353, 10.1540178], [-84.2220401, 10.1528813], [-84.2213246, 10.1516168], [-84.2208205, 10.1511686], [-84.2205765, 10.1509124], [-84.2205765, 10.1504002], [-84.220918, 10.1495198], [-84.2218904, 10.147676], [-84.2232422, 10.1448034], [-84.2239289, 10.1431136], [-84.2239289, 10.141973], [-84.2242078, 10.140938], [-84.2250232, 10.1397129], [-84.2260961, 10.1379175], [-84.2262677, 10.1369881], [-84.2259244, 10.1350026], [-84.2260532, 10.1341999], [-84.2257528, 10.1333972], [-84.2252378, 10.1324256], [-84.2248086, 10.1310526], [-84.2245297, 10.130102], [-84.2247013, 10.1292149], [-84.2251519, 10.128391], [-84.2259888, 10.1262998], [-84.2267654, 10.123288], [-84.2269558, 10.1229587], [-84.2281081, 10.1217018], [-84.2290134, 10.1197864], [-84.229988, 10.1178058], [-84.2299486, 10.1165382], [-84.2300527, 10.1148725], [-84.2306871, 10.1143159], [-84.2312799, 10.1131905]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;2&quot;, &quot;properties&quot;: {&quot;addresstype&quot;: &quot;village&quot;, &quot;category&quot;: &quot;boundary&quot;, &quot;display_name&quot;: &quot;Sabana Redonda, Cant\u00f3n Po\u00e1s, Provincia Alajuela, 20805, Costa Rica&quot;, &quot;importance&quot;: 0.2897018831470392, &quot;name&quot;: &quot;Sabana Redonda&quot;, &quot;osm_id&quot;: 5659375, &quot;osm_type&quot;: &quot;relation&quot;, &quot;place_id&quot;: 299129006, &quot;place_rank&quot;: 16, &quot;type&quot;: &quot;administrative&quot;}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+
+        function geo_json_95d0d9574ee4239e9e66da1e47d3b5a5_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_95d0d9574ee4239e9e66da1e47d3b5a5 = L.geoJson(null, {
+                onEachFeature: geo_json_95d0d9574ee4239e9e66da1e47d3b5a5_onEachFeature,
+            
+        });
+
+        function geo_json_95d0d9574ee4239e9e66da1e47d3b5a5_add (data) {
+            geo_json_95d0d9574ee4239e9e66da1e47d3b5a5
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_95d0d9574ee4239e9e66da1e47d3b5a5_add({&quot;bbox&quot;: [-84.1118867, 9.9320282, -84.1115524, 9.9321803], &quot;features&quot;: [{&quot;bbox&quot;: [-84.1118867, 9.9320282, -84.1115524, 9.9321803], &quot;geometry&quot;: {&quot;coordinates&quot;: [[[-84.1118867, 9.9320843], [-84.1117823, 9.932066], [-84.1116064, 9.9320352], [-84.1115664, 9.9320282], [-84.1115524, 9.932122], [-84.1118029, 9.9321684], [-84.1118702, 9.9321803], [-84.1118867, 9.9320843]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;2&quot;, &quot;properties&quot;: {&quot;addresstype&quot;: &quot;building&quot;, &quot;category&quot;: &quot;building&quot;, &quot;display_name&quot;: &quot;Cond. Sabana Sur, 0140, Calle 72, Roma, Mata Redonda, Cant\u00f3n San Jos\u00e9, Provincia San Jos\u00e9, 10108, Costa Rica&quot;, &quot;importance&quot;: 9.99999999995449e-06, &quot;name&quot;: &quot;Cond. Sabana Sur&quot;, &quot;osm_id&quot;: 1182801615, &quot;osm_type&quot;: &quot;way&quot;, &quot;place_id&quot;: 369530640, &quot;place_rank&quot;: 30, &quot;type&quot;: &quot;apartments&quot;}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+
+        function geo_json_00984d7342ca0d9a5bd567ad4589f91d_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_00984d7342ca0d9a5bd567ad4589f91d = L.geoJson(null, {
+                onEachFeature: geo_json_00984d7342ca0d9a5bd567ad4589f91d_onEachFeature,
+            
+        });
+
+        function geo_json_00984d7342ca0d9a5bd567ad4589f91d_add (data) {
+            geo_json_00984d7342ca0d9a5bd567ad4589f91d
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_00984d7342ca0d9a5bd567ad4589f91d_add({&quot;bbox&quot;: [-84.110095, 9.9326869, -84.0982609, 9.9383518], &quot;features&quot;: [{&quot;bbox&quot;: [-84.110095, 9.9326869, -84.0982609, 9.9383518], &quot;geometry&quot;: {&quot;coordinates&quot;: [[[-84.110095, 9.9338556], [-84.1022603, 9.9331095], [-84.1012906, 9.9330206], [-84.1010464, 9.9330241], [-84.100742, 9.9329893], [-84.1004465, 9.9329248], [-84.0983733, 9.9326869], [-84.0983321, 9.932727], [-84.098261, 9.9330276], [-84.0982609, 9.9334487], [-84.0994555, 9.9335567], [-84.0994057, 9.934108], [-84.0993021, 9.9351669], [-84.0992588, 9.935802], [-84.0988168, 9.9357765], [-84.0983371, 9.9357479], [-84.0983961, 9.9374711], [-84.0984232, 9.9376063], [-84.0985703, 9.9378151], [-84.1086425, 9.9383518], [-84.1087577, 9.9383251], [-84.1088221, 9.9382963], [-84.1088284, 9.9382888], [-84.1089278, 9.9381704], [-84.1089737, 9.938069], [-84.110095, 9.9338556]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;0&quot;, &quot;properties&quot;: {&quot;addresstype&quot;: &quot;park&quot;, &quot;category&quot;: &quot;leisure&quot;, &quot;display_name&quot;: &quot;Parque Metropolitano La Sabana, 0003, San Jos\u00e9, Mata Redonda, Cant\u00f3n San Jos\u00e9, Provincia San Jos\u00e9, 10103, Costa Rica&quot;, &quot;importance&quot;: 0.2780150946188139, &quot;name&quot;: &quot;Parque Metropolitano La Sabana&quot;, &quot;osm_id&quot;: 12657481, &quot;osm_type&quot;: &quot;way&quot;, &quot;place_id&quot;: 298957930, &quot;place_rank&quot;: 24, &quot;type&quot;: &quot;park&quot;}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+    
+        function geo_json_cb787762bc2504159fcbba9f83545782_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {&quot;color&quot;: &quot;black&quot;, &quot;dashArray&quot;: &quot;5, 5&quot;, &quot;fillColor&quot;: &quot;#ff0000&quot;, &quot;weight&quot;: 2};
+            }
+        }
+
+        function geo_json_cb787762bc2504159fcbba9f83545782_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_cb787762bc2504159fcbba9f83545782 = L.geoJson(null, {
+                onEachFeature: geo_json_cb787762bc2504159fcbba9f83545782_onEachFeature,
+            
+                style: geo_json_cb787762bc2504159fcbba9f83545782_styler,
+        });
+
+        function geo_json_cb787762bc2504159fcbba9f83545782_add (data) {
+            geo_json_cb787762bc2504159fcbba9f83545782
+                .addData(data)
+                .addTo(map_2be0297087758b67fb0a3f42cd2671f8);
+        }
+            geo_json_cb787762bc2504159fcbba9f83545782_add({&quot;bbox&quot;: [-84.110095, 9.9326869, -84.0982609, 9.9383518], &quot;features&quot;: [{&quot;bbox&quot;: [-84.110095, 9.9326869, -84.0982609, 9.9383518], &quot;geometry&quot;: {&quot;coordinates&quot;: [[[-84.110095, 9.9338556], [-84.1022603, 9.9331095], [-84.1012906, 9.9330206], [-84.1010464, 9.9330241], [-84.100742, 9.9329893], [-84.1004465, 9.9329248], [-84.0983733, 9.9326869], [-84.0983321, 9.932727], [-84.098261, 9.9330276], [-84.0982609, 9.9334487], [-84.0994555, 9.9335567], [-84.0994057, 9.934108], [-84.0993021, 9.9351669], [-84.0992588, 9.935802], [-84.0988168, 9.9357765], [-84.0983371, 9.9357479], [-84.0983961, 9.9374711], [-84.0984232, 9.9376063], [-84.0985703, 9.9378151], [-84.1086425, 9.9383518], [-84.1087577, 9.9383251], [-84.1088221, 9.9382963], [-84.1088284, 9.9382888], [-84.1089278, 9.9381704], [-84.1089737, 9.938069], [-84.110095, 9.9338556]]], &quot;type&quot;: &quot;Polygon&quot;}, &quot;id&quot;: &quot;0&quot;, &quot;properties&quot;: {&quot;addresstype&quot;: &quot;park&quot;, &quot;category&quot;: &quot;leisure&quot;, &quot;display_name&quot;: &quot;Parque Metropolitano La Sabana, 0003, San Jos\u00e9, Mata Redonda, Cant\u00f3n San Jos\u00e9, Provincia San Jos\u00e9, 10103, Costa Rica&quot;, &quot;importance&quot;: 0.2780150946188139, &quot;name&quot;: &quot;Parque Metropolitano La Sabana&quot;, &quot;osm_id&quot;: 12657481, &quot;osm_type&quot;: &quot;way&quot;, &quot;place_id&quot;: 298957930, &quot;place_rank&quot;: 24, &quot;type&quot;: &quot;park&quot;}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+
+        
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div>
 </div>
 
 </div>
